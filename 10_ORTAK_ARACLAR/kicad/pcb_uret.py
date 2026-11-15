@@ -30,9 +30,12 @@ def ag_listesi(sema):
     for m in re.finditer(r'\(comp\s*\(ref "([^"]+)"\)\s*\(value "([^"]*)"\)(.*?)(?=\(comp\s*\(ref|\(libparts)', t, re.S):
         govde = m.group(3)
         fp = re.match(r'\s*\(footprint "([^"]*)"\)', govde)
-        sayfa = re.search(r'\(sheetpath\s*\(names "([^"]*)"\)', govde)
+        sayfa = re.search(r'\(sheetpath\s*\(names "([^"]*)"\)\s*\(tstamps "([^"]*)"\)', govde)
+        kimlik = re.search(r'\(tstamps "([0-9a-f-]{36})"\)', govde)
         dnp = re.search(r'\(property\s*\(name "dnp"\)', govde) is not None
-        elemanlar.append({"ref": m.group(1), "deger": m.group(2), "fp": fp.group(1) if fp else "", "sayfa": sayfa.group(1) if sayfa else "/", "dnp": dnp})
+        elemanlar.append({"ref": m.group(1), "deger": m.group(2), "fp": fp.group(1) if fp else "", "sayfa": sayfa.group(1) if sayfa else "/", "dnp": dnp,
+                         "bom_disi": re.search(r'\(property\s*\(name "exclude_from_bom"\)', govde) is not None,
+                         "yol": ((sayfa.group(2) if sayfa else "/") + (kimlik.group(1) if kimlik else ""))})
     aglar = []
     for ad, govde in re.findall(r'\(net\s*\(code "?\d+"?\)\s*\(name "([^"]*)"\)(.*?)(?=\(net\s*\(code|\Z)', t, re.S):
         aglar.append((ad, re.findall(r'\(node\s*\(ref "([^"]*)"\)\s*\(pin "([^"]*)"\)', govde)))
@@ -63,14 +66,16 @@ def uret(kart, kok, genislik=80.0, bosluk=1.0):
         fp = ayak_izi(e["fp"])
         fp.SetReference(e["ref"])
         fp.SetValue(e["deger"])
+        kutuphane, isim = e["fp"].split(":", 1)
+        fp.SetFPID(pcbnew.LIB_ID(kutuphane, isim))
+        fp.SetPath(pcbnew.KIID_PATH(e["yol"]))   # şematikteki sembole bağ (şematik-kart uyum denetimi için)
+        fp.SetExcludedFromBOM(e["bom_disi"])
         if e["dnp"]:
             fp.SetDNP(True)
         b.Add(fp)
         fpler[e["ref"]] = (fp, e["sayfa"])
     eksik = []
     for ad, uclar in aglar:
-        if ad.startswith("unconnected-"):
-            continue
         ag = pcbnew.NETINFO_ITEM(b, ad)
         b.Add(ag)
         for ref, uc in uclar:

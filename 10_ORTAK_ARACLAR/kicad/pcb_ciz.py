@@ -168,6 +168,10 @@ def ciz(kart, kok, tur=40, sure="00:20:00"):
     if not JAR or not os.path.exists(JAR):
         raise SystemExit("yol çizici bulunamadı: OPERFLY_YOL_CIZICI ortam değişkeni jar dosyasını göstermeli")
     ortam = {k: v for k, v in os.environ.items() if k not in ("JAVA_TOOL_OPTIONS", "HTTPS_PROXY", "HTTP_PROXY", "https_proxy", "http_proxy")}
+    # Yol çizici ilerleyemediği yerleşimde çok uzun süre dönebilir: eleman sayısına göre süre sınırı konur.
+    # Aracın kendi süre ayarı bundan 3 dakika kısa verilir (uyan sürümler o ana kadarki sonucu yazıp çıkar).
+    sinir = ayar.get("sure_dk") or (8 + len(b.GetFootprints()) / 10.0)
+    sure = "%02d:%02d:00" % divmod(max(2, int(sinir) - 3), 60)
     gecici = os.path.join(is_dizini, "tmp_" + kok)
     os.makedirs(os.path.join(gecici, "freerouting"), exist_ok=True)
     json.dump({"gui": {"enabled": False}, "usage_and_diagnostic_data": {"disable_analytics": True},
@@ -179,8 +183,6 @@ def ciz(kart, kok, tur=40, sure="00:20:00"):
              # Ağ erişimi kapalı: araç açılışta sürüm denetimi için dışarı çıkmak ister; ölü bir vekil adresi verilir.
              "-Dhttp.proxyHost=127.0.0.1", "-Dhttp.proxyPort=9", "-Dhttps.proxyHost=127.0.0.1", "-Dhttps.proxyPort=9", "-jar", JAR,
              "--gui.enabled=false", "-da", "-de", dsn, "-do", ses, "-mp", str(tur), "--router.max_passes=%d" % tur]
-    # Yol çizici ilerleyemediği yerleşimde çok uzun süre dönebilir: eleman sayısına göre süre sınırı konur.
-    sinir = ayar.get("sure_dk") or (8 + len(b.GetFootprints()) / 10.0)
     try:
         s = subprocess.run(komut, cwd=is_dizini, env=ortam, capture_output=True, text=True, timeout=sinir * 60)
         open(os.path.join(is_dizini, kok + ".log"), "w", encoding="utf-8").write(s.stdout + "\n" + s.stderr)

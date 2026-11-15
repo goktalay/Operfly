@@ -2,1048 +2,125 @@
 	(version 20260306)
 	(generator "eeschema")
 	(generator_version "10.0")
-	(uuid "d48159a1-da92-5502-a8de-e7148e8aed5b")
+	(uuid "021aeb0d-29af-5cb6-83ea-514d49692429")
 	(paper "A3")
 	(title_block
-		(title "Operfly Core - omurga portlari")
+		(title "Operfly Core")
 		(date "2026-11-15")
 		(rev "A")
 		(company "Operfly")
 	)
-	(lib_symbols
-		(symbol "operfly:Operfly_Bus_20"
-			(pin_names
-				(offset 1.016)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "J"
-				(at 0 16.51 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "Operfly_Bus_20"
-				(at 0 -16.51 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "Connector_Harwin:Harwin_Gecko_G125-MS12005M2P_2x10_P1.25mm_Vertical"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Operfly Bus portu, Harwin Gecko-SL 20 kontak"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "Operfly_Bus_20_0_1"
-				(rectangle
-					(start -10.16 13.97)
-					(end 10.16 -13.97)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-			)
-			(symbol "Operfly_Bus_20_1_1"
-				(pin passive line
-					(at -12.7 11.43 0)
-					(length 2.54)
-					(name "+12V"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -12.7 8.89 0)
-					(length 2.54)
-					(name "+12V"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -12.7 6.35 0)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -12.7 3.81 0)
-					(length 2.54)
-					(name "CAN_A_H"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -12.7 1.27 0)
-					(length 2.54)
-					(name "CAN_B_H"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -12.7 -1.27 0)
-					(length 2.54)
-					(name "PPS"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -12.7 -3.81 0)
-					(length 2.54)
-					(name "ETH_A+"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -12.7 -6.35 0)
-					(length 2.54)
-					(name "ETH_B+"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -12.7 -8.89 0)
-					(length 2.54)
-					(name "ETH_C+"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "9"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -12.7 -11.43 0)
-					(length 2.54)
-					(name "ETH_D+"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "10"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 12.7 11.43 180)
-					(length 2.54)
-					(name "+12V"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "11"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 12.7 8.89 180)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "12"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 12.7 6.35 180)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "13"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 12.7 3.81 180)
-					(length 2.54)
-					(name "CAN_A_L"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "14"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 12.7 1.27 180)
-					(length 2.54)
-					(name "CAN_B_L"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "15"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 12.7 -1.27 180)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "16"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 12.7 -3.81 180)
-					(length 2.54)
-					(name "ETH_A-"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "17"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 12.7 -6.35 180)
-					(length 2.54)
-					(name "ETH_B-"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "18"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 12.7 -8.89 180)
-					(length 2.54)
-					(name "ETH_C-"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "19"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 12.7 -11.43 180)
-					(length 2.54)
-					(name "ETH_D-"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "20"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-	)
-	(text "Operfly Bus portlari - taslak. Port 2 yedek guc ve CAN icindir."
+	(lib_symbols)
+	(text "Operfly Core - ucus kontrol karti (OPFCOR)"
 		(exclude_from_sim no)
-		(at 40 40 0)
+		(at 25.4 25.4 0)
 		(effects
 			(font
-				(size 2 2)
+				(size 3 3)
 			)
 			(justify left bottom)
 		)
-		(uuid "f708be71-026a-555a-8932-40e2bebecfe3")
+		(uuid "2e4664eb-2cce-5ae1-9a05-bcf682619810")
 	)
-	(no_connect
-		(at 92.71 99.06)
-		(uuid "13d2dc4e-8de6-5f03-985f-d732b6df9ece")
-	)
-	(no_connect
-		(at 67.31 99.06)
-		(uuid "3c9b964c-a943-500f-92ab-e1b4f94b6bb0")
-	)
-	(no_connect
-		(at 203.2 96.52)
-		(uuid "4d3ae206-b4f8-56e8-8311-886478ed8abb")
-	)
-	(no_connect
-		(at 177.8 91.44)
-		(uuid "58d91f63-dc8f-5d95-b68e-a274be52c516")
-	)
-	(no_connect
-		(at 67.31 101.6)
-		(uuid "7f058b61-cbcb-5aee-9479-7f266249c3a4")
-	)
-	(no_connect
-		(at 203.2 101.6)
-		(uuid "9dd71707-d9bc-5007-ba8c-3abc6f37a939")
-	)
-	(no_connect
-		(at 203.2 99.06)
-		(uuid "a3d1f238-4c34-59f1-aba7-b69f29448b07")
-	)
-	(no_connect
-		(at 177.8 93.98)
-		(uuid "abc61a80-7578-55ce-bd09-5c5473a65ca4")
-	)
-	(no_connect
-		(at 177.8 99.06)
-		(uuid "ac88924a-6ea7-5152-a0b0-b269d48b7d89")
-	)
-	(no_connect
-		(at 177.8 96.52)
-		(uuid "ad902ece-671f-594c-bef6-90381bad7588")
-	)
-	(no_connect
-		(at 177.8 101.6)
-		(uuid "b3ed84a0-f207-585a-b7ff-a0af721fac79")
-	)
-	(no_connect
-		(at 92.71 101.6)
-		(uuid "c1575fd3-34ce-5742-be02-e995d38b04ce")
-	)
-	(no_connect
-		(at 203.2 93.98)
-		(uuid "e746508d-362b-51d7-925d-af1f86cb4b4b")
-	)
-	(label "GND"
-		(at 177.8 83.82 180)
+	(text "Sematik betikle uretilir: 01_DONANIM/CORE/kicad/uret.py"
+		(exclude_from_sim no)
+		(at 25.4 33.02 0)
 		(effects
 			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "022610e6-8c3c-593e-990f-1f01897bbea6")
-	)
-	(label "+12V_BUS1"
-		(at 92.71 78.74 0)
-		(effects
-			(font
-				(size 1.27 1.27)
+				(size 1.6 1.6)
 			)
 			(justify left bottom)
 		)
-		(uuid "0acab82a-d8d7-58b0-9039-2405a8ae1f34")
+		(uuid "a43b60ba-4f35-5244-9364-85448981876a")
 	)
-	(label "+12V_BUS2"
-		(at 177.8 81.28 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "0bcc0115-1403-51b1-b866-aa764e64b467")
-	)
-	(label "GND"
-		(at 203.2 91.44 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "17c57154-d29c-5823-9ce5-27c80c85357d")
-	)
-	(label "+12V_BUS1"
-		(at 67.31 81.28 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "1f4d458d-bad2-5611-9a23-5b9e8367a73b")
-	)
-	(label "CAN_B_H"
-		(at 177.8 88.9 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "22ead3e1-4a6e-5e7b-91c3-122aa717aa57")
-	)
-	(label "CAN_A_H"
-		(at 67.31 86.36 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "35be0585-6d88-54e0-8f50-f33853e2a5a2")
-	)
-	(label "ETH_RX-"
-		(at 92.71 96.52 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "3decf668-ab32-5d29-bb02-230e6f0b2457")
-	)
-	(label "CAN_B_L"
-		(at 92.71 88.9 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "4d070d20-e763-578a-999f-5663558cca55")
-	)
-	(label "+12V_BUS1"
-		(at 67.31 78.74 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "5290ae87-0925-58d8-a26b-9cf2f605af88")
-	)
-	(label "CAN_B_L"
-		(at 203.2 88.9 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "52b894ea-1112-5a4e-aa27-01fc10fff4a0")
-	)
-	(label "GND"
-		(at 203.2 83.82 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "587f7bc3-f9d9-5b4f-8f97-3130a0766306")
-	)
-	(label "CAN_A_L"
-		(at 203.2 86.36 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "5a02ae1a-568e-5517-b7bb-e2250cdda6aa")
-	)
-	(label "ETH_TX+"
-		(at 67.31 93.98 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "5a584e77-2fd0-56ad-9d4c-1927d59e4825")
-	)
-	(label "PPS_BUS"
-		(at 67.31 91.44 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "767b947d-64cd-562c-bbef-c82f54a0ac0c")
-	)
-	(label "GND"
-		(at 92.71 81.28 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "7a7437e2-407f-5b1b-a1d5-beda98c0279c")
-	)
-	(label "GND"
-		(at 203.2 81.28 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "9a89a523-9af2-5602-bcc6-a07642ced177")
-	)
-	(label "CAN_B_H"
-		(at 67.31 88.9 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "9e10eec4-dc2f-5933-9b54-932da443e8a6")
-	)
-	(label "CAN_A_H"
-		(at 177.8 86.36 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "a4298836-8728-5aaa-ae25-d273e84e517e")
-	)
-	(label "ETH_RX+"
-		(at 67.31 96.52 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "a505db36-080b-5535-89d0-83d137b0d865")
-	)
-	(label "ETH_TX-"
-		(at 92.71 93.98 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "b3adc7be-b718-5b0e-83c6-0720adc89bfd")
-	)
-	(label "CAN_A_L"
-		(at 92.71 86.36 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "bbc7b73a-a8ea-5504-a068-001d1bfa58b3")
-	)
-	(label "GND"
-		(at 92.71 83.82 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "bf8e5067-b987-5d4f-a57b-684cab570a1b")
-	)
-	(label "GND"
-		(at 67.31 83.82 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "d1420ee2-9707-5716-8b8c-711384a261fb")
-	)
-	(label "GND"
-		(at 92.71 91.44 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "de194bdb-8fe3-59b5-b051-bb6f71aa2f58")
-	)
-	(label "+12V_BUS2"
-		(at 177.8 78.74 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "e25b1343-7933-5292-b755-a1c206c215cc")
-	)
-	(label "+12V_BUS2"
-		(at 203.2 78.74 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "f19f8f19-ff1a-5623-8612-a22d2d789b58")
-	)
-	(symbol
-		(lib_id "operfly:Operfly_Bus_20")
-		(at 80.01 90.17 0)
-		(unit 1)
-		(body_style 1)
+	(sheet
+		(at 101.6 50.8)
+		(size 50.8 20.32)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(in_pos_files yes)
 		(dnp no)
-		(uuid "46b379d3-1359-589d-a0ac-276abc217957")
-		(property "Reference" "J1"
-			(at 80.01 73.66 0)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "1dcef2a4-d249-58e4-84e6-d6944eeaa58f")
+		(property "Sheetname" "Islemci"
+			(at 101.6 50.1 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left bottom)
 			)
 		)
-		(property "Value" "Operfly Bus 1"
-			(at 80.01 106.68 0)
+		(property "Sheetfile" "islemci.kicad_sch"
+			(at 101.6 71.72 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left top)
 			)
-		)
-		(property "Footprint" ""
-			(at 80.01 90.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 80.01 90.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 80.01 90.17 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "84947d2e-8810-5793-a1c6-717f826e50bf")
-		)
-		(pin "2"
-			(uuid "bc2d6284-9322-50b0-bab5-4a176602bd78")
-		)
-		(pin "3"
-			(uuid "da1ae6cf-3747-5e44-82f4-c9aab26d9ccf")
-		)
-		(pin "4"
-			(uuid "8fb16946-0100-5593-b5ab-1bd42d48960c")
-		)
-		(pin "5"
-			(uuid "2f3329b3-1898-599b-8a52-94868f83413f")
-		)
-		(pin "6"
-			(uuid "2f282650-33c1-5937-8974-5d1d6f17910c")
-		)
-		(pin "7"
-			(uuid "b7aff34e-df15-59a6-88a0-1c7ee72ff4ff")
-		)
-		(pin "8"
-			(uuid "443df031-988d-5f49-928d-9d3b6b71bff2")
-		)
-		(pin "9"
-			(uuid "eee9ebf1-de06-5b0f-aad2-fd2326f7d36b")
-		)
-		(pin "10"
-			(uuid "6e7c8e71-08e8-52c8-ba20-8fc692b54d85")
-		)
-		(pin "11"
-			(uuid "c086ec38-6637-5941-8671-f5aabbba836c")
-		)
-		(pin "12"
-			(uuid "dbbf612e-cf33-570a-8428-aa426e2a3504")
-		)
-		(pin "13"
-			(uuid "f03666ca-5632-5089-8893-8f2ed44efedf")
-		)
-		(pin "14"
-			(uuid "e0a00981-92e5-5e10-89e6-8def4f63a7cd")
-		)
-		(pin "15"
-			(uuid "9ae3d28b-cd75-5966-a12b-a404de2155c3")
-		)
-		(pin "16"
-			(uuid "f7970cf9-9083-5658-a31d-6bfd654d4299")
-		)
-		(pin "17"
-			(uuid "c41039e7-dc5a-5601-8a52-1b1066030856")
-		)
-		(pin "18"
-			(uuid "24029aeb-4163-5b39-8bf8-eb42eb21a8b7")
-		)
-		(pin "19"
-			(uuid "d5d554bf-9842-51aa-9f1c-ac6f5559be84")
-		)
-		(pin "20"
-			(uuid "037f68ed-c716-5a13-b288-c59b1ccd7d68")
 		)
 		(instances
 			(project "operfly_core"
-				(path "/d48159a1-da92-5502-a8de-e7148e8aed5b"
-					(reference "J1")
-					(unit 1)
+				(path "/021aeb0d-29af-5cb6-83ea-514d49692429"
+					(page "3")
 				)
 			)
 		)
 	)
-	(symbol
-		(lib_id "operfly:Operfly_Bus_20")
-		(at 190.5 90.17 0)
-		(unit 1)
-		(body_style 1)
+	(sheet
+		(at 25.4 50.8)
+		(size 50.8 20.32)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(in_pos_files yes)
 		(dnp no)
-		(uuid "84ed578d-e190-56be-8513-283d029357b6")
-		(property "Reference" "J2"
-			(at 190.5 73.66 0)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "a90d8aaf-689f-5c6a-a844-2bbd6c1400a2")
+		(property "Sheetname" "Omurga"
+			(at 25.4 50.1 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left bottom)
 			)
 		)
-		(property "Value" "Operfly Bus 2 (yedek)"
-			(at 190.5 106.68 0)
+		(property "Sheetfile" "omurga.kicad_sch"
+			(at 25.4 71.72 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left top)
 			)
-		)
-		(property "Footprint" ""
-			(at 190.5 90.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 190.5 90.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 190.5 90.17 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "bf5ecb51-7b04-50e2-bba0-ad406546a835")
-		)
-		(pin "2"
-			(uuid "d72674b0-1720-55ae-8960-fe4c8900e233")
-		)
-		(pin "3"
-			(uuid "58d2404e-5847-5f39-8b8d-4326a97410cc")
-		)
-		(pin "4"
-			(uuid "60887a11-6950-5423-9ae9-c6ba29fbc088")
-		)
-		(pin "5"
-			(uuid "afafece8-88d0-5d94-87d3-213cc4bf4e3a")
-		)
-		(pin "6"
-			(uuid "fecdb41a-82bf-5635-ad2e-0bc87f418d7a")
-		)
-		(pin "7"
-			(uuid "a41502de-f80c-551a-90c7-7bd81253514e")
-		)
-		(pin "8"
-			(uuid "c5cf336a-81d8-56cd-ab9b-59e67bfc3a8c")
-		)
-		(pin "9"
-			(uuid "fc898b64-be7b-5f0e-a2c4-4793976d9c23")
-		)
-		(pin "10"
-			(uuid "92994b98-56f6-524f-b445-00a0e75c70c8")
-		)
-		(pin "11"
-			(uuid "81f5b641-47e3-515e-80a3-50e7fda02e18")
-		)
-		(pin "12"
-			(uuid "0d62f918-1a7e-58c7-94fa-fdf346f14d62")
-		)
-		(pin "13"
-			(uuid "509919a7-6047-5cf6-9752-ee971537f1c8")
-		)
-		(pin "14"
-			(uuid "70280c1a-31e0-54fb-b0cd-b7ae06f894ce")
-		)
-		(pin "15"
-			(uuid "085311f2-004d-5df7-9546-5a9f978ad97d")
-		)
-		(pin "16"
-			(uuid "912dca1c-130f-5b93-ab5c-9043eab7bdad")
-		)
-		(pin "17"
-			(uuid "b03f8564-2592-5a37-8e76-907a424a194c")
-		)
-		(pin "18"
-			(uuid "2db308f0-1e2c-546d-a3ff-f592a2512db0")
-		)
-		(pin "19"
-			(uuid "66c4f6a9-f3a7-5c65-b8b7-07f12f10798f")
-		)
-		(pin "20"
-			(uuid "b16e523a-667e-54f0-9bf7-a8367bcab054")
 		)
 		(instances
 			(project "operfly_core"
-				(path "/d48159a1-da92-5502-a8de-e7148e8aed5b"
-					(reference "J2")
-					(unit 1)
+				(path "/021aeb0d-29af-5cb6-83ea-514d49692429"
+					(page "2")
 				)
 			)
 		)

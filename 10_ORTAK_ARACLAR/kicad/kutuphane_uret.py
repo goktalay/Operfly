@@ -82,11 +82,37 @@ ENTEGRELER = [
 ]
 
 
+def ksz9567r():
+    """KSZ9567R, 128 uclu TQFP + alt ped. Uc numaralari uretici belgesindeki pin atama tablosundan (Tablo 3-1)."""
+    T = "tri_state"
+    sol, no = [], {1: (1, 4, 6, 8), 2: (12, 15, 17, 20), 3: (24, 26, 28, 31), 4: (34, 37, 39, 42), 5: (112, 115, 117, 120)}
+    for port in (1, 2, 3, 4, 5):
+        for cift, n in zip("ABCD", no[port]):
+            sol += [(str(n), "TXRX%dP_%s" % (port, cift), B), (str(n + 1), "TXRX%dM_%s" % (port, cift), B)]
+    sag = []
+    for port, t in ((6, 48), (7, 66)):
+        sag += [(str(t), "TX_CLK%d" % port, I), (str(t + 1), "TX_CTL%d" % port, I), (str(t + 2), "TX_ER%d" % port, P), (str(t + 3), "COL%d" % port, P)]
+        sag += [(str(t + 4 + i), "TXD%d_%d" % (port, 3 - i), I) for i in range(4)]
+    sag += [("57", "RX_CLK6", O), ("58", "RX_CTL6", O), ("59", "RX_ER6", P), ("60", "CRS6", P)] + [(str(62 + i), "RXD6_%d" % (3 - i), B) for i in range(4)]
+    sag += [("75", "RX_CLK7", O), ("76", "RX_CTL7", B), ("78", "RX_ER7", P), ("79", "CRS7", P)] + [(str(80 + i), "RXD7_%d" % (3 - i), B) for i in range(4)]
+    sag += [("96", "RESET_N", I), ("100", "SCS_N", I), ("101", "SCL", I), ("98", "SDI", B), ("97", "SDO", T), ("94", "INTRP_N", P), ("93", "PME_N", P),
+            ("95", "SYNCLKO", O), ("90", "GPIO_1", B), ("105", "LED1_0", B), ("106", "LED1_1", B), ("91", "LED2_0", B), ("92", "LED2_1", B),
+            ("88", "LED3_0", B), ("89", "LED3_1", B), ("85", "LED4_0", B), ("86", "LED4_1", B), ("102", "LED5_0", B), ("103", "LED5_1", B),
+            ("126", "XI", I), ("125", "XO", O), ("127", "ISET", P), ("108", "NC", N)]
+    ust = [(str(n), "AVDDH", G) for n in (10, 22, 33, 44, 111, 122, 128)] + [(str(n), "AVDDL", G) for n in (3, 14, 19, 30, 36, 41, 114, 119, 124)]
+    ust += [(str(n), "DVDDL", G) for n in (11, 23, 45, 56, 74, 87, 104, 110)] + [(str(n), "VDDIO", G) for n in (61, 77, 99)]
+    alt = [(str(n), "GND", G) for n in (46, 47, 84, 107, 109, 123)] + [("129", "EP", P)]
+    assert len(sol) + len(sag) + len(ust) + len(alt) == 129 and len({x[0] for x in sol + sag + ust + alt}) == 129
+    return kutu("KSZ9567R", sol, sag, ust, alt, "Package_QFP:TQFP-128_14x14mm_P0.4mm",
+                "7 portlu gigabit Ethernet anahtari, 5 bakir port + 2 RGMII, PTP (ayak izi gecici: alt pedli kilif cizilecek)", yari=73.66)
+
+
 def main():
     s = '(kicad_symbol_lib (version 20231120) (generator "operfly") (generator_version "1")\n'
     s += konnektor("Operfly_Bus_20", BUS, FP_BUS, "Operfly Bus portu, Harwin Gecko-SL 20 kontak")
     for e in ENTEGRELER:
         s += kutu(*e[:7], yari=e[7])
+    s += ksz9567r()
     s += ")\n"
     open(sys.argv[1], "w", encoding="utf-8", newline="\n").write(s)
     print("yazıldı:", sys.argv[1])

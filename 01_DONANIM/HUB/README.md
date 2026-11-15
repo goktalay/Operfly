@@ -5,9 +5,9 @@ Omurganın merkezi: 12 port, her portta elektronik sigorta ve akım ölçümü, 
 ## Durum (15 Kasım 2026)
 
 - KiCad projesi: `kicad/operfly_hub.kicad_pro`. Üretim ve denetim: `python 10_ORTAK_ARACLAR/kicad/denetle.py HUB operfly_hub`.
-- Çizilen: düğüm devresi (`dugum`), güç girişi ve port denetimi (`guc`), 12 port ve sigortaları (`portlar`).
-  ERC 0 hata, 0 uyarı.
-- Çizilmeyen: **Ethernet anahtarı** ve port trafoları. Portların Ethernet uçları şimdilik bağlı değil.
+- Şematik tamam, 8 sayfa: düğüm (`dugum`), güç girişi ve port denetimi (`guc`), 12 port ve sigortaları (`portlar`),
+  anahtar beslemeleri (`anahtar_besleme`), üç Ethernet anahtarı sayfası (`anahtar_a/b/c`). ERC 0 hata, 0 uyarı.
+- Kart çizimi başlamadı. Hub, ekosistemin en zor kartıdır (üç adet 128 uçlu entegre, 12 gigabit hat).
 
 ## Güç dağıtımı kararları (sahibi kararı tasarımcıya bıraktı)
 
@@ -30,17 +30,31 @@ Omurganın merkezi: 12 port, her portta elektronik sigorta ve akım ölçümü, 
 
 İşlemci pinleri: PA0 akım ölçümü, PA1 giriş gerilimi, PA4-PA7 seçici adresi, PB10/PB11 I2C, PB3 genişletici kesmesi.
 
-## Ethernet anahtarı (çizim bekliyor)
+## Ethernet anahtarı kararları (15 Kasım 2026)
 
-- Gereksinim: 12 bakır gigabit port, zaman eşleme (PTP), port bazında açma/kapama, yönetim için düğüm işlemcisine bağlantı.
-- KiCad standart kütüphanesinde 12 portluk bir anahtar entegresi yok; sembol üretici belgesindeki pin tablosundan
-  çıkarılacak (100'ün üzerinde pin). Bu yüzden ayrı bir adım olarak ele alınıyor.
-- Aday mimari: belgeleri açık, 5 bakır portlu ve PTP destekli anahtar entegrelerinden üç adet zincirlemek
-  (aday aile: Microchip KSZ9477/KSZ9567). Seçim, belge doğrulamasından sonra kesinleşir.
-- Her port için 4 çiftli gigabit trafo gerekir (12 adet).
+1. **Üç adet KSZ9567R** (Microchip). Her biri 5 bakır gigabit port, 2 RGMII portu ve zaman eşleme (PTP) desteği taşır;
+   belgeleri açıktır, pin tablosu doğrulanabildi. 12 bakır portlu tek entegre seçenekleri ayrıca araştırılmadı; kart
+   alanını küçültmek istenirse sonraki revizyonda bakılabilir.
+2. **Her anahtar dört omurga portuna hizmet eder** (A: 1-4, B: 5-8, C: 9-12); beşinci bakır portlar boş kalır (yedek).
+3. **Anahtarlar RGMII ile zincirlenir:** A-B ve B-C. Uçtan uca en çok iki atlama. A ile C arasındaki trafik B'den
+   geçer; B arızalanırsa A ve C birbirini göremez (kabul edilen risk; halka bağlantı sonraki revizyon seçeneği).
+4. **Yönetim SPI ile düğüm işlemcisinden** (ortak hat, üç ayrı seçme ucu, ortak sıfırlama).
+5. **Anahtarlar açılışta veri geçirmez** (başlatma ucu aşağı çekili). Düğüm işlemcisi kartların sertifikasını
+   doğruladıktan sonra anahtarı başlatır ve portları tek tek açar. Kapalı ekosistem kuralının donanım karşılığıdır.
+6. **Pin sırası üreticinin pin atama tablosundan alındı** ve ortak kütüphaneye işlendi (`KSZ9567R`, 128 uç + alt ped).
+7. **Trafo: 4 çiftli gigabit modül** (TG111-MSC13LF), port başına bir adet. Entegre tarafındaki orta uçlar ayrı ayrı
+   100 nF ile toprağa, kablo tarafı 75 ohm + 1 nF.
+8. **Beslemeler:** 3,3 V, 2,5 V ve 1,2 V için üç aynı regülatör (TPS62130, 3 A). Analog beslemeler ferritle ayrılır.
+9. **Port LED'i yok** (uçuş donanımı); durum yazılımdan okunur.
+
+İşlemci pinleri (ek): PB3/PB4/PA2 SPI, PB6/PB7/PC6 seçme uçları, PC7 sıfırlama, PB0 genişletici kesmesi.
 
 ## Doğrulanacaklar
 
 - TPS26630: akım sınırı formülü (18 / R kohm), kapatma girişinin (SHDN) 3,3 V lojikle sürülmesi, PGTH bölücüsü.
 - 12 port aynı anda açılırken toplam ani akım (Power çeviricisinin akım sınırıyla birlikte).
 - Yıldız topolojide CAN FD veri hızı üst sınırı (kablo boylarıyla ölçülecek).
+- KSZ9567R: akım tüketimi (1,2 V ve 2,5 V hatları), kullanılmayan uçların (7. port, MII'ye özgü uçlar) bağlanma önerisi,
+  RGMII saat gecikmesi ayarı (yazılımla), trafo orta uçlarının bağlanma biçimi, kristal yük kondansatörleri.
+- KSZ9567R ayak izi geçici (alt pedli 128 uçlu kılıf çizilecek).
+- TPS62130: sabit frekans ve çıkış ayar uçlarının bağlantısı, yumuşak başlatma kondansatörü.

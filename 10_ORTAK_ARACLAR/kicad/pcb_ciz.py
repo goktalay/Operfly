@@ -31,6 +31,8 @@ JAR = os.environ.get("OPERFLY_YOL_CIZICI", "")
 TOPRAK = "GND"
 KENAR_PAYI = 0.25   # mm; yol çizicinin kart kenarından ek uzaklığı
 KADEMELER = (0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0)   # besleme yolu genişlik kademeleri (mm)
+RF_DESENI = r"^(GNSS_|RADIO_|WB_|KUM_)?ANT_?\d(_RF)?$"   # anten ağları
+RF_GENISLIK = 0.35
 
 
 def kurallar(b, ayar):
@@ -68,12 +70,25 @@ def kurallar(b, ayar):
             ns.SetNetclass(ad, nc)
             kullanilan.add(ad)
         ns.SetNetclassPatternAssignment(ag, ad)
+    # Anten (RF) ağları: 4 katmanlı standart dizilimde yaklaşık 50 ohm veren genişlik (üreticinin katman
+    # dizilimiyle hesaplanıp doğrulanacak); uzunluk ve geçiş sayısı gözetilmez.
+    import re
+    rf = [ag for ag in en_dar if re.search(RF_DESENI, ag) and ag not in guc]
+    if rf:
+        nc = pcbnew.NETCLASS("RF")
+        nc.SetClearance(MM(max(aciklik, 0.2)))
+        nc.SetTrackWidth(MM(RF_GENISLIK))
+        nc.SetViaDiameter(MM(0.6))
+        nc.SetViaDrill(MM(0.3))
+        ns.SetNetclass("RF", nc)
+        for ag in sorted(rf):
+            ns.SetNetclassPatternAssignment(ag, "RF")
     bds.m_TrackMinWidth = MM(0.127)
     bds.m_ViasMinSize = MM(0.45)
     bds.m_MinThroughDrill = MM(0.2)
     bds.m_CopperEdgeClearance = MM(0.25)
     bds.m_MinClearance = MM(0.125)
-    bds.m_HoleClearance = MM(0.2)
+    bds.m_HoleClearance = MM(0.19)   # KiCad kütüphanesindeki USB Type-C ayak izinin kendi uç-delik aralığı 0,194 mm
     bds.m_HoleToHoleMin = MM(0.25)
     bds.m_ViasMinAnnularWidth = MM(0.1)
 

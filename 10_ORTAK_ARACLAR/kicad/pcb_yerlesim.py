@@ -10,6 +10,11 @@ Kart ayarları `01_DONANIM/<KART>/kicad/pcb_ayar.py` dosyasındaki AYAR sözlü�
     katman           bakır katman sayısı (varsayılan 4)
     kenar_otomatik   True ise ayarda geçmeyen J konnektörleri de kenara oturtulur (omurga portu batıya, anten
                      konnektörleri kuzeye, diğerleri en boş kenara); "ic" listesindeki konnektörler kart içinde kalır
+    yasak            [(sol, üst, sağ, alt), ...] eleman konmayacak bölgeler (mm)
+    ice_bakan        {"J2": ("B", konum)}: kenarda duran ama ağzı kartın içine bakan yuvalar (M.2 gibi; modül kartın
+                     üstüne yatar)
+    kenar_bosluk     kenara oturtulmayan elemanların kart kenarından en az uzaklığı (mm; varsayılan 0,3; çok uçlu
+                     entegresi olan kartlarda 2 verilir ki kenardaki uçlara yol çıkabilsin)
     tohum            rastgele sayı tohumu (aynı tohum = aynı yerleşim)
 Çıktı: `01_DONANIM/<KART>/kicad/<kök>.kicad_pcb` (yol çizilmemiş).
 
@@ -41,7 +46,7 @@ SINIFLAR = {"Default": (0.125, 0.20, 0.60, 0.30)}
 DUZLEMLER = {"In1.Cu": "GND", "In2.Cu": "+3V3"}
 VARSAYILAN = {"en": None, "boy": None, "kenar": {}, "sabit": {}, "delik": DELIK_M3, "delik_ic": 3.5, "katman": 4,
               "tohum": 1, "bosluk": 0.30, "doluluk": 0.42, "oran": 1.35, "siniflar": {}, "guc_aglari": [], "duzlemler": DUZLEMLER,
-              "kenar_otomatik": True, "ic": []}
+              "kenar_otomatik": True, "ic": [], "kenar_bosluk": 0.3, "ice_bakan": {}, "yasak": []}
 
 
 def ayar_oku(kart):
@@ -106,6 +111,20 @@ class Eleman:
         self.fp.SetPosition(pcbnew.VECTOR2I(MM(self.x), MM(self.y)))
 
 
+class Engel:
+    """Eleman konmayacak bölge (ör. kartın üstüne yatan modülün altı)."""
+    sabit = True
+
+    def __init__(self, kutu):
+        self._k = kutu
+
+    def kutu(self, pay=0.0):
+        return self._k
+
+    def yaz(self):
+        pass
+
+
 class Bolme:
     """Düzlemi karelere bölen arama yapısı: bir kutuya yakın elemanları hepsine bakmadan bulur."""
 
@@ -146,9 +165,13 @@ def acilis(e):
     return ("D" if vx > 0 else "B") if abs(vx) > abs(vy) else ("G" if vy > 0 else "K")
 
 
-def kenara_oturt(e, kenar, konum, en, boy, ic=0.0):
-    """Konnektörü ağzı dışarı bakacak biçimde kenara yaslar; dikey konnektör kenardan 1 mm içeride durur."""
+def kenara_oturt(e, kenar, konum, en, boy, ic=0.0, ters=False):
+    """Konnektörü ağzı dışarı bakacak biçimde kenara yaslar; dikey konnektör kenardan 1 mm içeride durur.
+    ters=True: ağzı kartın içine bakar (kart üstüne yatan modül yuvaları, ör. M.2), kenardan 3 mm içeride."""
     yon = acilis(e)
+    if ters and yon is not None:
+        yon = {"K": "G", "G": "K", "D": "B", "B": "D"}[yon]
+        ic = 3.0
     sira = ["K", "D", "G", "B"]   # KiCad'de artı açı saat yönünün tersidir (y aşağı): K -> B -> G -> D
     if yon is None:
         e.rot, ic = (0 if kenar in "KG" else 90), 1.0
@@ -211,6 +234,8 @@ def yerlestir(kart, kok, ayar=None):
     for ref, (x, y, r) in a["sabit"].items():
         e = el[idx[ref]]
         e.x, e.y, e.rot, e.sabit = x, y, r, True
+    for ref, (kenar, konum) in a["ice_bakan"].items():
+        kenara_oturt(el[idx[ref]], kenar, konum, en, boy, ters=True)
     kenar_ayari = dict(a["kenar"])
     if a["kenar_otomatik"]:
         # Ayarda yeri verilmeyen konnektörler: omurga portu batıya, anten konnektörleri kuzeye, diğerleri en boş kenara.
@@ -222,9 +247,11 @@ def yerlestir(kart, kok, ayar=None):
             return max(g[2] - g[0], g[3] - g[1]) if acilis(e) is None else (g[2] - g[0] if acilis(e) in "KG" else g[3] - g[1])
         for ref, (kenar, _) in kenar_ayari.items():
             dolu[kenar] += genislik(el[idx[ref]]) + 2.0
-        adaylar = [e for e in el if re.match(r"^J\d+$", e.ref) and e.ref not in kenar_ayari and e.ref not in a["sabit"] and e.ref not in a["ic"]]
+        adaylar = [e for e in el if re.match(r"^J\d+$", e.ref) and e.ref not in kenar_ayari and e.ref not in a["sabit"] and e.ref not in a["ic"] and e.ref not in a["ice_bakan"]]
+        gecko = sorted((e.ref for e in adaylar if "Gecko" in e.ad), key=lambda r: int(r[1:]))
+        omurga = gecko[0] if gecko and not any("Gecko" in el[idx[r]].ad for r in kenar_ayari) else None   # ilk omurga portu batıya
         for e in sorted(adaylar, key=lambda e: (-genislik(e), e.ref)):
-            if "Gecko" in e.ad:
+            if "Gecko" in e.ad and e.ref == omurga:
                 kenar = "B"
             elif "SMA" in e.ad:
                 kenar = "K"
@@ -259,7 +286,7 @@ def yerlestir(kart, kok, ayar=None):
             for ref, (a_, b_) in zip(serbest, olcu):
                 kenara_oturt(el[idx[ref]], kenar, konum - a_, en, boy)
                 konum += (b_ - a_) + ara
-    hepsi = el + delikler
+    hepsi = el + delikler + [Engel(k) for k in a["yasak"]]
     hareketli = [i for i, e in enumerate(el) if not e.sabit]
     # Ağlar: (ağırlık, [(eleman, uç sırası)])
     aglar, eleman_aglari = [], [[] for _ in el]
@@ -328,6 +355,7 @@ def yerlestir(kart, kok, ayar=None):
         og = o.geo[o.rot][4]
         return 1.5 * min(abs(o.x + og[k][2] - px) + abs(o.y + og[k][3] - py) for k in hedef)
 
+    kb = a["kenar_bosluk"]   # kenara oturtulmayan elemanların kart kenarından en az uzaklığı
     bolme = Bolme()
     for k, e in enumerate(hepsi):
         bolme.ekle(k, e.kutu(pay))
@@ -335,7 +363,7 @@ def yerlestir(kart, kok, ayar=None):
     def cakisma(i):
         e = el[i]
         l, t, r, bb = e.kutu(pay)
-        c = max(0.0, -l) + max(0.0, -t) + max(0.0, r - en) + max(0.0, bb - boy)
+        c = max(0.0, kb - l) + max(0.0, kb - t) + max(0.0, r - en + kb) + max(0.0, bb - boy + kb)
         c *= 4.0
         for k in bolme.yakin((l, t, r, bb)):
             if k == i:
@@ -419,7 +447,7 @@ def yerlestir(kart, kok, ayar=None):
 
     def bos_mu(e):
         l, t, r, bb = e.kutu(pay)
-        if l < 0.3 or t < 0.3 or r > en - 0.3 or bb > boy - 0.3:
+        if l < kb or t < kb or r > en - kb or bb > boy - kb:
             return False
         for k in konan.yakin((l, t, r, bb)):
             ol, ot, orr, ob = hepsi[k].kutu(pay)

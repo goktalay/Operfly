@@ -46,7 +46,14 @@ def rapor(kart, kok, notlar):
     b += ("Sahibinin kararıyla kart **otomatik** çizildi: yerleşim `pcb_yerlesim.py`, yollar dış bir otomatik yol çiziciyle\n"
           "(`pcb_ciz.py`). Dosya: `kicad/%s.kicad_pcb`; ayarlar `kicad/pcb_ayar.py`.\n"
           "Yeniden üretmek için: `python 10_ORTAK_ARACLAR/kicad/pcb_ciz.py %s %s`.\n\n" % (kok, kart, kok))
-    b += "- **Kart:** %.0f x %.0f mm, 4 katman (üst: elemanlar + sinyal, iç 1: toprak, iç 2: +3V3, alt: sinyal), %d eleman, tamamı üst yüzde; köşelerde M3 montaj deliği.\n" % (s["en"], s["boy"], s["eleman"])
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import pcb_yerlesim
+    ayar = pcb_yerlesim.ayar_oku(kart)
+    if ayar["katman"] == 4:
+        dizilim = "4 katman (üst: elemanlar + sinyal, iç 1: toprak, iç 2: +3V3, alt: sinyal)"
+    else:
+        dizilim = "%d katman (%s; diğer katmanlar sinyal, elemanlar üstte)" % (ayar["katman"], ", ".join("%s: %s" % (k.replace("In", "iç ").replace(".Cu", ""), v.replace("GND", "toprak")) for k, v in sorted(ayar["duzlemler"].items())))
+    b += "- **Kart:** %.0f x %.0f mm, %s, %d eleman, tamamı üst yüzde; köşelerde M3 montaj deliği.\n" % (s["en"], s["boy"], dizilim, s["eleman"])
     b += "- **Kurallar:** yol 0,20 mm, açıklık 0,125 mm, geçiş 0,6/0,3 mm; besleme ağları, ağın en dar ucunu aşmayacak biçimde 0,2-1,0 mm (0,4 mm ve üstünde geçiş 0,8/0,4 mm); bakır-kenar 0,25 mm.\n"
     if temiz:
         b += "- **Denetim:** DRC 0 ihlal, 0 bağlanmamış uç%s. %d yol parçası, %d geçiş.\n" % ("; şematik-kart uyumu temiz" if s["uyum"] == 0 else "; şematik-kart uyum uyarısı %d" % s["uyum"], s["yol"], s["gecis"])

@@ -3,6 +3,7 @@
   (lib (name "Capacitor_SMD")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Capacitor_SMD.pretty")(options "")(descr ""))
   (lib (name "Connector_AMASS")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Connector_AMASS.pretty")(options "")(descr ""))
   (lib (name "Connector_Harwin")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Connector_Harwin.pretty")(options "")(descr ""))
+  (lib (name "Connector_JST")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Connector_JST.pretty")(options "")(descr ""))
   (lib (name "Crystal")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Crystal.pretty")(options "")(descr ""))
   (lib (name "Diode_SMD")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Diode_SMD.pretty")(options "")(descr ""))
   (lib (name "Fuse")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Fuse.pretty")(options "")(descr ""))

@@ -4898,10 +4898,6 @@
 		(uuid "42bf8ea0-1985-5dd0-803a-3970bccdcc98")
 	)
 	(no_connect
-		(at 138.43 269.24)
-		(uuid "448d9bef-8217-58a1-87ac-c0133885f8cb")
-	)
-	(no_connect
 		(at 138.43 304.8)
 		(uuid "59b96440-ebe9-5947-bcd6-b729d87cfd76")
 	)
@@ -4922,10 +4918,6 @@
 		(uuid "6a82b48e-6987-5429-921a-aed0a95ca329")
 	)
 	(no_connect
-		(at 138.43 317.5)
-		(uuid "6b23ef3e-65bb-5b11-9a1b-b575b997c9f0")
-	)
-	(no_connect
 		(at 138.43 297.18)
 		(uuid "6e1915ec-d68a-573d-92f8-64ae3b50d731")
 	)
@@ -4938,24 +4930,12 @@
 		(uuid "7a811788-d19b-5645-9833-971062fbc6d6")
 	)
 	(no_connect
-		(at 138.43 274.32)
-		(uuid "8d229054-9dad-581f-962b-65c7016066e4")
-	)
-	(no_connect
-		(at 138.43 266.7)
-		(uuid "92d29c44-1f6a-5751-9ca0-15fbbefec2b1")
-	)
-	(no_connect
 		(at 82.55 287.02)
 		(uuid "93aa2805-c59f-5034-afc2-939352778479")
 	)
 	(no_connect
 		(at 82.55 281.94)
 		(uuid "989d406f-3a48-5e35-b2f3-9345fc6094e7")
-	)
-	(no_connect
-		(at 138.43 320.04)
-		(uuid "b6d67f72-e467-54b1-85f7-45b0df651329")
 	)
 	(no_connect
 		(at 138.43 302.26)
@@ -4992,10 +4972,6 @@
 	(no_connect
 		(at 270.51 160.02)
 		(uuid "d4ab1b34-d8d5-5d9e-8292-de82764f1e0e")
-	)
-	(no_connect
-		(at 138.43 271.78)
-		(uuid "dde3673c-c042-5c92-8bda-86d7f765e252")
 	)
 	(no_connect
 		(at 57.15 83.82)
@@ -5919,6 +5895,28 @@
 			)
 		)
 	)
+	(global_label "SRV_B_SENS"
+		(shape passive)
+		(at 138.43 271.78 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3ee8f444-c085-5f64-8c42-04b215c2f043")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 138.43 271.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
 	(global_label "GND"
 		(shape passive)
 		(at 534.67 74.93 270)
@@ -6447,6 +6445,28 @@
 			)
 		)
 	)
+	(global_label "SRV_A_OFF"
+		(shape passive)
+		(at 138.43 317.5 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "62ce2f2f-1f4b-5128-97e0-52615cefa556")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 138.43 317.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
 	(global_label "SE_SDA"
 		(shape passive)
 		(at 511.81 199.39 270)
@@ -6887,6 +6907,28 @@
 			)
 		)
 	)
+	(global_label "IBAT_SENS"
+		(shape passive)
+		(at 138.43 274.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7ef1c3c1-f417-5942-94e8-8895a971bfe9")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 138.43 274.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
 	(global_label "SE_SCL"
 		(shape passive)
 		(at 426.72 182.88 180)
@@ -7075,6 +7117,50 @@
 		(uuid "86137eb1-7c33-516e-8373-3147770d9838")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 125.73 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "SRV_B_OFF"
+		(shape passive)
+		(at 138.43 320.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "87dde326-f4c7-5f32-ac74-af9071ca905b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 138.43 320.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "SRV_A_SENS"
+		(shape passive)
+		(at 138.43 269.24 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "89690edd-8aad-5255-8003-c312bdd0ea54")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 138.43 269.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7449,6 +7535,28 @@
 		(uuid "b6000e10-e196-5285-afef-9362c5e50e6a")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 186.69 163.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "SERVO_SENS"
+		(shape passive)
+		(at 138.43 266.7 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b6a6a201-69cd-5882-acd8-973b252253ed")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 138.43 266.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

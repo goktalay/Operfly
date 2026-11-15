@@ -38,6 +38,7 @@ Pin haritasından çıkan tasarım notları:
   kondansatörleri (`islemci_destek`), Ethernet/CAN/USB/microSD/PPS (`haberlesme`), sensörler/bellek/güvenli eleman
   (`sensorler`), IO işlemcisi ve çıkışlar (`io`), gözetim/enerji deposu/Peltier (`gozetim`).
 - Durum: şematik tamam; ERC 0 hata, 0 uyarı. Sıradaki iş doğrulama listesi ve kart çizimi.
+- Diğer kartlar ortak yardımcıları kullanır: `10_ORTAK_ARACLAR/kicad/kart.py` ve `dugum.py` (düğüm devresi).
 
 ## Güç ve işlemci destek kararları (15 Kasım 2026, sahibinin onayı beklenmeden alındı)
 

@@ -32,6 +32,7 @@ KARTLAR = [
     ("air", "AIR", "operfly_air", "Operfly Air"),
     ("engine", "ENGINE", "operfly_engine", "Operfly Engine"),
     ("vision", "VISION", "operfly_vision", "Operfly Vision"),
+    ("range", "RANGE", "operfly_range", "Operfly Range 10 / 30 / 100"),
 ]
 
 

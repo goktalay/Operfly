@@ -63,9 +63,9 @@ prices=[
 ("10 inç gün ışığında okunur dokunmatik ekran",400,T,"","","",M,A),
 ("CRPA modülü, 4 kanal, L1",1342,D,"Satıcı sayfası tek adet 1.342 $ (sayfa verisinde 1.342–1.492 aralığı). Kaynak: yundingantenna.com (YDAJ-P4065). Performans üretici beyanı; ithalat koşulları teyit edilecek","Yunding Antenna","YDAJ-P4065",M,S),
 ("5G M.2 modem",250,B,"Türkiye bantları: n28 ve n78","","",M,A),
-("Mesafe sensörü çekirdeği, 10 m",50,B,"","","",M,A),
-("Mesafe sensörü çekirdeği, 30 m",150,B,"","","",M,A),
-("Mesafe sensörü çekirdeği, 100 m",400,B,"","","",M,A),
+("Mesafe sensörü çekirdeği, 10 m",50,T,"Aday: 12 m, 5 V, seri port/I2C; numuneyle kesinleşecek; fiyat teyit edilecek","Benewake","TFmini Plus",M,O),
+("Mesafe sensörü çekirdeği, 30 m",150,T,"Aday: 40 m (%10 yansıtmada 13,5 m), 5 V, seri port/I2C; fiyat teyit edilecek","Benewake","TF02-Pro",M,O),
+("Mesafe sensörü çekirdeği, 100 m",260,D,"Aday: 100 m, IP67; 5 V seri port sürümü alınmalı. Satıcılarda tek adet 205 € ile 259 $ arası. Kaynak: exp-tech.de/en/products/tf03-100uart-can, worldronemarket.com/product/benewake-tf03-100-lidar-module","Benewake","TF03-100 (UART/CAN, 5 V)",M,O),
 ]
 PR={p[0]:p for p in prices}
 small="PCB, 8 katman Sınıf 3 (küçük kart)"; big="PCB, 8 katman Sınıf 3 (büyük kart)"
@@ -200,7 +200,7 @@ for i,l in enumerate(lines,1):
     c=sv.cell(row=i,column=1,value=l); c.font=bf if i==1 else nf; c.alignment=Alignment(wrap_text=True)
 wb.save("Operfly_BOM.xlsx")
 # denetim
-exp={"Core":(520,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(413,520),"Radio":(384,450),"RX":(373,86),"Pilot 12":(882,86),"Air":(393,0),"Engine":(383,0),"Vision":(611,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,400),"Cell":(407,250),"Pilot T":(912,86),"Pilot Pro":(1153,1796),"Base":(398,520),"Ground Radio":(494,536),"Tracker":(613,0),"Shield":(373,1342)}
+exp={"Core":(520,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(413,520),"Radio":(384,450),"RX":(373,86),"Pilot 12":(882,86),"Air":(393,0),"Engine":(383,0),"Vision":(611,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,260),"Cell":(407,250),"Pilot T":(912,86),"Pilot Pro":(1153,1796),"Base":(398,520),"Ground Radio":(494,536),"Tracker":(613,0),"Shield":(373,1342)}
 tk=tm=0
 for n,c,s,its in P:
     k=sum(q*PR[i][1] for i,q in its if PR[i][6]==K); m=sum(q*PR[i][1] for i,q in its if PR[i][6]==M)

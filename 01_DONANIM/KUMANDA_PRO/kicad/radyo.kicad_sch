@@ -3451,7 +3451,7 @@
 		)
 		(uuid "04ecb558-d957-551d-b2aa-baead5c9b5ab")
 	)
-	(text "I2C guc islemcisine gider (iki islemci arasi baglanti), PWR_HOLD kullanilmaz (gucu guc islemcisi tutar), USB 2. adimda Jetson'a baglanir."
+	(text "I2C guc islemcisine gider (iki islemci arasi baglanti), PWR_HOLD kullanilmaz (gucu guc islemcisi tutar), USB gobegin 1. portuna gider."
 		(exclude_from_sim no)
 		(at 270 156 0)
 		(effects
@@ -3460,7 +3460,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "a45ecd9e-69f5-50a7-9ad2-b846c4d5d995")
+		(uuid "a0333d07-fd9d-5425-9cad-06e7072eb49d")
 	)
 	(text "RADYO BESLEMESI (AP63201, +VSYS -> 5,3 V, 2 A, sabit frekansli): RX kartindaki devrenin aynisi. Cikis = 0,8 V x (1 + 169k / 30k1) = 5,29 V."
 		(exclude_from_sim no)
@@ -4430,6 +4430,28 @@
 			)
 		)
 	)
+	(global_label "RADIO_SWO"
+		(shape passive)
+		(at 186.69 154.94 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "686217ce-bbbe-5c25-923d-10d5ae714e85")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 186.69 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
 	(global_label "SW_RADIO"
 		(shape passive)
 		(at 403.86 76.2 90)
@@ -4486,6 +4508,28 @@
 		(uuid "72091cea-5945-5bf2-8191-074e7f8cb2bc")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 289.56 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "RADIO_3V3"
+		(shape passive)
+		(at 209.55 154.94 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "72213776-50ef-54b5-83b1-a93e52fdab91")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 209.55 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5002,28 +5046,6 @@
 			)
 		)
 	)
-	(global_label "RADIO_SWO"
-		(shape passive)
-		(at 186.69 154.94 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "b97d6afa-c1fa-5637-a8e4-3b5729cbd7a6")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 186.69 154.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "RADIO_TXD"
 		(shape passive)
 		(at 232.41 154.94 270)
@@ -5033,7 +5055,7 @@
 			)
 			(justify right)
 		)
-		(uuid "b97e9bb7-afca-5820-adf6-cb17ae82f64b")
+		(uuid "b97d6afa-c1fa-5637-a8e4-3b5729cbd7a6")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 232.41 154.94 0)
 			(hide yes)
@@ -5168,28 +5190,6 @@
 		(uuid "cae295b3-52fc-5696-9fa4-95aa67af6d01")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 82.55 87.63 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "KUM_USB_DM"
-		(shape passive)
-		(at 419.1 199.39 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "cc25585d-92a5-5624-92f7-693d313acbcd")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 419.1 199.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5354,28 +5354,6 @@
 			)
 		)
 	)
-	(global_label "KUM_USB_DP"
-		(shape passive)
-		(at 396.24 199.39 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "e24b078e-44ec-5316-be19-a3ad5a504111")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 396.24 199.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "+5V"
 		(shape passive)
 		(at 396.24 223.52 90)
@@ -5508,28 +5486,6 @@
 			)
 		)
 	)
-	(global_label "RADIO_3V3"
-		(shape passive)
-		(at 209.55 154.94 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "ec4b7b7f-2ac2-51b2-b2f3-f075aa3fb4ae")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 209.55 154.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "SW_RADIO"
 		(shape passive)
 		(at 381 83.82 270)
@@ -5642,7 +5598,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 186.69 154.94 0)
+		(at 232.41 154.94 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5652,7 +5608,7 @@
 		(dnp no)
 		(uuid "05823b0e-1170-567e-9228-70cfff46e3a9")
 		(property "Reference" "TP12"
-			(at 189.23 153.67 0)
+			(at 234.95 153.67 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5662,8 +5618,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "RADIO_SWO"
-			(at 189.23 156.21 0)
+		(property "Value" "RADIO_TXD"
+			(at 234.95 156.21 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5674,7 +5630,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 186.69 154.94 0)
+			(at 232.41 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5685,7 +5641,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 186.69 154.94 0)
+			(at 232.41 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5696,7 +5652,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 186.69 154.94 0)
+			(at 232.41 154.94 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5958,83 +5914,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 396.24 199.39 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "2d119943-767d-57cf-a808-eda81d7de5c7")
-		(property "Reference" "TP15"
-			(at 398.78 198.12 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "KUM_USB_DP"
-			(at 398.78 200.66 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 396.24 199.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 396.24 199.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 396.24 199.39 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5ba2819d-e9c2-5bf8-ba5f-7c56fca10278")
-		)
-		(instances
-			(project "operfly_pilotpro"
-				(path "/b7c47103-47da-5702-9736-49131f4f5275/ca451ee0-9fc0-5fec-b786-18f971b3f276"
-					(reference "TP15")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Regulator_Switching:AP63201WU")
 		(at 299.72 80.01 0)
 		(unit 1)
@@ -6119,6 +5998,83 @@
 			(project "operfly_pilotpro"
 				(path "/b7c47103-47da-5702-9736-49131f4f5275/ca451ee0-9fc0-5fec-b786-18f971b3f276"
 					(reference "U10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 186.69 154.94 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "30e98be4-d269-5e21-9e54-e0d2bbba6b0d")
+		(property "Reference" "TP10"
+			(at 189.23 153.67 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "RADIO_SWO"
+			(at 189.23 156.21 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
+			(at 186.69 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 186.69 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 186.69 154.94 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "26cb7411-637b-5d39-9685-bcedf291375d")
+		)
+		(instances
+			(project "operfly_pilotpro"
+				(path "/b7c47103-47da-5702-9736-49131f4f5275/ca451ee0-9fc0-5fec-b786-18f971b3f276"
+					(reference "TP10")
 					(unit 1)
 				)
 			)
@@ -6665,83 +6621,6 @@
 			(project "operfly_pilotpro"
 				(path "/b7c47103-47da-5702-9736-49131f4f5275/ca451ee0-9fc0-5fec-b786-18f971b3f276"
 					(reference "C51")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 232.41 154.94 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "742ab103-30ea-5bae-be81-0a4feef12191")
-		(property "Reference" "TP14"
-			(at 234.95 153.67 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "RADIO_TXD"
-			(at 234.95 156.21 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 232.41 154.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 232.41 154.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 232.41 154.94 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5189b742-03e2-5ae7-bab7-00c05168a15d")
-		)
-		(instances
-			(project "operfly_pilotpro"
-				(path "/b7c47103-47da-5702-9736-49131f4f5275/ca451ee0-9fc0-5fec-b786-18f971b3f276"
-					(reference "TP14")
 					(unit 1)
 				)
 			)
@@ -7790,8 +7669,8 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "d327f3e7-05dd-54f2-bbf5-433cded89b8a")
-		(property "Reference" "TP13"
+		(uuid "d1e31968-838e-5aa0-9e4a-82351114b680")
+		(property "Reference" "TP11"
 			(at 212.09 153.67 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7846,12 +7725,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "3a6fba0d-f499-54b9-a88a-0f3c50078447")
+			(uuid "b34dd0ae-67e4-556c-9e25-743b159fd93d")
 		)
 		(instances
 			(project "operfly_pilotpro"
 				(path "/b7c47103-47da-5702-9736-49131f4f5275/ca451ee0-9fc0-5fec-b786-18f971b3f276"
-					(reference "TP13")
+					(reference "TP11")
 					(unit 1)
 				)
 			)
@@ -8012,83 +7891,6 @@
 			(project "operfly_pilotpro"
 				(path "/b7c47103-47da-5702-9736-49131f4f5275/ca451ee0-9fc0-5fec-b786-18f971b3f276"
 					(reference "L4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 419.1 199.39 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "d81a469e-d5b2-52c6-bbf7-b6e85891701a")
-		(property "Reference" "TP16"
-			(at 421.64 198.12 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "KUM_USB_DM"
-			(at 421.64 200.66 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 419.1 199.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 419.1 199.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 419.1 199.39 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "99accbd4-6489-57ee-b3b8-03b5b0ec07a0")
-		)
-		(instances
-			(project "operfly_pilotpro"
-				(path "/b7c47103-47da-5702-9736-49131f4f5275/ca451ee0-9fc0-5fec-b786-18f971b3f276"
-					(reference "TP16")
 					(unit 1)
 				)
 			)

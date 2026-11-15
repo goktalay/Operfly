@@ -4,15 +4,16 @@ En üst kumanda modeli: 10 inç ekran, üzerinde çalışan yer istasyonu yazıl
 İşlemci ve güvenli eleman taşıyan ortak giriş kartıyla (`01_DONANIM/KUMANDA_GIRIS`) birlikte çalışır; iki kart
 arasındaki bağlantı: `13_DOKUMANTASYON/KUMANDA_ARAYUZU.md`.
 
-## Durum (15 Kasım 2026): şematik İKİ ADIMDA çiziliyor, 1. adım tamam
+## Durum (15 Kasım 2026): şematik ADIM ADIM çiziliyor; ekran ve geniş bant radyo henüz yok
 
 - KiCad projesi: `kicad/operfly_pilotpro.kicad_pro`.
   Üretim ve denetim: `python 10_ORTAK_ARACLAR/kicad/denetle.py KUMANDA_PRO operfly_pilotpro`.
-- **1. adım (tamam, ERC 0 hata, 0 uyarı), 4 sayfa:** kök, güç işlemcisi (`dugum`), USB-C güç anlaşması + batarya
-  şarjı + güç yolu + 3,3 V / 5 V + güç düğmesi (`guc`), kumanda radyosu + giriş kartı bağlantısı + sesli uyarıcı
-  (`radyo`). Bu kadarıyla kart **kumanda olarak** çalışır (12 kanal, şarj, açma/kapama).
-- **2. adım (henüz çizilmedi):** Jetson çekirdeği ve beslemesi, NVMe, Ethernet (omurga portu + geniş bant radyo),
-  geniş bant radyo modülü, 10 inç ekran ve dokunmatik arayüzü, USB göbeği. Aşağıda "Sonraki adım" bölümünde.
+- **Çizilenler (ERC 0 hata, 0 uyarı), 6 sayfa:** kök, güç işlemcisi (`dugum`), USB-C güç anlaşması + batarya şarjı
+  + güç yolu + 3,3 V / 5 V + güç düğmesi (`guc`), kumanda radyosu + giriş kartı bağlantısı + sesli uyarıcı (`radyo`),
+  Jetson soketi + beslemesi + denetimi (`jetson`), NVMe + USB göbeği + dış USB + omurga Ethernet'i + fan (`cevre`).
+- **Henüz çizilmeyenler:** geniş bant radyo modülü ve ikinci Ethernet portu, 10 inç ekran ve arka ışık arayüzü.
+  Aşağıda "Sonraki adım" bölümünde. Bu ikisi olmadan kart kumanda ve (ekransız) bilgisayar olarak çalışır,
+  ürün olarak tamam değildir.
 - Kart çizimi (PCB) başlamadı.
 
 ## Kararlar (sahibi kararı tasarımcıya bıraktı)
@@ -38,6 +39,18 @@ arasındaki bağlantı: `13_DOKUMANTASYON/KUMANDA_ARAYUZU.md`.
 7. **İki işlemci birbirine doğrudan bağlıdır** (yassı kablodaki I2C hattı ve uyarı ucu): batarya durumu ve
    "kapanıyorum" bilgisi Jetson'a bağlı olmadan kumanda işlemcisine ulaşır (sesli uyarı için).
 8. **3,3 V ve 5 V** düğüm kartlarındaki regülatörlerle aynıdır (AP63203 / AP63205), batarya bağlıyken sürekli açıktır.
+9. **Jetson çekirdeği Vision kartıyla aynıdır** (aynı soket, aynı denetim devreleri, aynı sigorta). Fark besleme:
+   Jetson'a batarya gerilimi (12-17 V) doğrudan verilir (modül 5-20 V kabul eder); sigorta 10,4 V altında ve
+   18,4 V üstünde keser. Jetson'ı güç işlemcisi açar, kapanma isteğini bekleyip düzgün kapatır.
+10. **Taşıyıcının 3,3 V'u tek regülatördür (TPS54560B, 5 A)**, batarya geriliminden; NVMe ve ileride ikinci Ethernet
+    denetleyicisi içindir. Vision'daki regülatör (en çok 17 V) batarya gerilimine yetmediği için değiştirildi;
+    Power ve Cell kartlarındaki parçayla aynıdır.
+11. **USB göbeği (4 port):** kumanda işlemcisi, güç işlemcisi, dokunmatik ekran, dış USB-A (bellek, fare, klavye).
+    Jetson kapalıyken göbek sıfırlamada tutulur, dış portların 5 V'u kesilir.
+12. **USB Type-C tek konnektördür:** hem şarj hem Jetson'ın servis/yazılım yükleme portu (Jetson USB0).
+13. **Omurga (Operfly Bus) portu:** Jetson'ın gigabit Ethernet'i + güç işlemcisinin CAN FD hatları. Yer radyosu,
+    Base ve bilgisayar buradan bağlanır. Pilot Pro omurgaya güç vermez ve omurgadan güç almaz.
+14. **Jetson ↔ güç işlemcisi:** seri port (seviye çeviriciyle) ve USB. Batarya, şarj ve sıcaklık bilgisi buradan gider.
 
 ## Sahibinin bilmesi gerekenler
 
@@ -52,17 +65,16 @@ arasındaki bağlantı: `13_DOKUMANTASYON/KUMANDA_ARAYUZU.md`.
 - **Pilot Pro'da yassı kablonun iki ucu farklı kullanılır:** I2C güç işlemcisine gider, PWR_HOLD kullanılmaz.
   Giriş kartının yazılımı kumanda modelini tanıyıp buna göre davranmalıdır (donanımı aynıdır).
 
-## Sonraki adım (2. adım, henüz çizilmedi)
+## Sonraki adım (henüz çizilmedi)
 
-- Jetson Orin NX soketi ve çekirdek devresi (Vision kartındaki devre temel alınacak), +VSYS'ten sigortalı besleme,
-  güç işlemcisiyle açma/kapama, fan.
-- NVMe (M.2), USB göbeği (kumanda işlemcisi, güç işlemcisi, dokunmatik ekran, servis USB'si, dış portlar).
-- Ethernet: Jetson'ın portu → omurga (Operfly Bus) konnektörü; ikinci port (PCIe denetleyici) → geniş bant radyo.
-- Geniş bant radyo modülü (Radio kartındaki devre) ve beslemeleri.
-- 10 inç yüksek parlaklıklı dokunmatik ekran arayüzü ve arka ışık beslemesi (panel seçimiyle birlikte).
+- **Geniş bant radyo modülü** (Radio kartındaki devre ve beslemeleri) ve onu Jetson'a bağlayan **ikinci Ethernet
+  portu** (PCIe denetleyici, Vision'daki kamera portu devresi; Jetson'ın PCIE1 hattı bunun için boş bırakıldı).
+- **10 inç yüksek parlaklıklı dokunmatik ekran:** panel seçilmedi. Jetson'ın görüntü çıkışı (DP/HDMI) ve arka ışık
+  beslemesi panelle birlikte çizilecek; görüntü çıkışının çevre devresi üreticinin tasarım kılavuzuyla
+  doğrulanmadan çizilmeyecek. Dokunmatik için USB konnektörü hazır.
 - Isıl tasarım ve güç bütçesinin ölçümle doğrulanması.
 
-## Doğrulanacaklar (1. adım)
+## Doğrulanacaklar
 
 - **Batarya paketi:** konnektör, uç sırası, sıcaklık ucunun türü (şarj entegresi 103AT sınıfı 10 k NTC bekler;
   farklıysa bölücü değişir ya da sıcaklık denetimi paketin kendi korumasına bırakılır), en yüksek şarj akımı.
@@ -77,3 +89,10 @@ arasındaki bağlantı: `13_DOKUMANTASYON/KUMANDA_ARAYUZU.md`.
 - **Koruma diyotları** (ESDA25P35-1U1M) için ayak izi yer tutucudur; üretici çizimiyle değiştirilecek.
 - **Güç bütçesi ve ısı:** 2. adım tamamlanınca toplam tüketim, bobin ve MOSFET ısısı hesaplanıp ölçülecek.
 - Kumanda radyosu ve frekans konuları: `01_DONANIM/KUMANDA_12/README.md` ve `01_DONANIM/RX/README.md`.
+- **Jetson bölümü** Vision'daki doğrulama listesini devralır (`01_DONANIM/VISION/README.md`): soket parça numarası,
+  POWER_EN seviyesi, SYS_RESET ile regülatör açma, USB algılama kutbu üreticinin tasarım kılavuzuyla karşılaştırılacak.
+- **SHUTDOWN_REQ bölücüsü** (100k / 22k) batarya gerilimine göre seçildi: 16,8 V'ta 3,0 V, 12 V'ta 2,2 V.
+- **3,3 V taşıyıcı regülatörünün kompanzasyonu** (13 kΩ, 4,7 nF, 47 pF) veri sayfası formülleriyle hesaplandı;
+  yük adımı ölçümüyle doğrulanacak. Etkinleştirme ucunun 1,8 V'luk SYS_RESET hattına bağlanması numunede denenecek.
+- **USB göbeği ayar uçları** (kendi beslemeli, 1. ve 2. portlar çıkarılamaz aygıt) üretici belgesiyle doğrulanacak.
+- **USB-C algılama:** VBUS 20 V'a çıkabildiği için algılama transistörünün kapısı 10 V görür (sınır 20 V).

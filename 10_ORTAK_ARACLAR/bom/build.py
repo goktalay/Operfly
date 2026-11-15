@@ -56,6 +56,7 @@ prices=[
 ("Pilot Pro bataryası ve şarj devresi",150,T,"Pilot Pro şematiği (1. adım): 4 hücreli akıllı Li-ion paket (seçilmedi; 100 Wh altı önerilir) + şarj/güç yolu, USB-C güç anlaşması, giriş anahtarları, batarya anahtarı. Fiyat teyit edilecek",TI+" / "+ST+" / Vishay","BQ25798RQMR, STUSB4500QTR, 2 x SUD50P04-08",K,O),
 ("USB–Gigabit Ethernet köprüsü",10,T,"Köprü + USB göbeği + trafo; fiyat teyit edilecek","Microchip / HALO","LAN7500i, USB2514B, TG111-MSC13LF",K,S),
 ("USB Type-C konnektör",6,T,"","","",K,TS),
+("USB göbeği ve dış USB portu",8,T,"Pilot Pro şematiği: 4 portlu göbek, 2 güç anahtarı, USB-A konnektör, korumalar; fiyat teyit edilecek","Microchip / "+TI+" / Molex","USB2514Bi-AEZG, 2 x TPS2051CDBV, 67643",K,S),
 ("Anten takip motorları ve sürücüleri (2 eksen)",250,T,"","","",K,A),
 ("GNSS modülü",520,D,"DigiKey tek adet 472 € / 424 £. Kaynak: digikey.es/en/products/detail/septentrio-inc/410322/12503897","Septentrio","mosaic-X5",M,S),
 ("Geniş bant radyo modülü (2,4 GHz, 1 W)",450,D,"ModalAI tek adet 449,99 $. Kaynak: modalai.com/products/oem-m0048-4-1","Microhard","pMDDL2450",M,S),
@@ -97,7 +98,7 @@ P=[
 ("Operfly Range 100","OPFR1H",3,[("Mesafe sensörü çekirdeği, 100 m",1)]+node+[(pas,1),(bus,1),(small,1),(asm,1)]),
 ("Operfly Cell","OPFCEL",4,[("5G M.2 modem",1),("SIM yuvası, eSIM, anten bağlantıları",1),("PCIe gigabit Ethernet denetleyici (Cell)",1),("Gigabit Ethernet trafosu",1),("Modem besleme regülatörü (3,8 V, 5 A)",1),("Radyo modülü soğutucusu ve ısı dolgusu",1),("USB Type-C konnektör",1)]+node+[(reg,1),(pas,1),(sma,4),(bus,1),(small,1),(asm,1)]),
 ("Operfly Pilot T","OPFKTL",4,merge([(KR,1),("Güvenli eleman",1),("Küçük ekran (Pilot T)",1),("Kumanda bataryası ve şarj devresi",1),(sma,2),(pas,1),(small,1),(asm,1)]+GK)),
-("Operfly Pilot Pro","OPFKPR",4,merge([("Jetson modülü",1),(WB,1),(KR,1),("10 inç gün ışığında okunur dokunmatik ekran",1),("M.2 NVMe 256 GB (endüstriyel)",1),("Jetson taşıyıcı devresi (soket, güç, soğutma)",1),("Güvenli eleman",1),("Pilot Pro bataryası ve şarj devresi",1),("CAN FD alıcı-verici",2),("Düğüm işlemcisi",1),("Güvenli eleman",1),(phy,1),(sma,4),(pas,1),(bus,1),(big,1),(asm,1)]+GK)),
+("Operfly Pilot Pro","OPFKPR",4,merge([("Jetson modülü",1),(WB,1),(KR,1),("10 inç gün ışığında okunur dokunmatik ekran",1),("M.2 NVMe 256 GB (endüstriyel)",1),("Jetson taşıyıcı devresi (soket, güç, soğutma)",1),("Güvenli eleman",1),("Pilot Pro bataryası ve şarj devresi",1),("CAN FD alıcı-verici",2),("Düğüm işlemcisi",1),("Güvenli eleman",1),("Gigabit Ethernet trafosu",1),("Port koruması: elektronik sigorta + akım ölçümü",1),("USB göbeği ve dış USB portu",1),(reg,1),(sma,4),(pas,1),(bus,1),(big,1),(asm,1)]+GK)),
 ("Operfly Base","OPFBAS",4,[("GNSS modülü",1),("GNSS RF ön ucu (LNA, filtre, anten beslemesi)",1)]+node+[(reg,1),(pas,1),(sma,1),(bus,1),(small,1),(asm,1)]),
 ("Operfly Ground Radio","OPFGRD",4,[(WB,1),(KR,1)]+node+[(phy,1),(reg,1),(pas,1),(sma,4),(bus,2),(big,1),(asm,1)]),
 ("Operfly Tracker","OPFTRK",4,[("Anten takip motorları ve sürücüleri (2 eksen)",1)]+node+[(reg,1),(pas,1),(bus,1),(small,1),(asm,1)]),
@@ -202,7 +203,7 @@ for i,l in enumerate(lines,1):
     c=sv.cell(row=i,column=1,value=l); c.font=bf if i==1 else nf; c.alignment=Alignment(wrap_text=True)
 wb.save("Operfly_BOM.xlsx")
 # denetim
-exp={"Core":(520,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(413,520),"Radio":(384,450),"RX":(373,86),"Pilot 12":(882,86),"Air":(393,0),"Engine":(383,0),"Vision":(611,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,260),"Cell":(436,250),"Pilot T":(912,86),"Pilot Pro":(1169,1796),"Base":(398,520),"Ground Radio":(494,536),"Tracker":(613,0),"Shield":(373,1342)}
+exp={"Core":(520,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(413,520),"Radio":(384,450),"RX":(373,86),"Pilot 12":(882,86),"Air":(393,0),"Engine":(383,0),"Vision":(611,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,260),"Cell":(436,250),"Pilot T":(912,86),"Pilot Pro":(1198,1796),"Base":(398,520),"Ground Radio":(494,536),"Tracker":(613,0),"Shield":(373,1342)}
 tk=tm=0
 for n,c,s,its in P:
     k=sum(q*PR[i][1] for i,q in its if PR[i][6]==K); m=sum(q*PR[i][1] for i,q in its if PR[i][6]==M)

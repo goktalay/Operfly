@@ -22,7 +22,7 @@
 		)
 		(uuid "3ad73e21-a21f-505f-98f8-61df016d4a64")
 	)
-	(text "Sematik betikle uretilir: 01_DONANIM/KUMANDA_PRO/kicad/uret.py. Cizilmeyenler: genis bant radyo, ikinci Ethernet portu, 10 inc ekran arayuzu."
+	(text "Sematik betikle uretilir: 01_DONANIM/KUMANDA_PRO/kicad/uret.py. Cizilmeyen: 10 inc ekranin goruntu ve arka isik arayuzu (panel secilmedi)."
 		(exclude_from_sim no)
 		(at 25.4 33.02 0)
 		(effects
@@ -31,7 +31,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "d3f4fe23-9a90-5d77-9883-43f2f4da50d3")
+		(uuid "a3e6b2c5-1fce-5c23-9e76-01c2b7d7c554")
 	)
 	(sheet
 		(at 25.4 50.8)
@@ -259,6 +259,52 @@
 			(project "operfly_pilotpro"
 				(path "/b7c47103-47da-5702-9736-49131f4f5275"
 					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 25.4 101.6)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "e570273f-f591-56f6-8016-8dddc5b5bb4a")
+		(property "Sheetname" "Genisbant"
+			(at 25.4 100.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "genisbant.kicad_sch"
+			(at 25.4 122.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_pilotpro"
+				(path "/b7c47103-47da-5702-9736-49131f4f5275"
+					(page "7")
 				)
 			)
 		)

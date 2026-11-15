@@ -4,16 +4,16 @@ En üst kumanda modeli: 10 inç ekran, üzerinde çalışan yer istasyonu yazıl
 İşlemci ve güvenli eleman taşıyan ortak giriş kartıyla (`01_DONANIM/KUMANDA_GIRIS`) birlikte çalışır; iki kart
 arasındaki bağlantı: `13_DOKUMANTASYON/KUMANDA_ARAYUZU.md`.
 
-## Durum (15 Kasım 2026): şematik ADIM ADIM çiziliyor; ekran ve geniş bant radyo henüz yok
+## Durum (15 Kasım 2026): şematikte yalnızca ekran arayüzü eksik
 
 - KiCad projesi: `kicad/operfly_pilotpro.kicad_pro`.
   Üretim ve denetim: `python 10_ORTAK_ARACLAR/kicad/denetle.py KUMANDA_PRO operfly_pilotpro`.
-- **Çizilenler (ERC 0 hata, 0 uyarı), 6 sayfa:** kök, güç işlemcisi (`dugum`), USB-C güç anlaşması + batarya şarjı
+- **Çizilenler (ERC 0 hata, 0 uyarı), 7 sayfa:** kök, güç işlemcisi (`dugum`), USB-C güç anlaşması + batarya şarjı
   + güç yolu + 3,3 V / 5 V + güç düğmesi (`guc`), kumanda radyosu + giriş kartı bağlantısı + sesli uyarıcı (`radyo`),
-  Jetson soketi + beslemesi + denetimi (`jetson`), NVMe + USB göbeği + dış USB + omurga Ethernet'i + fan (`cevre`).
-- **Henüz çizilmeyenler:** geniş bant radyo modülü ve ikinci Ethernet portu, 10 inç ekran ve arka ışık arayüzü.
-  Aşağıda "Sonraki adım" bölümünde. Bu ikisi olmadan kart kumanda ve (ekransız) bilgisayar olarak çalışır,
-  ürün olarak tamam değildir.
+  Jetson soketi + beslemesi + denetimi (`jetson`), NVMe + USB göbeği + dış USB + omurga Ethernet'i + fan (`cevre`),
+  geniş bant radyo + ikinci Ethernet portu (`genisbant`).
+- **Henüz çizilmeyen:** 10 inç ekranın görüntü ve arka ışık arayüzü (panel seçilmedi). Aşağıda "Sonraki adım"da.
+  Bu olmadan kart ürün olarak tamam değildir.
 - Kart çizimi (PCB) başlamadı.
 
 ## Kararlar (sahibi kararı tasarımcıya bıraktı)
@@ -51,6 +51,16 @@ arasındaki bağlantı: `13_DOKUMANTASYON/KUMANDA_ARAYUZU.md`.
 13. **Omurga (Operfly Bus) portu:** Jetson'ın gigabit Ethernet'i + güç işlemcisinin CAN FD hatları. Yer radyosu,
     Base ve bilgisayar buradan bağlanır. Pilot Pro omurgaya güç vermez ve omurgadan güç almaz.
 14. **Jetson ↔ güç işlemcisi:** seri port (seviye çeviriciyle) ve USB. Batarya, şarj ve sıcaklık bilgisi buradan gider.
+15. **Geniş bant radyo karttadır (Microhard pMDDL2450 OEM)**, Radio kartındaki devrenin aynısıyla: Pilot Pro araçla
+    doğrudan video/telemetri bağlantısı kurar, ayrı yer radyosu gerekmez (uzun menzil ve direk üstü anten için
+    Ground Radio omurga portundan yine bağlanabilir).
+16. **Radyo Jetson'a ikinci bir Ethernet portuyla bağlanır** (Intel I210, Jetson'ın PCIE1 hattı; Vision'daki kamera
+    portu devresi). Jetson'ın kendi Ethernet'i omurga portuna ayrıldığı için ikinci port gerekir. Radyonun ve
+    denetleyicinin trafoları kart üzerinde sırt sırta bağlanır: iki ayrı kartı kabloyla bağlamanın eşdeğeridir,
+    ikisi de üreticilerinin doğrulanmış devresinde kalır.
+17. **Radyonun denetim uçları güç işlemcisinin I2C hattındaki küçük genişleticidedir (PCA9536):** sıfırlama, ayar
+    kipi, verici beslemesini kesme, "çalışıyor" bilgisi. Güç işlemcisinde boş uç kalmadığı için. Radyonun ayarı
+    Jetson'dan Ethernet üzerinden yapılır; seri port yalnızca kurtarma içindir (ölçüm noktaları).
 
 ## Sahibinin bilmesi gerekenler
 
@@ -62,17 +72,20 @@ arasındaki bağlantı: `13_DOKUMANTASYON/KUMANDA_ARAYUZU.md`.
   yavaştır ve kumanda açıkken batarya yine de boşalır.
 - **STUSB4500'e istenen gerilim üretimde bir kez yazılır** (20 V 3 A); yazılmazsa fabrika ayarıyla daha düşük
   güçte anlaşır. Güç işlemcisi bunu ilk açılışta kendisi yazabilir.
+- **Düğmeye uzun basmak (yaklaşık 10 s) gücü ANİDEN keser.** Bu, kilitlenmeye karşı donanım sıfırlamasıdır; Jetson
+  için düzgün kapanma değildir ve disk bozulabilir. Olağan kapatma kısa basışladır: güç işlemcisi önce Jetson'ı
+  kapatır, sonra gücü keser.
+- **Geniş bant radyo tam güçte yaklaşık 9 W, Jetson 15-25 W çeker;** ikisi aynı kasada olduğu için soğutma kasa
+  tasarımının en önemli konusudur. Frekans ve güç izinleri Radio kartıyla aynıdır (`01_DONANIM/RADIO/README.md`).
 - **Pilot Pro'da yassı kablonun iki ucu farklı kullanılır:** I2C güç işlemcisine gider, PWR_HOLD kullanılmaz.
   Giriş kartının yazılımı kumanda modelini tanıyıp buna göre davranmalıdır (donanımı aynıdır).
 
 ## Sonraki adım (henüz çizilmedi)
 
-- **Geniş bant radyo modülü** (Radio kartındaki devre ve beslemeleri) ve onu Jetson'a bağlayan **ikinci Ethernet
-  portu** (PCIe denetleyici, Vision'daki kamera portu devresi; Jetson'ın PCIE1 hattı bunun için boş bırakıldı).
 - **10 inç yüksek parlaklıklı dokunmatik ekran:** panel seçilmedi. Jetson'ın görüntü çıkışı (DP/HDMI) ve arka ışık
   beslemesi panelle birlikte çizilecek; görüntü çıkışının çevre devresi üreticinin tasarım kılavuzuyla
   doğrulanmadan çizilmeyecek. Dokunmatik için USB konnektörü hazır.
-- Isıl tasarım ve güç bütçesinin ölçümle doğrulanması.
+- Isıl tasarım ve güç bütçesinin ölçümle doğrulanması (Jetson + radyo + ekran aynı kasada).
 
 ## Doğrulanacaklar
 
@@ -96,3 +109,8 @@ arasındaki bağlantı: `13_DOKUMANTASYON/KUMANDA_ARAYUZU.md`.
   yük adımı ölçümüyle doğrulanacak. Etkinleştirme ucunun 1,8 V'luk SYS_RESET hattına bağlanması numunede denenecek.
 - **USB göbeği ayar uçları** (kendi beslemeli, 1. ve 2. portlar çıkarılamaz aygıt) üretici belgesiyle doğrulanacak.
 - **USB-C algılama:** VBUS 20 V'a çıkabildiği için algılama transistörünün kapısı 10 V görür (sınır 20 V).
+- **Geniş bant radyo bölümü** Radio kartının doğrulama listesini devralır. Ek olarak: modülün RTS girişi boştadır
+  (akış denetimi kullanılmaz; modül ayarında kapalı olmalı); 3,3 V'u kartın ortak rayından alır (toplam yük
+  ölçülecek); sırt sırta trafo bağlantısında bağlantı hızı ve hata oranı numunede ölçülecek.
+- **İkinci Ethernet denetleyicisi** Vision'daki listeyi devralır (taban pedi ölçüsü, ayar belleğinin içeriği).
+- **PCA9536** çıkışları açılışta boştadır: sıfırlama ve ayar hatları yukarı çekili, verici beslemesi açık başlar.

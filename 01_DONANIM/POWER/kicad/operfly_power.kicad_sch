@@ -11,7 +11,7 @@
 		(company "Operfly")
 	)
 	(lib_symbols)
-	(text "Sematik betikle uretilir: 01_DONANIM/POWER/kicad/uret.py. 12 V cevirici ve servo rayi henuz cizilmedi (README)."
+	(text "Sematik betikle uretilir: 01_DONANIM/POWER/kicad/uret.py. Servo rayi henuz cizilmedi (README)."
 		(exclude_from_sim no)
 		(at 25.4 33.02 0)
 		(effects
@@ -20,7 +20,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "35a2200a-5ac7-50e4-9d7a-9fe6336c3f10")
+		(uuid "18b56806-b771-5c70-bb07-6177e809c787")
 	)
 	(text "Operfly Power - guc karti (OPFPWR)"
 		(exclude_from_sim no)
@@ -75,6 +75,52 @@
 			(project "operfly_power"
 				(path "/c2cae590-43f8-5b4c-ac33-c6a8545ce09b"
 					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 177.8 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "b661e48a-ed83-5bca-9db6-55000bf04e03")
+		(property "Sheetname" "Cevirici"
+			(at 177.8 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "cevirici.kicad_sch"
+			(at 177.8 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_power"
+				(path "/c2cae590-43f8-5b4c-ac33-c6a8545ce09b"
+					(page "4")
 				)
 			)
 		)

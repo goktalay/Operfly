@@ -23,3 +23,7 @@ gerber/
 *.sqlite
 *.dump
 gizli/
+
+# Python
+__pycache__/
+*.pyc

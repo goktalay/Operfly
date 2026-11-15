@@ -13,3 +13,10 @@ Pin haritasından çıkan tasarım notları:
 - Uçuş kaydı için microSD yuvası önerildi (SDMMC1 pinleri ayrıldı); onay bekliyor.
 - Üç IMU ayrı SPI hatlarında ve ayrı besleme anahtarlarındadır; bir sensörün arızası diğerlerini etkilemez.
 - 12 çıkış üç ayrı zamanlayıcıdadır (4 + 4 + 4); DShot ve PWM grupları buna göre seçilir.
+
+## KiCad projesi (15 Kasım 2026)
+
+- Proje: `kicad/operfly_core.kicad_pro`. Şematik `kicad/uret.py` ile üretilir; `operfly_core.kicad_sch` elle düzenlenmez.
+- Üretim: `python 01_DONANIM/CORE/kicad/uret.py`, ardından `kicad-cli sch upgrade` ve `kicad-cli sch erc`.
+- Durum: yalnızca iki Operfly Bus portu yerleşik (ERC: 0 hata; karşı ucu henüz çizilmemiş etiketler için uyarı var).
+- Port 1 tam omurgadır (güç, iki CAN FD, PPS, Ethernet). Port 2 yedek güç ve CAN içindir; Ethernet ve PPS bağlı değildir.

@@ -36,6 +36,7 @@ KARTLAR = [
     ("cell", "CELL", "operfly_cell", "Operfly Cell"),
     ("pilott", "KUMANDA_T", "operfly_pilott", "Operfly Pilot T"),
     ("pilotpro", "KUMANDA_PRO", "operfly_pilotpro", "Operfly Pilot Pro"),
+    ("base", "BASE", "operfly_base", "Operfly Base"),
 ]
 
 

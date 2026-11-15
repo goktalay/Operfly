@@ -71,6 +71,15 @@ class Sema:
             ps.append((re.search(r'\(number "([^"]*)"', p).group(1), re.search(r'\(name "([^"]*)"', p).group(1),
                        float(at.group(1)), float(at.group(2)), int(at.group(3))))
         self.pinler[lid] = ps
+        # Çok birimli semboller (ör. USB ve Ethernet uçları ayrı birimde): her pinin birimi. 0 = tüm birimlerde ortak.
+        birim = {}
+        for sm in re.finditer(r'\(symbol "[^"]*_(\d+)_\d+"', b):
+            alt = blok(b, sm.start())
+            for no in re.findall(r'\(number "([^"]*)"', alt):
+                birim[no] = max(1, int(sm.group(1)))
+        if not hasattr(self, "birim"):
+            self.birim = {}
+        self.birim[lid] = birim
         return lid
 
     def koy(self, lid, ref, deger, x, y, aglar, footprint="", dnp=False):
@@ -80,33 +89,38 @@ class Sema:
                 self.ayak_izleri = set()
             self.ayak_izleri.add(footprint)
         x, y = round(x / 1.27) * 1.27, round(y / 1.27) * 1.27  # bağlantı ızgarasına oturt
-        u = uid(self.proje, ref)
-        s = '\t(symbol (lib_id "%s") (at %.2f %.2f 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp %s) (uuid "%s")\n' % (lid, x, y, "yes" if dnp else "no", u)
-        ys = [p[3] for p in self.pinler[lid]]
-        ust, alt = max(ys) + 5.08, min(ys) - 5.08
-        dikey = len(self.pinler[lid]) <= 2 and all(p[2] == 0 for p in self.pinler[lid])  # uçları üstte ve altta olan eleman
-        for ad, dg, py, gizli in (("Reference", ref, ust, False), ("Value", deger, alt, False), ("Footprint", footprint, 0, True), ("Datasheet", "", 0, True)):
-            px, hiza = x, ""
-            if dikey and not gizli:  # yazılar yana: üstte ve altta ağ etiketleri duruyor
-                px, py, hiza = x + 2.54, (1.27 if ad == "Reference" else -1.27), " (justify left)"
-            s += '\t\t(property "%s" "%s" (at %.2f %.2f 0) (effects (font (size 1.27 1.27))%s%s))\n' % (ad, dg, px, y - py, hiza, " (hide yes)" if gizli else "")
-        for no, ad, px, py, aci in self.pinler[lid]:
-            s += '\t\t(pin "%s" (uuid "%s"))\n' % (no, uid(self.proje, ref, "pin", no))
-        s += '\t\t(instances (project "%s" (path "%s" (reference "%s") (unit 1))))\n\t)\n' % (self.proje, self.yol, ref)
-        self.govde.append(s)
+        birim = getattr(self, "birim", {}).get(lid, {})
+        birimler = sorted(set(birim.values())) or [1]
         kullanilan = set()
-        for no, ad, px, py, aci in self.pinler[lid]:
-            ag = aglar.get(no, aglar.get(ad))
-            sx, sy = x + px, y - py
-            if ag is None:
-                self.govde.append('\t(no_connect (at %.2f %.2f) (uuid "%s"))\n' % (sx, sy, uid(self.proje, ref, "nc", no)))
-                continue
-            kullanilan.add(no if no in aglar else ad)
-            eaci, hiza = {0: (180, "right"), 180: (0, "left"), 90: (270, "right"), 270: (90, "left")}[aci]
-            if self.genel:
-                self.govde.append('\t(global_label "%s" (shape passive) (at %.2f %.2f %d) (effects (font (size 1.27 1.27)) (justify %s)) (uuid "%s"))\n' % (ag, sx, sy, eaci, hiza, uid(self.proje, ref, "lbl", no)))
-            else:
-                self.govde.append('\t(label "%s" (at %.2f %.2f %d) (effects (font (size 1.27 1.27)) (justify %s bottom)) (uuid "%s"))\n' % (ag, sx, sy, eaci, hiza, uid(self.proje, ref, "lbl", no)))
+        for bn in birimler:   # çok birimli sembolde birimler yan yana konur
+            pinler = [p for p in self.pinler[lid] if birim.get(p[0], 1) == bn]
+            bx = round((x + (bn - birimler[0]) * 76.2) / 1.27) * 1.27
+            u = uid(self.proje, ref) if bn == birimler[0] else uid(self.proje, ref, "birim", bn)
+            s = '\t(symbol (lib_id "%s") (at %.2f %.2f 0) (unit %d) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp %s) (uuid "%s")\n' % (lid, bx, y, bn, "yes" if dnp else "no", u)
+            ys = [p[3] for p in pinler]
+            ust, alt = max(ys) + 5.08, min(ys) - 5.08
+            dikey = len(pinler) <= 2 and all(p[2] == 0 for p in pinler)  # uçları üstte ve altta olan eleman
+            for ad, dg, py, gizli in (("Reference", ref, ust, False), ("Value", deger, alt, False), ("Footprint", footprint, 0, True), ("Datasheet", "", 0, True)):
+                px, hiza = bx, ""
+                if dikey and not gizli:  # yazılar yana: üstte ve altta ağ etiketleri duruyor
+                    px, py, hiza = bx + 2.54, (1.27 if ad == "Reference" else -1.27), " (justify left)"
+                s += '\t\t(property "%s" "%s" (at %.2f %.2f 0) (effects (font (size 1.27 1.27))%s%s))\n' % (ad, dg, px, y - py, hiza, " (hide yes)" if gizli else "")
+            for no, ad, px, py, aci in pinler:
+                s += '\t\t(pin "%s" (uuid "%s"))\n' % (no, uid(self.proje, ref, "pin", no))
+            s += '\t\t(instances (project "%s" (path "%s" (reference "%s") (unit %d))))\n\t)\n' % (self.proje, self.yol, ref, bn)
+            self.govde.append(s)
+            for no, ad, px, py, aci in pinler:
+                ag = aglar.get(no, aglar.get(ad))
+                sx, sy = bx + px, y - py
+                if ag is None:
+                    self.govde.append('\t(no_connect (at %.2f %.2f) (uuid "%s"))\n' % (sx, sy, uid(self.proje, ref, "nc", no)))
+                    continue
+                kullanilan.add(no if no in aglar else ad)
+                eaci, hiza = {0: (180, "right"), 180: (0, "left"), 90: (270, "right"), 270: (90, "left")}[aci]
+                if self.genel:
+                    self.govde.append('\t(global_label "%s" (shape passive) (at %.2f %.2f %d) (effects (font (size 1.27 1.27)) (justify %s)) (uuid "%s"))\n' % (ag, sx, sy, eaci, hiza, uid(self.proje, ref, "lbl", no)))
+                else:
+                    self.govde.append('\t(label "%s" (at %.2f %.2f %d) (effects (font (size 1.27 1.27)) (justify %s bottom)) (uuid "%s"))\n' % (ag, sx, sy, eaci, hiza, uid(self.proje, ref, "lbl", no)))
         eksik = set(aglar) - kullanilan
         if eksik:
             raise SystemExit("%s: sembolde olmayan pin(ler): %s" % (ref, sorted(eksik)))

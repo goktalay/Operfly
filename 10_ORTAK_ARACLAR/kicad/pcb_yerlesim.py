@@ -8,6 +8,8 @@ Kart ayarları `01_DONANIM/<KART>/kicad/pcb_ayar.py` dosyasındaki AYAR sözlü�
     sabit            {"U7": (x, y, açı), ...} elle verilen konumlar
     delik            montaj deliği ayak izi (varsayılan M3) ya da None
     katman           bakır katman sayısı (varsayılan 4)
+    kenar_otomatik   True ise ayarda geçmeyen J konnektörleri de kenara oturtulur (omurga portu batıya, anten
+                     konnektörleri kuzeye, diğerleri en boş kenara); "ic" listesindeki konnektörler kart içinde kalır
     tohum            rastgele sayı tohumu (aynı tohum = aynı yerleşim)
 Çıktı: `01_DONANIM/<KART>/kicad/<kök>.kicad_pcb` (yol çizilmemiş).
 
@@ -34,11 +36,12 @@ MM = pcbnew.FromMM
 DELIK_M3 = "MountingHole:MountingHole_3.2mm_M3"
 # Ağ sınıfları (mm): açıklık, yol, geçiş çapı, geçiş deliği. Güç ağları adlarından tanınır.
 # Açıklık 0,125 mm: 0,5 mm adımlı LGA kılıfların kendi uçları arası 0,129 mm olduğu için bundan büyük seçilemez.
-SINIFLAR = {"Default": (0.125, 0.20, 0.60, 0.30), "Guc": (0.125, 0.40, 0.80, 0.40)}
+SINIFLAR = {"Default": (0.125, 0.20, 0.60, 0.30)}
 # İç katman düzlemleri: iç 1 toprak, iç 2 ana lojik beslemesi (kartta o ağ yoksa iç 2 yol çizimine kalır).
 DUZLEMLER = {"In1.Cu": "GND", "In2.Cu": "+3V3"}
 VARSAYILAN = {"en": None, "boy": None, "kenar": {}, "sabit": {}, "delik": DELIK_M3, "delik_ic": 3.5, "katman": 4,
-              "tohum": 1, "bosluk": 0.30, "doluluk": 0.42, "oran": 1.35, "siniflar": {}, "guc_aglari": [], "duzlemler": DUZLEMLER}
+              "tohum": 1, "bosluk": 0.30, "doluluk": 0.42, "oran": 1.35, "siniflar": {}, "guc_aglari": [], "duzlemler": DUZLEMLER,
+              "kenar_otomatik": True, "ic": []}
 
 
 def ayar_oku(kart):
@@ -72,6 +75,8 @@ class Eleman:
         self.x = self.y = 0.0
         self.rot = 0
         self.geo = {}   # açı -> (sol, üst, sağ, alt, [(uç no, ağ, dx, dy)])
+        self.ped = {}   # açı -> uçların çevre kutusu
+        self.ad = str(fp.GetFPID().GetLibItemName())
         fp.SetPosition(pcbnew.VECTOR2I(0, 0))
         for r in (0, 90, 180, 270):
             fp.SetOrientationDegrees(r)
@@ -81,6 +86,9 @@ class Eleman:
                 kutu = fp.GetBoundingBox(False)
             uclar = [(p.GetNumber(), p.GetNetname(), pcbnew.ToMM(p.GetPosition().x), pcbnew.ToMM(p.GetPosition().y)) for p in fp.Pads()]
             self.geo[r] = (pcbnew.ToMM(kutu.GetLeft()), pcbnew.ToMM(kutu.GetTop()), pcbnew.ToMM(kutu.GetRight()), pcbnew.ToMM(kutu.GetBottom()), uclar)
+            pk = [p.GetBoundingBox() for p in fp.Pads()]
+            self.ped[r] = (min(pcbnew.ToMM(k.GetLeft()) for k in pk), min(pcbnew.ToMM(k.GetTop()) for k in pk),
+                           max(pcbnew.ToMM(k.GetRight()) for k in pk), max(pcbnew.ToMM(k.GetBottom()) for k in pk)) if pk else self.geo[r][:4]
         fp.SetOrientationDegrees(0)
         g = self.geo[0]
         self.alan = (g[2] - g[0]) * (g[3] - g[1])
@@ -96,6 +104,33 @@ class Eleman:
     def yaz(self):
         self.fp.SetOrientationDegrees(self.rot)
         self.fp.SetPosition(pcbnew.VECTOR2I(MM(self.x), MM(self.y)))
+
+
+class Bolme:
+    """Düzlemi karelere bölen arama yapısı: bir kutuya yakın elemanları hepsine bakmadan bulur."""
+
+    def __init__(self, kare=4.0):
+        self.kare, self.h, self.kayit = kare, {}, {}
+
+    def _kareler(self, k):
+        c = self.kare
+        return [(ix, iy) for ix in range(int(k[0] // c), int(k[2] // c) + 1) for iy in range(int(k[1] // c), int(k[3] // c) + 1)]
+
+    def ekle(self, anahtar, kutu):
+        kareler = self._kareler(kutu)
+        self.kayit[anahtar] = kareler
+        for q in kareler:
+            self.h.setdefault(q, set()).add(anahtar)
+
+    def kaldir(self, anahtar):
+        for q in self.kayit.pop(anahtar, ()):
+            self.h[q].discard(anahtar)
+
+    def yakin(self, kutu):
+        s = set()
+        for q in self._kareler(kutu):
+            s |= self.h.get(q, set())
+        return s
 
 
 def acilis(e):
@@ -125,6 +160,8 @@ def kenara_oturt(e, kenar, konum, en, boy, ic=0.0):
             if sira[(sira.index(yon) - r // 90) % 4] == kenar:
                 e.rot = r
     g = e.geo[e.rot]
+    if "EdgeMount" in e.ad:   # kart kenarını kıstıran konnektör: uçları kenardan bakır payı kadar içeride başlar
+        g, ic = e.ped[e.rot], 0.35
     if kenar == "K":
         e.x, e.y = konum, ic - g[1]
     elif kenar == "G":
@@ -174,16 +211,54 @@ def yerlestir(kart, kok, ayar=None):
     for ref, (x, y, r) in a["sabit"].items():
         e = el[idx[ref]]
         e.x, e.y, e.rot, e.sabit = x, y, r, True
+    kenar_ayari = dict(a["kenar"])
+    if a["kenar_otomatik"]:
+        # Ayarda yeri verilmeyen konnektörler: omurga portu batıya, anten konnektörleri kuzeye, diğerleri en boş kenara.
+        dolu = {"K": 0.0, "G": 0.0, "D": 0.0, "B": 0.0}
+        uzunluk = {"K": en, "G": en, "D": boy, "B": boy}
+
+        def genislik(e):
+            g = e.geo[0]
+            return max(g[2] - g[0], g[3] - g[1]) if acilis(e) is None else (g[2] - g[0] if acilis(e) in "KG" else g[3] - g[1])
+        for ref, (kenar, _) in kenar_ayari.items():
+            dolu[kenar] += genislik(el[idx[ref]]) + 2.0
+        adaylar = [e for e in el if re.match(r"^J\d+$", e.ref) and e.ref not in kenar_ayari and e.ref not in a["sabit"] and e.ref not in a["ic"]]
+        for e in sorted(adaylar, key=lambda e: (-genislik(e), e.ref)):
+            if "Gecko" in e.ad:
+                kenar = "B"
+            elif "SMA" in e.ad:
+                kenar = "K"
+            else:
+                kenar = min("DGKB", key=lambda k: (dolu[k] + genislik(e)) / (uzunluk[k] - 16.0))
+            dolu[kenar] += genislik(e) + 2.0
+            kenar_ayari[e.ref] = (kenar, None)
     gruplar = {}
-    for ref, (kenar, konum) in a["kenar"].items():
+    for ref, (kenar, konum) in kenar_ayari.items():
         gruplar.setdefault(kenar, []).append((ref, konum))
     for kenar, liste in gruplar.items():
         uzun = en if kenar in "KG" else boy
         bas, son = 8.0, uzun - 8.0
-        for n, (ref, konum) in enumerate(liste):
-            if konum is None:
-                konum = bas + (son - bas) * (n + 0.5) / len(liste)
-            kenara_oturt(el[idx[ref]], kenar, konum, en, boy)
+        liste.sort(key=lambda rk: int(re.sub(r"\D", "", rk[0]) or 0))
+        serbest = [ref for ref, konum in liste if konum is None]
+        for ref, konum in liste:
+            if konum is not None:
+                kenara_oturt(el[idx[ref]], kenar, konum, en, boy)
+        # Yeri verilmeyenler: önce geçici oturt (açı belli olsun), sonra kenar boyunca eşit aralıkla diz.
+        olcu = []
+        for ref in serbest:
+            e = el[idx[ref]]
+            kenara_oturt(e, kenar, uzun / 2, en, boy)
+            g = e.geo[e.rot]
+            olcu.append((g[0], g[2]) if kenar in "KG" else (g[1], g[3]))
+        toplam = sum(b_ - a_ for a_, b_ in olcu)
+        if serbest:
+            ara = (son - bas - toplam) / len(serbest)
+            if ara < 1.0:
+                raise SystemExit("kenar dolu (%s): konnektörler sığmıyor; kart büyütülür ya da kenar ayarı verilir" % kenar)
+            konum = bas + ara / 2
+            for ref, (a_, b_) in zip(serbest, olcu):
+                kenara_oturt(el[idx[ref]], kenar, konum - a_, en, boy)
+                konum += (b_ - a_) + ara
     hepsi = el + delikler
     hareketli = [i for i, e in enumerate(el) if not e.sabit]
     # Ağlar: (ağırlık, [(eleman, uç sırası)])
@@ -197,8 +272,9 @@ def yerlestir(kart, kok, ayar=None):
     for ag, uclar in ag_uclari.items():
         if ag == "GND" or ag.endswith("GND") or ag.startswith("+") or len(uclar) > 14:
             guc.add(ag)
+    duzlem_aglari = set(a["duzlemler"].values())
     for ag, uclar in sorted(ag_uclari.items()):
-        if len(uclar) < 2 or ag == "GND" or ag.endswith("GND"):
+        if len(uclar) < 2 or ag in duzlem_aglari:
             continue
         w = 0.15 if ag in guc else 1.0
         n = len(aglar)
@@ -220,7 +296,7 @@ def yerlestir(kart, kok, ayar=None):
                 continue
             ortak = sorted({u[1] for u in e.geo[0][4] if u[1]} & {u[1] for u in o.geo[0][4] if u[1]})
             sinyal = [g for g in ortak if g not in guc]
-            besleme = [g for g in ortak if g in guc and g != "GND" and not g.endswith("GND")]
+            besleme = [g for g in ortak if g in guc and g != "GND"]
             if sinyal or besleme:
                 uzak = math.hypot(sk[o.ref][1] - sx, sk[o.ref][2] - sy)
                 adaylar.append((0 if sinyal else 1, uzak, j, (sinyal or besleme)[0]))
@@ -252,15 +328,19 @@ def yerlestir(kart, kok, ayar=None):
         og = o.geo[o.rot][4]
         return 1.5 * min(abs(o.x + og[k][2] - px) + abs(o.y + og[k][3] - py) for k in hedef)
 
+    bolme = Bolme()
+    for k, e in enumerate(hepsi):
+        bolme.ekle(k, e.kutu(pay))
+
     def cakisma(i):
         e = el[i]
         l, t, r, bb = e.kutu(pay)
         c = max(0.0, -l) + max(0.0, -t) + max(0.0, r - en) + max(0.0, bb - boy)
         c *= 4.0
-        for o in hepsi:
-            if o is e:
+        for k in bolme.yakin((l, t, r, bb)):
+            if k == i:
                 continue
-            ol, ot, orr, ob = o.kutu(pay)
+            ol, ot, orr, ob = hepsi[k].kutu(pay)
             dx, dy = min(r, orr) - max(l, ol), min(bb, ob) - max(t, ot)
             if dx > 0 and dy > 0:
                 c += dx * dy + 0.5 * min(dx, dy)
@@ -279,6 +359,8 @@ def yerlestir(kart, kok, ayar=None):
             e.y = 4 + (boy - 8) * (sk[e.ref][2] - min(ys)) / max(1.0, max(ys) - min(ys))
         else:
             e.x, e.y = rnd.uniform(4, en - 4), rnd.uniform(4, boy - 4)
+        bolme.kaldir(i)
+        bolme.ekle(i, e.kutu(pay))
     # Tavlama
     W = 6.0   # çakışma ağırlığı (sıcaklık düştükçe artar)
     adim = 120 * len(hareketli)
@@ -309,24 +391,38 @@ def yerlestir(kart, kok, ayar=None):
                 eski_o = (o.x, o.y, o.rot)
                 once = yerel(i) + yerel(j) + W * (cakisma(i) + cakisma(j))
                 e.x, e.y, o.x, o.y = o.x, o.y, e.x, e.y
+                bolme.kaldir(j)
+                bolme.ekle(j, o.kutu(pay))
+                bolme.kaldir(i)
+                bolme.ekle(i, e.kutu(pay))
                 sonra = yerel(i) + yerel(j) + W * (cakisma(i) + cakisma(j))
             d = sonra - once
             if d > 0 and rnd.random() >= math.exp(-d / T):
                 e.x, e.y, e.rot = eski
                 if j is not None:
                     o.x, o.y, o.rot = eski_o
+                    bolme.kaldir(j)
+                    bolme.ekle(j, o.kutu(pay))
+                    bolme.kaldir(i)
+                    bolme.ekle(i, e.kutu(pay))
+            elif j is None:
+                bolme.kaldir(i)
+                bolme.ekle(i, e.kutu(pay))
         T *= 0.92
         W *= 1.06
         tur += 1
     # Kesin çakışma giderme: büyükten küçüğe, en yakın boş yere
-    konan = [e for e in hepsi if e.sabit]
+    konan = Bolme()
+    for k, e in enumerate(hepsi):
+        if e.sabit:
+            konan.ekle(k, e.kutu(pay))
 
     def bos_mu(e):
         l, t, r, bb = e.kutu(pay)
         if l < 0.3 or t < 0.3 or r > en - 0.3 or bb > boy - 0.3:
             return False
-        for o in konan:
-            ol, ot, orr, ob = o.kutu(pay)
+        for k in konan.yakin((l, t, r, bb)):
+            ol, ot, orr, ob = hepsi[k].kutu(pay)
             if min(r, orr) - max(l, ol) > 1e-6 and min(bb, ob) - max(t, ot) > 1e-6:
                 return False
         return True
@@ -348,12 +444,12 @@ def yerlestir(kart, kok, ayar=None):
             yaricap += 0.25
         if not buldu:
             raise SystemExit("yer bulunamadı: %s (kart küçük; en/boy büyütülür)" % e.ref)
-        konan.append(e)
+        konan.ekle(i, e.kutu(pay))
     # Son iyileştirme: çakışma yaratmayan ve maliyeti düşüren küçük kaymalar
     for _ in range(25):
         for i in hareketli:
             e = el[i]
-            konan.remove(e)
+            konan.kaldir(i)
             en_iyi = (yerel(i), e.x, e.y, e.rot)
             x0, y0, r0 = e.x, e.y, e.rot
             for dx, dy, dr in [(s * a_, 0, 0) for s in (-1, 1) for a_ in (0.1, 0.25, 0.5, 1.0, 2.0, 4.0)] + [(0, s * a_, 0) for s in (-1, 1) for a_ in (0.1, 0.25, 0.5, 1.0, 2.0, 4.0)] + [(0, 0, 90), (0, 0, 180), (0, 0, 270)]:
@@ -363,7 +459,7 @@ def yerlestir(kart, kok, ayar=None):
                     if m < en_iyi[0] - 1e-6:
                         en_iyi = (m, e.x, e.y, e.rot)
             _, e.x, e.y, e.rot = en_iyi
-            konan.append(e)
+            konan.ekle(i, e.kutu(pay))
     for e in hepsi:
         e.yaz()
     # Kart sınırı, katmanlar, kurallar

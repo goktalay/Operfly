@@ -75,3 +75,25 @@ bırakıldı; modül Çin'den ya da yurt dışından satın alınabilenler aras�
 - Kart 8 kanala hazır tasarlanır; ilk üretimde 4 kanalı dizilir. Hedef L1 + L5.
 - Küçük FPGA + işlemci; Vision takılıysa ek analiz için ham veri Jetson'a da gönderilebilir (isteğe bağlı, zorunlu değil).
 - Açık konular: FPGA ve ADC seçimi, kalibrasyon, anten ölçümü, ihracat denetimi teyidi.
+
+## Kart çizimi (otomatik)
+
+Sahibinin kararıyla kart **otomatik** çizildi: yerleşim `pcb_yerlesim.py`, yollar dış bir otomatik yol çiziciyle
+(`pcb_ciz.py`). Dosya: `kicad/operfly_shield.kicad_pcb`; ayarlar `kicad/pcb_ayar.py`.
+Yeniden üretmek için: `python 10_ORTAK_ARACLAR/kicad/pcb_ciz.py SHIELD operfly_shield`.
+
+- **Kart:** 70 x 50 mm, 4 katman (üst: elemanlar + sinyal, iç 1: toprak, iç 2: +3V3, alt: sinyal), 93 eleman, tamamı üst yüzde; köşelerde M3 montaj deliği.
+- **Kurallar:** yol 0,20 mm, açıklık 0,125 mm, geçiş 0,6/0,3 mm; besleme ağları, ağın en dar ucunu aşmayacak biçimde 0,2-1,0 mm (0,4 mm ve üstünde geçiş 0,8/0,4 mm); bakır-kenar 0,25 mm.
+- **Denetim:** DRC 0 ihlal, 0 bağlanmamış uç; şematik-kart uyumu temiz. 620 yol parçası, 112 geçiş.
+
+**Bu bir mühendis çizimi değildir.** Üretimden önce bir kart tasarımcısının bakması gereken noktalar:
+
+- Yükselten regülatörün (+12 V → +18 V) bobin, diyot ve çıkış kondansatörü döngüsü küçük tutulmadı; modül beslemesindeki dalgalanma ölçülmeli.
+- RS-232 çeviricinin yük pompası kondansatörleri entegreye en kısa yoldan bağlanmadı.
+- Anahtarlamalı regülatörlerin (bobin, diyot, giriş/çıkış kondansatörleri) akım döngüleri küçük tutulmadı; gürültü ve verim ölçülmeli.
+- Kristal ve osilatör hatları en kısa yoldan çizilmedi; altlarından başka sinyal geçip geçmediğine bakılmalı.
+- Fark çiftleri (CAN, USB, Ethernet) çift olarak, eşit uzunlukta ve empedans denetimli çizilmedi.
+- Güç elemanlarının soğutma bakırı ve ısıl geçişleri ayrıca hesaplanmadı.
+- Eleman adları üretim katmanında bırakıldı; kart üstünde yazı (serigrafi) yok.
+- Kasa, konnektör yerleri ve montaj delikleri mekanik tasarımla eşleştirilmedi.
+- Üretim dosyaları (Gerber, delik, dizgi) henüz çıkarılmadı.

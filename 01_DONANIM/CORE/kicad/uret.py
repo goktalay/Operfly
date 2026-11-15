@@ -306,6 +306,148 @@ x, y = g.yer()
 hb.koy(lib(hb, "Connector:TestPoint"), ref("TP"), "ETH_PPS_OUT", x, y, {"1": "ETH_PPS_OUT"}, footprint="TestPoint:TestPoint_Pad_D1.0mm")
 hb.yaz(os.path.join(BURASI, "haberlesme.kicad_sch"))
 
+# --- Sayfa 7: sensorler, bellek, guvenli eleman, LED, hata ayiklama -----------
+sn = Sema(P, "Operfly Core - sensorler, bellek, guvenli eleman, hata ayiklama", kagit="A1", tarih=T, ust=kok, ad="Sensorler", genel_etiket=True)
+kok.alt_sayfa(sn, "sensorler.kicad_sch", 101.6, 101.6)
+
+
+def op(sema, ad):
+    lid = "operfly:" + ad
+    if lid not in sema.lib:
+        sema.kutuphane("operfly", ORTAK, ad)
+    return lid
+
+
+sn.metin("IMU 1 (ICM-42688-P, SPI1) - besleme +3V3_S1. Ayni beslemede barometre 1 ve pusula.", 30, 30)
+g = Izgara(50, 70, sutun=16)
+x, y = g.yer(); g.yer(); g.yer()
+sn.koy(op(sn, "ICM-42688-P"), ref("U"), "ICM-42688-P", x + 25, y, {
+    "AP_CS": "IMU1_CS", "AP_SCLK": "IMU1_SCK", "AP_SDI": "IMU1_MOSI", "AP_SDO": "IMU1_MISO", "INT1": "IMU1_DRDY",
+    "VDD": "+3V3_S1", "VDDIO": "+3V3_S1", "GND": "GND", "RESV7": "GND", "RESV11": "GND"}, footprint="Package_LGA:Bosch_LGA-14_3x2.5mm_P0.5mm")
+C(sn, g, "100n", "+3V3_S1"); C(sn, g, "100n", "+3V3_S1"); C(sn, g, "2u2", "+3V3_S1", fp=C0603); R(sn, g, "10k", "+3V3_S1", "IMU1_CS")
+
+sn.metin("IMU 2 (BMI088, SPI2) - besleme +3V3_S2. Ivmeolcer ve donuolcer ayri secme ve kesme hatlarina sahip.", 30, 115)
+g = Izgara(50, 160, sutun=16)
+x, y = g.yer(); g.yer(); g.yer()
+sn.koy(lib(sn, "Sensor_Motion:BMI088"), ref("U"), "BMI088", x + 25, y, {
+    "~{CSB1}": "IMU2_CS_ACC", "~{CSB2}": "IMU2_CS_GYR", "SCK/SCL": "IMU2_SCK", "SDI/SDA": "IMU2_MOSI", "SDO1": "IMU2_SDO_ACC", "SDO2": "IMU2_SDO_GYR",
+    "INT1": "IMU2_INT_ACC", "INT3": "IMU2_INT_GYR", "PS": "GND", "VDD": "+3V3_S2", "VDDIO": "+3V3_S2", "GNDA": "GND", "GNDIO": "GND"},
+    footprint="Package_LGA:Bosch_LGA-16_4.5x3mm_P0.5mm_LayoutBorder7x1y_ClockwisePinNumbering")
+R(sn, g, "33R", "IMU2_SDO_ACC", "IMU2_MISO"); R(sn, g, "33R", "IMU2_SDO_GYR", "IMU2_MISO")
+C(sn, g, "100n", "+3V3_S2"); C(sn, g, "100n", "+3V3_S2"); C(sn, g, "2u2", "+3V3_S2", fp=C0603)
+R(sn, g, "10k", "+3V3_S2", "IMU2_CS_ACC"); R(sn, g, "10k", "+3V3_S2", "IMU2_CS_GYR")
+
+sn.metin("IMU 3 (ICM-45686, SPI4) - besleme +3V3_S3.", 30, 210)
+g = Izgara(50, 250, sutun=16)
+x, y = g.yer(); g.yer(); g.yer()
+sn.koy(op(sn, "ICM-45686"), ref("U"), "ICM-45686", x + 25, y, {
+    "AP_CS": "IMU3_CS", "AP_SCLK": "IMU3_SCK", "AP_SDI": "IMU3_MOSI", "AP_SDO": "IMU3_MISO", "INT1": "IMU3_DRDY",
+    "VDD": "+3V3_S3", "VDDIO": "+3V3_S3", "GND": "GND"}, footprint="Package_LGA:Bosch_LGA-14_3x2.5mm_P0.5mm")
+C(sn, g, "100n", "+3V3_S3"); C(sn, g, "100n", "+3V3_S3"); C(sn, g, "2u2", "+3V3_S3", fp=C0603); R(sn, g, "10k", "+3V3_S3", "IMU3_CS")
+
+sn.metin("I2C A: barometre 1 (BMP390, adres 0x76), pusula (IST8310), guvenli eleman (SE050). I2C B: barometre 2 (MS5611, adres 0x77).", 30, 300)
+g = Izgara(50, 345, sutun=16)
+x, y = g.yer(); g.yer(); g.yer()
+sn.koy(op(sn, "BMP390"), ref("U"), "BMP390", x + 20, y, {"SCK": "I2C_A_SCL", "SDI": "I2C_A_SDA", "SDO": "GND", "CSB": "+3V3_S1",
+       "VDD": "+3V3_S1", "VDDIO": "+3V3_S1", "VSS": "GND"}, footprint="Package_LGA:ST_HLGA-10_2x2mm_P0.5mm_LayoutBorder3x2y")
+C(sn, g, "100n", "+3V3_S1"); C(sn, g, "100n", "+3V3_S1")
+x, y = g.yer(); g.yer(); g.yer()
+sn.koy(lib(sn, "Sensor_Magnetic:IST8310"), ref("U"), "IST8310", x + 20, y, {"SCL": "I2C_A_SCL", "SDA": "I2C_A_SDA", "AVDD": "+3V3_S1", "DVDD": "+3V3_S1",
+       "VSS": "GND", "C1": "MAG_C1", "~{RST}": "+3V3_S1", "CAD0": "GND", "CAD1": "GND"}, footprint="Package_LGA:LGA-16_3x3mm_P0.5mm")
+C(sn, g, "4u7", "MAG_C1", fp=C0603); C(sn, g, "100n", "+3V3_S1"); C(sn, g, "100n", "+3V3_S1")
+g.satir()
+g = Izgara(50, 410, sutun=16)
+x, y = g.yer(); g.yer(); g.yer()
+sn.koy(lib(sn, "Sensor_Pressure:MS5611-01BA"), ref("U"), "MS5611-01BA03", x + 20, y, {"SCLK": "I2C_B_SCL", "SDI/SDA": "I2C_B_SDA", "PS": "+3V3_S2", "CSB": "GND",
+       "VDD": "+3V3_S2", "GND": "GND"}, footprint="Package_LGA:LGA-8_3x5mm_P1.25mm")
+C(sn, g, "100n", "+3V3_S2")
+for ag in ("I2C_A_SCL", "I2C_A_SDA", "I2C_B_SCL", "I2C_B_SDA"):
+    R(sn, g, "2k2", "+3V3", ag)
+
+sn.metin("GUVENLI ELEMAN (SE050): SE_NRST hatti ENA girisini surer; sifira cekilince eleman kapanir, birakilinca yeniden baslar.", 430, 30)
+g = Izgara(450, 80, sutun=12)
+x, y = g.yer(); g.yer(); g.yer()
+sn.koy(op(sn, "SE050"), ref("U"), "SE050E2HQ1", x + 20, y, {"I2C_SDA": "I2C_A_SDA", "I2C_SCL": "I2C_A_SCL", "ENA": "SE_NRST",
+       "VIN": "+3V3", "VCC": "SE_VCC", "VOUT": "SE_VCC", "VSS": "GND", "EP": "GND"}, footprint="Package_DFN_QFN:QFN-20-1EP_3x3mm_P0.4mm_EP1.65x1.65mm")
+R(sn, g, "10k", "+3V3", "SE_NRST"); C(sn, g, "100n", "+3V3"); C(sn, g, "2u2", "SE_VCC", fp=C0603)
+
+sn.metin("FRAM (parametre ve durum bellegi, SPI5).", 430, 140)
+g = Izgara(450, 180, sutun=12)
+x, y = g.yer(); g.yer()
+sn.koy(lib(sn, "Memory_NVRAM:MB85RS2MT"), ref("U"), "FM25V10-G", x + 15, y, {"~{CS}": "FRAM_CS", "SO": "FRAM_MISO", "SI": "FRAM_MOSI", "SCK": "FRAM_SCK",
+       "~{WP}": "+3V3", "~{HOLD}": "+3V3", "VDD": "+3V3", "GND": "GND"}, footprint="Package_SO:SOIC-8_3.9x4.9mm_P1.27mm")
+R(sn, g, "10k", "+3V3", "FRAM_CS"); C(sn, g, "100n", "+3V3")
+
+sn.metin("DURUM LED'leri (sifirda yanar), kart surum direncleri, hata ayiklama baglantisi ve olcum noktalari.", 430, 230)
+g = Izgara(450, 270, sutun=12)
+for renk, ag in (("kirmizi", "LED_R"), ("yesil", "LED_G"), ("mavi", "LED_B")):
+    iki(sn, g, "Device:LED", "D", "LED " + renk, ag, "LED_%s_A" % renk[0].upper(), "LED_SMD:LED_0603_1608Metric")
+    R(sn, g, "1k", "+3V3", "LED_%s_A" % renk[0].upper())
+g.satir()
+R(sn, g, "10k", "+3V3A", "HW_VER"); R(sn, g, "10k", "HW_VER", "GND"); R(sn, g, "10k", "+3V3A", "HW_REV"); R(sn, g, "1k", "HW_REV", "GND")
+g.satir()
+x, y = g.yer(); g.yer(); g.yer()
+sn.koy(lib(sn, "Connector:Conn_ARM_JTAG_SWD_10"), ref("J"), "SWD 2x5 1,27 mm", x + 15, y + 10, {"VTref": "+3V3", "GND": "GND", "GNDDetect": "GND",
+       "SWDIO/TMS": "SWDIO", "SWCLK/TCK": "SWCLK", "SWO/TDO": "SWO", "~{RESET}": "MCU_NRST"}, footprint="Connector_PinHeader_1.27mm:PinHeader_2x05_P1.27mm_Vertical_SMD")
+for ag in ("DBG_UART_TX", "DBG_UART_RX"):
+    x, y = g.yer()
+    sn.koy(lib(sn, "Connector:TestPoint"), ref("TP"), ag, x, y, {"1": ag}, footprint="TestPoint:TestPoint_Pad_D1.0mm")
+sn.yaz(os.path.join(BURASI, "sensorler.kicad_sch"))
+
+# --- Sayfa 8: IO/failsafe islemcisi ve cikislar -------------------------------
+io = Sema(P, "Operfly Core - IO/failsafe islemcisi ve cikislar", kagit="A1", tarih=T, ust=kok, ad="IO", genel_etiket=True)
+kok.alt_sayfa(io, "io.kicad_sch", 177.8, 101.6)
+io.metin("IO/FAILSAFE ISLEMCISI (STM32G0B1CET6): kendi 3,3 V regulatoru, kendi kristali, kendi CAN alici-vericisi (CAN B).", 30, 30)
+io.metin("Ana islemciyle arasindaki hatlar seri direnclidir: biri beslemesizken digerini yuklemez.", 30, 36)
+g0 = lib(io, "MCU_ST_STM32G0:STM32G0B1CETx")
+ioag = {}
+for satir in csv.DictReader(open(os.path.join(BURASI, "..", "io_pin_atamalari.csv"), encoding="utf-8"), delimiter=";"):
+    ioag[satir["pin"]] = satir["sinyal"]
+ioag.update({"VDD": "+3V3_IO", "VBAT": "+3V3_IO", "VREF+": "+3V3_IO", "VSS": "GND"})
+eksik = set(ioag) - {ad for _no, ad, _x, _y, _a in io.pinler[g0]}
+assert not eksik, eksik
+io.koy(g0, ref("U"), "STM32G0B1CET6", 110, 130, ioag, footprint="Package_QFP:LQFP-48_7x7mm_P0.5mm")
+g = Izgara(200, 70, sutun=14)
+x, y = g.yer(); g.yer()
+io.koy(lib(io, "Regulator_Linear:LP5907MFX-3.3"), ref("U"), "LP5907MFX-3.3", x + 10, y, {"IN": "+5V", "EN": "+5V", "GND": "GND", "OUT": "+3V3_IO"}, footprint="Package_TO_SOT_SMD:SOT-23-5")
+C(io, g, "1u", "+5V"); C(io, g, "1u", "+3V3_IO"); C(io, g, "4u7", "+3V3_IO", fp=C0603); C(io, g, "100n", "+3V3_IO"); C(io, g, "100n", "+3V3_IO"); C(io, g, "100n", "+3V3_IO")
+x, y = g.yer()
+io.koy(lib(io, "Device:Crystal_GND24"), ref("Y"), "16 MHz", x, y, {"1": "IO_HSE_IN", "3": "IO_HSE_OUT", "2": "GND", "4": "GND"}, footprint="Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm")
+C(io, g, "10p", "IO_HSE_IN"); C(io, g, "10p", "IO_HSE_OUT")
+g.satir()
+R(io, g, "10k", "+3V3_IO", "IO_NRST_PIN"); C(io, g, "100n", "IO_NRST_PIN"); R(io, g, "1k", "IO_NRST", "IO_NRST_PIN")
+R(io, g, "10k", "IO_BOOT0", "IO_SWCLK"); R(io, g, "1k", "N_ARMED", "N_ARMED_IO"); R(io, g, "100k", "N_ARMED_IO", "+3V3_IO")
+R(io, g, "10k", "IO_MUX_SEL", "GND"); R(io, g, "10k", "IO_CAN_S", "GND")
+iki(io, g, "Device:LED", "D", "LED sari", "IO_LED", "IO_LED_A", "LED_SMD:LED_0603_1608Metric"); R(io, g, "1k", "+3V3_IO", "IO_LED_A")
+for ag in ("IO_SWDIO", "IO_SWCLK"):
+    x, y = g.yer()
+    io.koy(lib(io, "Connector:TestPoint"), ref("TP"), ag, x, y, {"1": ag}, footprint="TestPoint:TestPoint_Pad_D1.0mm")
+g.satir()
+parca(io, g, "Interface_CAN_LIN:TJA1051TK-3", "U", "TJA1051TK/3", {"TXD": "IO_CAN_TX", "RXD": "IO_CAN_RX", "S": "IO_CAN_S", "VCC": "+5V", "VIO": "+3V3_IO", "GND": "GND",
+      "CANH": "CAN_B_H", "CANL": "CAN_B_L"}, "Package_SON:HVSON-8-1EP_3x3mm_P0.65mm_EP1.6x2.4mm", bosluk=1, dx=15)
+C(io, g, "100n", "+5V"); C(io, g, "100n", "+3V3_IO")
+
+io.metin("CIKIS SECICI: 1-8. cikislar analog anahtardan gecer (iki yonlu sinyale uygun). SEL=0: ana islemci, SEL=1: IO islemcisi.", 30, 240)
+io.metin("SEL asagi cekilidir: IO islemcisi calismiyorken cikislari ana islemci surer. 9-12. cikislar dogrudan ana islemcidendir.", 30, 246)
+g = Izgara(60, 300, sutun=16)
+for k in (0, 1):
+    n = [k * 4 + i for i in (1, 2, 3, 4)]
+    ag = {"SEL": "IO_MUX_SEL", "~{EN}": "GND", "VDD": "+5V", "GND": "GND"}
+    for i, c in enumerate(n, 1):
+        ag["S%dA" % i] = "OUT%d" % c; ag["S%dB" % i] = "IO_OUT%d" % c; ag["D%d" % i] = "OUT%d_M" % c
+    parca(io, g, "Analog_Switch:TMUX1574PW", "U", "TMUX1574PW", ag, "Package_SO:TSSOP-16_4.4x5mm_P0.65mm", bosluk=2, dx=25)
+    C(io, g, "100n", "+5V")
+g.satir()
+g = Izgara(60, 380, sutun=16)
+for c in range(1, 13):
+    R(io, g, "33R", "OUT%d_M" % c if c <= 8 else "OUT%d" % c, "CONN_OUT%d" % c)
+kon = {"Pin_%d" % (2 * c - 1): "CONN_OUT%d" % c for c in range(1, 13)}
+kon.update({"Pin_%d" % (2 * c): "GND" for c in range(1, 14)})
+x, y = g.yer(); g.yer()
+io.koy(lib(io, "Connector_Generic:Conn_02x13_Odd_Even"), ref("J"), "Cikis konnektoru 26 kontak", x + 20, y, kon, footprint="Connector_Harwin:Harwin_Gecko_G125-MS12605M2P_2x13_P1.25mm_Vertical")
+io.metin("Konnektor: tek numarali kontaklar 1-12. cikis, cift numarali kontaklar GND, 25. kontak bos.", 30, 420)
+io.yaz(os.path.join(BURASI, "io.kicad_sch"))
+
 kok.yaz(os.path.join(BURASI, "operfly_core.kicad_sch"))
-kutuphane_tablolari(BURASI, [kok, om, mcu, gc, ds, hb], {"operfly": "${KIPRJMOD}/../../ORTAK_KUTUPHANE/semboller/operfly.kicad_sym"})
+kutuphane_tablolari(BURASI, [kok, om, mcu, gc, ds, hb, sn, io], {"operfly": "${KIPRJMOD}/../../ORTAK_KUTUPHANE/semboller/operfly.kicad_sym"})
 print("elemanlar:", dict(sorted(sayac.items())))

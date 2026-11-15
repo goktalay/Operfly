@@ -172,6 +172,52 @@
 		)
 	)
 	(sheet
+		(at 101.6 101.6)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "97933d44-0653-538f-9a94-32492b150f54")
+		(property "Sheetname" "Sensorler"
+			(at 101.6 100.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "sensorler.kicad_sch"
+			(at 101.6 122.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_core"
+				(path "/021aeb0d-29af-5cb6-83ea-514d49692429"
+					(page "7")
+				)
+			)
+		)
+	)
+	(sheet
 		(at 25.4 50.8)
 		(size 50.8 20.32)
 		(exclude_from_sim no)
@@ -213,6 +259,52 @@
 			(project "operfly_core"
 				(path "/021aeb0d-29af-5cb6-83ea-514d49692429"
 					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 177.8 101.6)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "a959065d-c83d-5b2b-a17d-9228bd712538")
+		(property "Sheetname" "IO"
+			(at 177.8 100.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "io.kicad_sch"
+			(at 177.8 122.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_core"
+				(path "/021aeb0d-29af-5cb6-83ea-514d49692429"
+					(page "8")
 				)
 			)
 		)

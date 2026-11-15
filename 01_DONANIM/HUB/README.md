@@ -56,8 +56,8 @@ Omurganın merkezi: 12 port, her portta elektronik sigorta ve akım ölçümü, 
 - Yıldız topolojide CAN FD veri hızı üst sınırı (kablo boylarıyla ölçülecek).
 - KSZ9567R: akım tüketimi (1,2 V ve 2,5 V hatları), kullanılmayan uçların (7. port, MII'ye özgü uçlar) bağlanma önerisi,
   RGMII saat gecikmesi ayarı (yazılımla), trafo orta uçlarının bağlanma biçimi, kristal yük kondansatörleri.
-- KSZ9567R ayak izi geçici (alt pedli 128 uçlu kılıf çizilecek).
+- KSZ9567R ayak izi (15 Kasım 2026): üreticinin önerilen lehim desenine göre ortak kütüphaneye eklendi (Microchip
+  çizimi C04-2418B: ped 0,20 x 1,54 mm, ped merkezleri arası 15,40 mm, orta ped 10,5 x 10,5 mm). Isı geçişleri
+  (üretici önerisi çap 0,33 mm, adım 1,20 mm) kart çiziminde orta pedin içine yerleştirilecek. Üretimden önce
+  üreticinin güncel çizimiyle bir kez daha karşılaştırılacak.
 - TPS62130: sabit frekans ve çıkış ayar uçlarının bağlantısı, yumuşak başlatma kondansatörü.
-- **Kart çizimi ön koşulu (15 Kasım 2026 taraması):** KSZ9567R'nin alt pedi (uç 129) seçili ayak izinde yok; KiCad
-  kütüphanesinde alt pedli 128 uçlu TQFP ayak izi bulunmuyor. Kart çiziminden önce üretici kılıf çizimine göre ortak
-  kütüphaneye alt pedli ayak izi eklenecek.

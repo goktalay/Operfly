@@ -3216,7 +3216,7 @@
 					)
 				)
 			)
-			(property "Footprint" "Package_QFP:TQFP-128_14x14mm_P0.4mm"
+			(property "Footprint" "operfly_ayak:Microchip_TQFP-128-1EP_14x14mm_P0.4mm_EP10x10mm"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3238,7 +3238,7 @@
 					)
 				)
 			)
-			(property "Description" "7 portlu gigabit Ethernet anahtari, 5 bakir port + 2 RGMII, PTP (ayak izi gecici: alt pedli kilif cizilecek)"
+			(property "Description" "7 portlu gigabit Ethernet anahtari, 5 bakir port + 2 RGMII, PTP"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -14283,7 +14283,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_QFP:TQFP-128_14x14mm_P0.4mm"
+		(property "Footprint" "operfly_ayak:Microchip_TQFP-128-1EP_14x14mm_P0.4mm_EP10x10mm"
 			(at 149.86 299.72 0)
 			(hide yes)
 			(show_name no)

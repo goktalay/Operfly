@@ -113,8 +113,8 @@ def ksz9567r():
     ust += [(str(n), "DVDDL", G) for n in (11, 23, 45, 56, 74, 87, 104, 110)] + [(str(n), "VDDIO", G) for n in (61, 77, 99)]
     alt = [(str(n), "GND", G) for n in (46, 47, 84, 107, 109, 123)] + [("129", "EP", P)]
     assert len(sol) + len(sag) + len(ust) + len(alt) == 129 and len({x[0] for x in sol + sag + ust + alt}) == 129
-    return kutu("KSZ9567R", sol, sag, ust, alt, "Package_QFP:TQFP-128_14x14mm_P0.4mm",
-                "7 portlu gigabit Ethernet anahtari, 5 bakir port + 2 RGMII, PTP (ayak izi gecici: alt pedli kilif cizilecek)", yari=73.66)
+    return kutu("KSZ9567R", sol, sag, ust, alt, "operfly_ayak:Microchip_TQFP-128-1EP_14x14mm_P0.4mm_EP10x10mm",
+                "7 portlu gigabit Ethernet anahtari, 5 bakir port + 2 RGMII, PTP", yari=73.66)
 
 
 def mosaic():

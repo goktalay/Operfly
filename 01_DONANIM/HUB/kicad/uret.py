@@ -131,7 +131,7 @@ for i, h in enumerate("ABC"):
         ag.update({"TX_CLK%d" % port: gelen + "_CLK", "TX_CTL%d" % port: gelen + "_CTL", "RX_CLK%d" % port: giden + "_CLK", "RX_CTL%d" % port: giden + "_CTL"})
         for b in range(4):
             ag["TXD%d_%d" % (port, b)] = "%s_D%d" % (gelen, b); ag["RXD%d_%d" % (port, b)] = "%s_D%d" % (giden, b)
-    k.koy(sw, "operfly:KSZ9567R", "U", "KSZ9567RTXI", 150, 300, ag, "Package_QFP:TQFP-128_14x14mm_P0.4mm")
+    k.koy(sw, "operfly:KSZ9567R", "U", "KSZ9567RTXI", 150, 300, ag, "operfly_ayak:Microchip_TQFP-128-1EP_14x14mm_P0.4mm_EP10x10mm")
 
     sw.metin("TRAFOLAR (1000BASE-T, 4 cift): entegre tarafi orta uclari ayri ayri 100 nF ile topraga; kablo tarafi 75 ohm + 1 nF.", 330, 60)
     for kp in (1, 2, 3, 4):
@@ -171,5 +171,5 @@ for i, h in enumerate("ABC"):
     sw.yaz(os.path.join(BURASI, "anahtar_%s.kicad_sch" % h.lower()))
 
 kok.yaz(os.path.join(BURASI, "operfly_hub.kicad_sch"))
-kutuphane_tablolari(BURASI, [kok, dg, gc, pt, bs] + anahtar_sayfalari, {"operfly": ORTAK_URI})
+kutuphane_tablolari(BURASI, [kok, dg, gc, pt, bs] + anahtar_sayfalari, {"operfly": ORTAK_URI, "operfly_ayak": "${KIPRJMOD}/../../ORTAK_KUTUPHANE/ayak_izleri/operfly_ayak.pretty"})
 print("elemanlar:", dict(sorted(k.sayac.items())))

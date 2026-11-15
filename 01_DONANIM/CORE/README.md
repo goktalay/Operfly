@@ -35,9 +35,9 @@ Pin haritasından çıkan tasarım notları:
 - Üretim ve denetim tek komut: `python 10_ORTAK_ARACLAR/kicad/denetle.py CORE operfly_core` (üretir, güncel biçime çevirir,
   ERC çalıştırır, `out/core.pdf` çıkarır).
 - Sayfalar: kök (`operfly_core`), omurga portları (`omurga`), işlemci (`islemci`), güç (`guc`), saat/sıfırlama/ayırma
-  kondansatörleri (`islemci_destek`).
+  kondansatörleri (`islemci_destek`), Ethernet/CAN/USB/microSD/PPS (`haberlesme`).
 - Durum: ERC 0 hata. Kalan uyarılar (tek uçlu etiketler) henüz çizilmemiş sayfalardan gelir: sensörler, IO işlemcisi ve
-  çıkışlar, Ethernet/CAN, USB, microSD, gözetim ve Peltier sürücüsü.
+  çıkışlar, gözetim ve Peltier sürücüsü.
 
 ## Güç ve işlemci destek kararları (15 Kasım 2026, sahibinin onayı beklenmeden alındı)
 
@@ -62,3 +62,22 @@ Bu kararlar gece çalışmasında, onay sorulmadan alındı. Her biri tek satır
 
 Doğrulanacaklar (kart çizimine geçmeden): bobin parça numaraları ve doyma akımları, giriş diyotlarında ısıl hesap,
 5 V hattının toplam akımı (IO işlemcisi, sensör regülatörleri, omurga dışı yükler), kristal yük kondansatörleri.
+
+## Haberleşme kararları (15 Kasım 2026, sahibinin onayı beklenmeden alındı)
+
+1. **Ethernet alıcı-vericisi LAN8742A**, 50 MHz osilatörle. Aynı saat hem alıcı-vericiye hem işlemciye gider; zaman
+   eşlemesi (PTP) için en temiz düzen budur. Karşılığı: kristal yerine osilatör (biraz daha pahalı).
+2. **Ethernet hattında trafo var** (Bourns PT61017PEL). Kartlar arası kabloda standart ve en güvenli yol; kartlar arasında
+   toprak döngüsünü keser. Trafosuz (kondansatörlü) bağlantı yer kazandırır ama Hub tarafıyla birlikte kararlaştırılmalı.
+3. **CAN alıcı-vericisi TJA1051-3** (CAN FD, 5 Mbit/s), her hatta ayrı. İşlemci pinindeki `CAN_x_STB` sinyali bu parçada
+   "sessiz mod" girişidir (bekleme değil): yüksekken kart hattı yalnızca dinler.
+4. **CAN sonlandırma dirençleri Core'da dizilmez**, yerleri hazırdır. Sonlandırma Hub'dadır.
+5. **USB kartı beslemez.** Servis portu yalnızca veri taşır; kart her zaman omurgadan (12 V) beslenir. USB ile masa
+   üstünde beslemek istenirse 5 V hattına güç seçici eklenmesi ve 3,3 V regülatörünün 5 V'tan beslenmesi gerekir
+   (açık seçenek; ek parça ve kart alanı ister).
+6. **microSD beslemesi anahtarlanmaz**, doğrudan 3,3 V'a bağlıdır. Kart kilitlenirse yeniden başlatma gerekir.
+7. **PPS 3,3 V lojik** olarak tanımlandı ve omurga belgesine yazıldı. Core girişi 5 V'a dayanıklıdır.
+8. `ETH_PPS_OUT` (işlemcinin ürettiği saniye darbesi) şimdilik yalnızca ölçüm noktasına çıkar.
+
+Doğrulanacaklar: trafo pin sırası ve ayak izi (üretici belgesiyle), Hub tarafının 100 Mbit bağlantıda A/B çiftlerini
+kullandığı, CAN hattında kabul edilen en yüksek hız için kablo boyu.

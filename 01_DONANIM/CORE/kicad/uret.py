@@ -54,20 +54,30 @@ class Izgara:
         self.i = ((self.i + self.sutun - 1) // self.sutun) * self.sutun
 
 
-def iki(sema, g, sembol, onek, deger, a, b, fp):
-    """İki uçlu eleman: 1. uç a ağına, 2. uç b ağına."""
+def iki(sema, g, sembol, onek, deger, a, b, fp, dnp=False):
+    """İki uçlu eleman: 1. uç a ağına, 2. uç b ağına. dnp: karta dizilmez (yeri hazır)."""
     x, y = g.yer()
     r = ref(onek)
-    sema.koy(lib(sema, sembol), r, deger, x, y, {"1": a, "2": b}, footprint=fp)
+    sema.koy(lib(sema, sembol), r, deger + (" DNP" if dnp else ""), x, y, {"1": a, "2": b}, footprint=fp, dnp=dnp)
     return r
 
 
-def C(sema, g, deger, a, b="GND", fp=C0402):
-    return iki(sema, g, "Device:C", "C", deger, a, b, fp)
+def C(sema, g, deger, a, b="GND", fp=C0402, dnp=False):
+    return iki(sema, g, "Device:C", "C", deger, a, b, fp, dnp)
 
 
-def R(sema, g, deger, a, b, fp=R0402):
-    return iki(sema, g, "Device:R", "R", deger, a, b, fp)
+def R(sema, g, deger, a, b, fp=R0402, dnp=False):
+    return iki(sema, g, "Device:R", "R", deger, a, b, fp, dnp)
+
+
+def parca(sema, g, sembol, onek, deger, aglar, fp, bosluk=1, dx=10):
+    """Çok uçlu eleman; ızgarada 1 + bosluk hücre kaplar."""
+    x, y = g.yer()
+    for _ in range(bosluk):
+        g.yer()
+    r = ref(onek)
+    sema.koy(lib(sema, sembol), r, deger, x + dx, y, aglar, footprint=fp)
+    return r
 
 
 kok = Sema(P, "Operfly Core", kagit="A3", tarih=T)
@@ -213,6 +223,89 @@ C(ds, g, "4u7", "+3V3", fp=C0603); C(ds, g, "10u", "+3V3", fp=C0805); C(ds, g, "
 C(ds, g, "2u2", "VCAP1", fp=C0603); C(ds, g, "2u2", "VCAP2", fp=C0603)
 ds.yaz(os.path.join(BURASI, "islemci_destek.kicad_sch"))
 
+# --- Sayfa 6: haberlesme (Ethernet, CAN FD, USB, microSD, PPS) ---------------
+hb = Sema(P, "Operfly Core - Ethernet, CAN FD, USB, microSD, PPS", kagit="A1", tarih=T, ust=kok, ad="Haberlesme", genel_etiket=True)
+kok.alt_sayfa(hb, "haberlesme.kicad_sch", 25.4, 101.6)
+
+hb.metin("ETHERNET 100 Mbit (RMII): LAN8742A. 50 MHz osilator hem alici-vericiyi hem islemciyi besler (PTP icin tek saat kaynagi).", 30, 30)
+hb.metin("Acilis ayarlari ic direnclerle: adres 0, otomatik anlasma, kesme cikisi etkin, ic 1,2 V regulator acik.", 30, 36)
+g = Izgara(50, 80, sutun=16)
+parca(hb, g, "Interface_Ethernet:LAN8742A", "U", "LAN8742A-CZ", {
+    "VDD1A": "+3V3_PHY", "VDD2A": "+3V3_PHY", "VDDIO": "+3V3", "VDDCR": "VDDCR_PHY", "VSS": "GND",
+    "TXD0": "ETH_TXD0", "TXD1": "ETH_TXD1", "TXEN": "ETH_TX_EN",
+    "RXD0/MODE0": "ETH_RXD0", "RXD1/MODE1": "ETH_RXD1", "CRS_DV/MODE2": "ETH_CRS_DV",
+    "MDIO": "ETH_MDIO", "MDC": "ETH_MDC", "~{RST}": "PHY_NRST", "~{INT}/REFCLKO": "PHY_INT",
+    "XTAL1/CLKIN": "PHY_CLKIN", "RBIAS": "PHY_RBIAS",
+    "TXP": "PHY_TXP", "TXN": "PHY_TXN", "RXP": "PHY_RXP", "RXN": "PHY_RXN",
+}, "Package_DFN_QFN:VQFN-24-1EP_4x4mm_P0.5mm_EP2.5x2.5mm_ThermalVias", bosluk=3, dx=30)
+parca(hb, g, "Transformer:PT61017PEL", "T", "PT61017PEL (10/100, 1:1)", {
+    "TD+": "PHY_TXP", "TD-": "PHY_TXN", "C_TD": "+3V3_PHY", "RD+": "PHY_RXP", "RD-": "PHY_RXN", "C_RD": "+3V3_PHY",
+    "TX+": "ETH_TX+", "TX-": "ETH_TX-", "C_TX": "ETH_CT_TX", "RX+": "ETH_RX+", "RX-": "ETH_RX-", "C_RX": "ETH_CT_RX",
+}, "Transformer_SMD:Transformer_Ethernet_Bourns_PT61017PEL", bosluk=2, dx=25)
+parca(hb, g, "Oscillator:ASE-xxxMHz", "Y", "50 MHz 25 ppm", {"EN": "+3V3", "Vdd": "+3V3", "GND": "GND", "OUT": "CLK50"},
+      "Oscillator:Oscillator_SMD_Abracon_ASE-4Pin_3.2x2.5mm", bosluk=1, dx=15)
+R(hb, g, "33R", "CLK50", "PHY_CLKIN"); R(hb, g, "33R", "CLK50", "ETH_REF_CLK"); C(hb, g, "100n", "+3V3")
+g.satir()
+g = Izgara(50, 140, sutun=16)
+for ag in ("PHY_TXP", "PHY_TXN", "PHY_RXP", "PHY_RXN"):
+    R(hb, g, "49R9 1%", "+3V3_PHY", ag)
+R(hb, g, "12k1 1%", "PHY_RBIAS", "GND")
+R(hb, g, "1k5", "+3V3", "ETH_MDIO"); R(hb, g, "10k", "+3V3", "PHY_INT"); R(hb, g, "10k", "PHY_NRST", "GND")
+R(hb, g, "75R", "ETH_CT_TX", "ETH_BS"); R(hb, g, "75R", "ETH_CT_RX", "ETH_BS"); C(hb, g, "1n 2kV", "ETH_BS", fp=C1206)
+g.satir()
+iki(hb, g, "Device:FerriteBead", "FB", "BLM18PG221", "+3V3", "+3V3_PHY", FB0603)
+C(hb, g, "10u", "+3V3_PHY", fp=C0805); C(hb, g, "100n", "+3V3_PHY"); C(hb, g, "100n", "+3V3_PHY"); C(hb, g, "100n", "+3V3_PHY")
+C(hb, g, "100n", "+3V3"); C(hb, g, "1u", "VDDCR_PHY"); C(hb, g, "470p", "VDDCR_PHY")
+hb.bayrak("+3V3_PHY", *g.yer(), KICAD); hb.bayrak("VDDCR_PHY", *g.yer(), KICAD)
+
+hb.metin("CAN FD: iki bagimsiz alici-verici (TJA1051-3, 5 Mbit/s). Sessiz mod girisi (S) asagi cekili: islemci sifirlanirken hat dinlenir, surulmez.", 30, 215)
+hb.metin("Sonlandirma direncleri dizilmez (DNP): omurga yildiz baglantili, sonlandirma Hub'dadir.", 30, 221)
+g = Izgara(50, 250, sutun=16)
+for h in ("A", "B"):
+    parca(hb, g, "Interface_CAN_LIN:TJA1051TK-3", "U", "TJA1051TK/3", {
+        "TXD": "CAN_%s_TX" % h, "RXD": "CAN_%s_RX" % h, "S": "CAN_%s_STB" % h, "VCC": "+5V", "VIO": "+3V3", "GND": "GND",
+        "CANH": "CAN_%s_H" % h, "CANL": "CAN_%s_L" % h}, "Package_SON:HVSON-8-1EP_3x3mm_P0.65mm_EP1.6x2.4mm", bosluk=1, dx=15)
+    C(hb, g, "100n", "+5V"); C(hb, g, "100n", "+3V3"); R(hb, g, "10k", "CAN_%s_STB" % h, "GND")
+    x, y = g.yer()
+    hb.koy(lib(hb, "Power_Protection:NUP2105L"), ref("D"), "NUP2105L", x, y, {"1": "CAN_%s_H" % h, "2": "CAN_%s_L" % h, "3": "GND"}, footprint="Package_TO_SOT_SMD:SOT-23")
+    R(hb, g, "60R4", "CAN_%s_H" % h, "CAN_%s_TERM" % h, dnp=True); R(hb, g, "60R4", "CAN_%s_L" % h, "CAN_%s_TERM" % h, dnp=True)
+    C(hb, g, "4n7", "CAN_%s_TERM" % h, dnp=True)
+    g.satir()
+
+hb.metin("USB (servis portu, Type-C, yalnizca veri): karti beslemez; VBUS yalnizca 'bilgisayar bagli' bilgisini verir.", 430, 30)
+g = Izgara(450, 85, sutun=12)
+parca(hb, g, "Connector:USB_C_Receptacle_USB2.0_16P", "J", "USB Type-C", {
+    "VBUS": "VBUS_USB", "GND": "GND", "SHIELD": "GND", "CC1": "USB_CC1", "CC2": "USB_CC2", "D+": "USB_DP", "D-": "USB_DM"},
+    "Connector_USB:USB_C_Receptacle_GCT_USB4105-xx-A_16P_TopMnt_Horizontal", bosluk=2, dx=10)
+x, y = g.yer(); g.yer()
+hb.koy(lib(hb, "Power_Protection:USBLC6-2P6"), ref("D"), "USBLC6-2P6", x + 10, y,
+       {"1": "USB_DP", "6": "USB_DP", "3": "USB_DM", "4": "USB_DM", "5": "VBUS_USB", "2": "GND"}, footprint="Package_TO_SOT_SMD:SOT-666")
+R(hb, g, "5k1", "USB_CC1", "GND"); R(hb, g, "5k1", "USB_CC2", "GND")
+R(hb, g, "10k", "VBUS_USB", "USB_VBUS"); R(hb, g, "15k", "USB_VBUS", "GND"); C(hb, g, "100n", "USB_VBUS"); C(hb, g, "1u 16V", "VBUS_USB", fp=C0603)
+
+hb.metin("microSD (ucus kaydi): 4 bit SDMMC. Kart algilama anahtari kart takiliyken SD_DET'i sifira ceker.", 430, 150)
+g = Izgara(450, 195, sutun=12)
+parca(hb, g, "Connector:Micro_SD_Card_Det_Hirose_DM3AT", "J", "microSD DM3AT-SF-PEJM5", {
+    "DAT0": "SD_D0", "DAT1": "SD_D1", "DAT2": "SD_D2", "DAT3/CD": "SD_D3", "CMD": "SD_CMD", "CLK": "SD_CK_R",
+    "VDD": "+3V3", "VSS": "GND", "DET_A": "SD_DET", "DET_B": "GND", "SHIELD": "GND"},
+    "Connector_Card:microSD_HC_Hirose_DM3AT-SF-PEJM5", bosluk=3, dx=35)
+R(hb, g, "33R", "SD_CK", "SD_CK_R")
+for ag in ("SD_D0", "SD_D1", "SD_D2", "SD_D3", "SD_CMD"):
+    R(hb, g, "47k", "+3V3", ag)
+R(hb, g, "10k", "+3V3", "SD_DET")
+g.satir()
+C(hb, g, "10u", "+3V3", fp=C0805); C(hb, g, "100n", "+3V3")
+
+hb.metin("PPS: omurgadan gelen saniye darbesi (3,3 V lojik, 5 V'a dayanikli) tetikleyicili tamponla islemciye girer.", 430, 270)
+g = Izgara(450, 300, sutun=12)
+x, y = g.yer(); g.yer()
+hb.koy(lib(hb, "74xGxx:74LVC1G17"), ref("U"), "74LVC1G17", x + 15, y, {"2": "PPS_BUF_IN", "4": "PPS_IN", "5": "+3V3", "3": "GND"},
+       footprint="Package_TO_SOT_SMD:SOT-353_SC-70-5")
+R(hb, g, "100R", "PPS_BUS", "PPS_BUF_IN"); R(hb, g, "100k", "PPS_BUF_IN", "GND"); C(hb, g, "100n", "+3V3")
+x, y = g.yer()
+hb.koy(lib(hb, "Connector:TestPoint"), ref("TP"), "ETH_PPS_OUT", x, y, {"1": "ETH_PPS_OUT"}, footprint="TestPoint:TestPoint_Pad_D1.0mm")
+hb.yaz(os.path.join(BURASI, "haberlesme.kicad_sch"))
+
 kok.yaz(os.path.join(BURASI, "operfly_core.kicad_sch"))
-kutuphane_tablolari(BURASI, [kok, om, mcu, gc, ds], {"operfly": "${KIPRJMOD}/../../ORTAK_KUTUPHANE/semboller/operfly.kicad_sym"})
+kutuphane_tablolari(BURASI, [kok, om, mcu, gc, ds, hb], {"operfly": "${KIPRJMOD}/../../ORTAK_KUTUPHANE/semboller/operfly.kicad_sym"})
 print("elemanlar:", dict(sorted(sayac.items())))

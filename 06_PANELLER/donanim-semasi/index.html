@@ -164,6 +164,55 @@ main {
 .links button small { display: block; color: var(--muted); font-size: 11px; }
 .links button:hover, .links button:focus-visible { border-color: var(--accent); outline: none; }
 .open li { color: var(--muted); }
+.sdot { fill: var(--accent); }
+.node.on .sdot { fill: #fff; }
+.sheets { display: flex; flex-wrap: wrap; gap: 6px; }
+.sheets button {
+  font: inherit; font-size: 13px; text-align: left;
+  background: var(--accent-soft); color: var(--ink);
+  border: 1px solid transparent; border-radius: 8px;
+  padding: 6px 10px; cursor: pointer;
+}
+.sheets button small { display: block; color: var(--muted); font-size: 11px; max-width: 30ch; }
+.sheets button:hover, .sheets button:focus-visible { border-color: var(--accent); outline: none; }
+.nosheet { color: var(--muted); margin: 0; font-size: 13px; }
+
+/* Şematik görüntüleyici: tam ekran, sayfa sekmeleri, sürükleme ve yakınlaştırma. Kâğıt rengi temadan bağımsızdır. */
+.viewer {
+  position: fixed; inset: 0; z-index: 10;
+  background: var(--bg); color: var(--ink);
+  display: flex; flex-direction: column;
+}
+.viewer[hidden] { display: none; }
+.vbar { display: flex; align-items: center; gap: 10px; padding: 10px 12px 6px; }
+.vhead { flex: 1; min-width: 0; }
+.vhead strong { display: block; font-family: var(--font-display); font-size: 20px; line-height: 1.1; }
+.vhead span { display: block; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vbtn {
+  font: inherit; font-size: 14px; min-width: 44px; min-height: 40px;
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; cursor: pointer;
+}
+.vbtn:hover, .vbtn:focus-visible { border-color: var(--accent); outline: none; }
+.vtabs { display: flex; gap: 6px; overflow-x: auto; padding: 4px 12px 8px; scrollbar-width: thin; }
+.vtabs button {
+  font: inherit; font-size: 13px; white-space: nowrap; flex: none;
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 99px; padding: 6px 12px; cursor: pointer;
+}
+.vtabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.vstage {
+  flex: 1; min-height: 0; position: relative; overflow: hidden;
+  background: #f5f4ef; border-top: 1px solid var(--line);
+  touch-action: none; cursor: grab;
+}
+.vstage.drag { cursor: grabbing; }
+.vstage svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; user-select: none; -webkit-user-select: none; }
+.vmsg { position: absolute; inset: 0; margin: auto; height: 3em; text-align: center; color: #5d6b66; font-size: 14px; padding: 0 16px; }
+.vmsg:empty { display: none; }
+.vzoom { position: absolute; right: 12px; bottom: 14px; display: flex; gap: 6px; }
+.vzoom .vbtn { box-shadow: 0 2px 8px rgba(0,0,0,.18); }
+body.vopen { overflow: hidden; }
 footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 12px; color: var(--muted); }
 @media (min-width: 900px) {
   main { grid-template-columns: minmax(0, 580px) minmax(0, 1fr); align-items: start; padding-bottom: 16px; }
@@ -177,12 +226,13 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
 <body>
 <header class="top">
   <h1>Operfly Donanım Şeması</h1>
-  <p class="lead">22 ürün, tek omurga. İlk hedefler: 2 kg faydalı yüklü dört motorlu araç ve 10 kg faydalı yüklü benzinli sabit kanat. Bir donanıma dokunun: bağlı olduğu donanımlar vurgulanır, özellikleri panelde açılır.</p>
+  <p class="lead">22 ürün, tek omurga. İlk hedefler: 2 kg faydalı yüklü dört motorlu araç ve 10 kg faydalı yüklü benzinli sabit kanat. Bir donanıma dokunun: bağlı olduğu donanımlar vurgulanır, özellikleri panelde açılır. Şematiği çizilmiş kartlarda panelden şematik sayfaları da açılır.</p>
   <ul class="legend" aria-label="Çizgi türleri">
     <li><svg viewBox="0 0 30 10" aria-hidden="true"><line x1="0" y1="5" x2="30" y2="5" class="edge" style="opacity:1"/></svg>Operfly Bus / sinyal kablosu</li>
     <li><svg viewBox="0 0 30 10" aria-hidden="true"><line x1="0" y1="5" x2="30" y2="5" class="edge guc"/></svg>Güç</li>
     <li><svg viewBox="0 0 30 10" aria-hidden="true"><line x1="0" y1="5" x2="30" y2="5" class="edge rf"/></svg>Kablosuz bağlantı</li>
     <li><svg viewBox="0 0 30 10" aria-hidden="true"><rect x="1" y="1" width="28" height="8" fill="none" stroke="currentColor" stroke-dasharray="4 3"/></svg>Operfly ürünü değil</li>
+    <li><svg viewBox="0 0 30 10" aria-hidden="true"><circle cx="15" cy="5" r="3.2" class="sdot"/></svg>Şematiği hazır</li>
   </ul>
 </header>
 <main>
@@ -192,11 +242,27 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
   </figure>
   <section class="panel" id="panel" aria-live="polite"></section>
 </main>
-<footer>Kaynak: Operfly Donanım Ekosistemi Mimari Şartname, Rev A (14 Kasım 2026). Açık konular şartnamedeki kararlarla birlikte güncellenir.</footer>
+<footer>Kaynak: Operfly Donanım Ekosistemi Mimari Şartname, Rev A (14 Kasım 2026) ve depodaki KiCad şematikleri. Şematikler ilk taslaktır; kart çizimleri (PCB) henüz yapılmadı. Yeni şematikler çıktıkça sayfaya eklenir.</footer>
 
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-labelledby="vtitle">
+  <div class="vbar">
+    <div class="vhead"><strong id="vtitle"></strong><span id="vsub"></span></div>
+    <button type="button" class="vbtn" id="vclose" aria-label="Şematiği kapat">Kapat</button>
+  </div>
+  <div class="vtabs" id="vtabs" role="tablist" aria-label="Şematik sayfaları"></div>
+  <div class="vstage" id="vstage"><p class="vmsg" id="vmsg"></p></div>
+  <div class="vzoom">
+    <button type="button" class="vbtn" id="vout" aria-label="Uzaklaştır">−</button>
+    <button type="button" class="vbtn" id="vfit">Sığdır</button>
+    <button type="button" class="vbtn" id="vin" aria-label="Yakınlaştır">+</button>
+  </div>
+</div>
+
+<script src="sema/liste.js"></script>
 <script>
 (function () {
   "use strict";
+  var SEMA = window.OPERFLY_SEMA || {};
   var W = 130, S = 80, H = 38;
   var N = [
     // ARAÇ
@@ -218,16 +284,16 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
       specs: ["INS kamerası: aşağı bakar, global shutter, PTP eşlemeli, sıkıştırmasız; Vision'a doğrudan bağlı", "Seyrüsefer kamerası: öne bakar, pilot görüntüsü ve engel algılama; görüntüsü Radio veya Cell ile yere gider", "Hedef takibi seyrüsefer ve faydalı yük kamerasından beslenir"] },
     { id: "air", name: "Air", sub: "hava hızı", code: "OPFAIR", kind: "kart", stage: 2, x: 12, y: 234, w: 62,
       role: "Hava hızı kartı. Sabit kanat uçuşu için zorunlu.",
-      specs: ["Pitot tüpünden fark basınç ve sıcaklık ölçümü", "Omurgaya Operfly Bus ile bağlı", "Multikopterde takılması gerekmez"],
-      open: ["Basınç sensörü seçimi"] },
+      specs: ["Fark basınç sensörü TE MS5525DSO: pitot tüpüne iki hortumla bağlanır, yaklaşık 105 m/s'ye kadar ölçer", "Statik basınç sensörü ve dış hava sıcaklığı girişi", "Pitot ısıtıcı çıkışı: 12 V, en çok 1 A, korumalı", "Omurgaya Operfly Bus ile bağlı", "Multikopterde takılması gerekmez"],
+      open: ["Pitot tüpü ve ısıtıcısının seçimi", "10–15 m/s altında doğruluk sınırlı: her uçuş öncesi yerde sıfırlama gerekir"] },
     { id: "engine", name: "Engine", sub: "motor izleme", code: "OPFENG", kind: "kart", stage: 2, x: 80, y: 234, w: 62,
       role: "Benzinli motor izleme kartı (sabit kanat).",
-      specs: ["Devir, silindir sıcaklığı, yakıt seviyesi, jeneratör durumu", "Ateşleme kesme çıkışı failsafe zincirine bağlı", "Ateşleme gürültüsüne karşı yalıtımlı girişler"],
-      open: ["Benzinli motor ve jeneratör modeli"] },
+      specs: ["Devir girişi (optokuplörle yalıtımlı)", "İki termokupl (silindir kafası ve egzoz, yaklaşık 800 °C'ye kadar), iki NTC", "Yakıt seviyesi ve yakıt akışı girişi", "Motor durdurma: ateşleme beslemesini keser (4,8–14 V, en çok 2 A)", "Kart arızalansa da motor çalışmaya devam eder; yerde güvenlik için harici durdurma girişi", "Motor tarafındaki bütün bağlantılar omurgadan yalıtımlı"],
+      open: ["Benzinli motor ve sensörlerin seçimi", "Ateşleme akımının ölçülmesi (sınır 2 A)"] },
     { id: "hub", name: "HUB", sub: "12 port", code: "OPFHUB", kind: "kart hub", stage: 1, x: 172, y: 84, w: 36, h: 188,
       role: "Omurga anahtar kartı. Araçtaki tüm kartlar yıldız düzeninde buna bağlanır.",
-      specs: ["12 Operfly Bus portu, hepsi aynı konnektör ve pin sırası", "Konnektör: Harwin Gecko-SL, 20 kontak, vida kilitli", "Yönetilebilir Gigabit anahtar, PTP zaman eşleme", "Yedekli CAN FD (A ve B), 12 V dağıtım, PPS zaman sinyali", "Her portta elektronik sigorta ve akım ölçümü", "Sertifikası doğrulanmayan kartın portu veri ağına alınmaz", "Takılan kartı OFID adresiyle tanır; yer istasyonu şemada gösterir"],
-      open: ["12 portlu, PTP destekli anahtar entegresi", "Konnektörde Gigabit Ethernet'in numuneyle doğrulanması"] },
+      specs: ["12 Operfly Bus portu, hepsi aynı konnektör ve pin sırası", "Konnektör: Harwin Gecko-SL, 20 kontak, vida kilitli", "Yönetilebilir Gigabit anahtar (üç KSZ9567R), PTP zaman eşleme", "Yedekli CAN FD (A ve B), 12 V dağıtım, PPS zaman sinyali", "Her portta elektronik sigorta ve akım ölçümü", "Sertifikası doğrulanmayan kartın portu veri ağına alınmaz", "Takılan kartı OFID adresiyle tanır; yer istasyonu şemada gösterir"],
+      open: ["Konnektörde Gigabit Ethernet'in numuneyle doğrulanması"] },
     { id: "core", name: "Core", sub: "uçuş kontrol", code: "OPFCOR", kind: "kart", stage: 1, x: 238, y: 84, w: W,
       role: "Uçuş kontrol kartı.",
       specs: ["STM32H753 (BGA) + bağımsız IO/failsafe işlemcisi", "3 IMU (Peltier ile ısıtma ve soğutma), 2 barometre, dahili pusula", "İki Operfly Bus portu, iki bağımsız CAN FD hattı", "Ethernet 100 Mbit (RMII), PTP zaman damgalı; omurganın geri kalanı gigabit", "Uçuş kaydı microSD karta; parametreler FRAM'de", "Harici watchdog, kara kutu kaydı, kesintiye karşı enerji deposu", "8 katman, IPC Sınıf 3, konformal kaplama", "Hedef: MIL-STD-810H ve MIL-STD-461G"] },
@@ -237,7 +303,7 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
       open: ["Modülün arayüz belgesi (satıcıdan istenecek)", "Numuneyle performans doğrulaması", "İhracat ve ithalat koşullarının teyidi", "L1 dışındaki bantlar: çok bantlı RTK için çok bantlı model değerlendirilecek", "Sürüm 2: FPGA ve ADC seçimi, kalibrasyon, ihracat kontrolü teyidi"] },
     { id: "nav", name: "Nav", sub: "GNSS · RTK", code: "OPFNAV", kind: "kart", stage: 2, x: 238, y: 134, w: 62,
       role: "Konumlama kartı: RTK, karıştırma ve aldatma tespiti.",
-      specs: ["Septentrio mosaic-X5", "GPS, GLONASS, Galileo, BeiDou; çok bantlı", "Dahili karıştırma/aldatma bastırma, Galileo OSNMA doğrulaması", "PPS çıkışı omurgaya: tüm kartlar ve sürü için ortak zaman", "Opsiyonel ikinci anten ile pusuladan bağımsız yön", "Anten girişine Operfly Shield (CRPA) bağlanabilir"] },
+      specs: ["Septentrio mosaic-X5", "GPS, GLONASS, Galileo, BeiDou; çok bantlı", "Dahili karıştırma/aldatma bastırma, Galileo OSNMA doğrulaması", "PPS çıkışı omurgaya: tüm kartlar ve sürü için ortak zaman", "Opsiyonel ikinci anten ile pusuladan bağımsız yön", "Anten girişine Operfly Shield (CRPA) bağlanabilir", "Servis USB'si, ham ölçüm kaydı için microSD, kart üstü pusula"] },
     { id: "payload", name: "Faydalı yük", sub: "ekosistem içi", kind: "dis", x: 238, y: 184, w: W,
       role: "Hub'daki boş Operfly Bus portuna takılan faydalı yük.",
       specs: ["Üçüncü taraf faydalı yük portu yok", "Faydalı yükler ekosistem içinde tasarlanacak", "Takıldığında yer istasyonu otomatik tanır ve kurulum sihirbazını açar"] },
@@ -247,10 +313,10 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
       open: ["Sensör çekirdeği seçimi"] },
     { id: "rx", name: "RX", code: "OPFRCV", kind: "kart", stage: 2, x: 12, y: 304, w: S,
       role: "Araç tarafı kumanda alıcısı.",
-      specs: ["12 kanal", "Modül: RFD900x sınıfı, 900 MHz bandı, frekans atlamalı, 1 W, AES", "Geniş bant bağlantıdan bağımsız: o kesilse de araç kontrol edilir", "Kanalları omurga üzerinden Core'a verir", "Bağlantı kaybını Core'a bildirir; davranış kurum bazında ayarlanır"] },
+      specs: ["12 kanal", "Modül: RFDesign RFD900ux-SMT (868 MHz için RFD868ux-SMT), frekans atlamalı, 1 W, AES", "İki anten girişi (çeşitleme)", "Geniş bant bağlantıdan bağımsız: o kesilse de araç kontrol edilir", "Kanalları omurga üzerinden Core'a verir", "Bağlantı kaybını Core'a bildirir; davranış kurum bazında ayarlanır"] },
     { id: "radio", name: "Radio", code: "OPFRAD", kind: "kart", stage: 2, x: 104, y: 304, w: S,
       role: "Geniş bant radyo kartı: video ve telemetri, 12 km.",
-      specs: ["Modül: Microhard pMDDL2450, 2,4 GHz, 2×2 MIMO, 1 W", "25 Mbps'ye kadar; Ethernet + seri", "Noktadan noktaya, çok noktalı, röle ve mesh", "Modülün AES şifrelemesi + Operfly'ın uçtan uca şifrelemesi", "Sürü içi çarpışma önleme yayınlarını taşır"],
+      specs: ["Modül: Microhard pMDDL2450, 2,4 GHz, 2×2 MIMO, 1 W", "25 Mbps'ye kadar; Ethernet + seri", "Noktadan noktaya, çok noktalı, röle ve mesh", "Modülün AES şifrelemesi + Operfly'ın uçtan uca şifrelemesi", "Sürü içi çarpışma önleme yayınlarını taşır", "Tam güçte yaklaşık 9 W çeker; soğutucu şart"],
       open: ["Şifreleme için ihracat izni", "Türkiye'de frekans tahsisi"] },
     { id: "cell", name: "Cell", code: "OPFCEL", kind: "kart", stage: 4, x: 288, y: 304, w: S,
       role: "5G kartı: telemetri ve görüntü için ikinci haberleşme yolu.",
@@ -259,10 +325,11 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
     // YER
     { id: "pilot12", name: "Pilot 12", code: "OPFK12", kind: "kart", stage: 2, x: 12, y: 456, w: S,
       role: "Kumanda: yalnızca 12 kanal.",
-      specs: ["Kumanda modülü: RFD900x sınıfı, frekans atlamalı", "Ekransız, durum LED'leri", "Ortak kumanda giriş kartı: hall etkili gimbal, anahtarlar"] },
+      specs: ["Kumanda modülü: RFD900ux-SMT, iki anten", "Tek hücreli Li-ion batarya; USB Type-C'den şarj, şarjdayken kullanılabilir", "Batarya göstergesi ve sesli uyarıcı", "Ekransız, durum LED'leri", "İşlemci ortak kumanda giriş kartındadır"],
+      open: ["Batarya paketinin seçimi", "Çalışma süresi (tahmin 5–7 saat) numunede ölçülecek"] },
     { id: "pilott", name: "Pilot T", code: "OPFKTL", kind: "kart", stage: 4, x: 12, y: 506, w: S,
       role: "Kumanda: 12 kanal ve telemetri.",
-      specs: ["Kumanda modülü: RFD900x sınıfı; telemetri aynı bağlantıdan", "Küçük ekranda telemetri", "Ortak kumanda giriş kartı"] },
+      specs: ["Kumanda modülü: RFD900ux-SMT; telemetri aynı bağlantıdan", "Küçük ekranda telemetri", "Ortak kumanda giriş kartı"] },
     { id: "pilotpro", name: "Pilot Pro", code: "OPFKPR", kind: "kart", stage: 4, x: 12, y: 556, w: S,
       role: "Kumanda: 10 inç ekran, yer istasyonu, video ve görüntü işleme.",
       specs: ["Jetson; çekirdek devresi Vision ile aynı", "Geniş bant modül (video) + kumanda modülü", "Gün ışığında okunur 10 inç dokunmatik ekran", "Operfly GCS üzerinde çalışır", "Kullanıcı kodu yalıtılmış ortamda, Operfly API'si üzerinden çalışır", "Operfly Bus konnektörüyle yer birimlerine bağlanır"],
@@ -291,7 +358,8 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
     // ORTAK
     { id: "inputs", name: "Kumanda giriş kartı", sub: "ortak modül", kind: "kart ortak", stage: 2, x: 194, y: 622, w: 174,
       role: "Üç kumandada ortak giriş kartı.",
-      specs: ["Hall etkili gimbal", "Anahtarlar ve tekerlekler", "12 kanalın tamamı"] }
+      specs: ["Kumandanın işlemcisi (STM32G0B1) ve güvenli elemanı bu karttadır", "4 çubuk ekseni, 2 tekerlek, 6 anahtar: 12 kanalın tamamı", "2 düğme, 5 yönlü tuş, ekran konnektörü", "Ana karta 20 kontaklı yassı kabloyla bağlanır"],
+      open: ["Gimbal ve anahtar modellerinin seçimi"] }
   ];
   N.forEach(function (n) { if (!n.h) n.h = H; });
 
@@ -377,6 +445,7 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
     } else {
       g.appendChild(el("text", { x: cx, y: n.y + 23, "class": "nm", "text-anchor": "middle" }, n.name));
     }
+    if (SEMA[n.id]) g.appendChild(el("circle", { cx: n.x + n.w - 6, cy: n.y + 6, r: 2.6, "class": "sdot" }));
     g.addEventListener("click", function () { select(n.id); });
     g.addEventListener("keydown", function (ev) {
       if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(n.id); }
@@ -420,6 +489,14 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
     h += "<span class=\"pill\">" + (n.kind.indexOf("ortak") > -1 ? "Ortak modül" : KIND[kindKey]) + "</span>";
     if (n.stage) h += "<span class=\"pill stage\">Tasarım aşaması " + n.stage + "</span>";
     h += "</div><p class=\"role\">" + n.role + "</p>";
+    var sm = SEMA[id];
+    if (sm) {
+      h += "<h3>Şematik</h3><div class=\"sheets\">" + sm.sayfalar.map(function (p, i) {
+        return "<button type=\"button\" data-sema=\"" + id + "\" data-page=\"" + i + "\">" + (i + 1) + ". " + p.ad.replace(/_/g, " ") + "<small>" + p.baslik + "</small></button>";
+      }).join("") + "</div>";
+    } else if (kindKey === "kart") {
+      h += "<h3>Şematik</h3><p class=\"nosheet\">Henüz çizilmedi. Çizildiğinde burada açılır.</p>";
+    }
     h += "<h3>Özellikler</h3><ul>" + n.specs.map(function (s) { return "<li>" + s + "</li>"; }).join("") + "</ul>";
     if (near.length) {
       h += "<h3>Bağlantılar</h3><div class=\"links\">" + near.map(function (x) {
@@ -435,8 +512,156 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
 
   panel.addEventListener("click", function (ev) {
     var b = ev.target.closest("button[data-go]");
-    if (b) select(b.getAttribute("data-go"));
+    if (b) { select(b.getAttribute("data-go")); return; }
+    var s = ev.target.closest("button[data-sema]");
+    if (s) openViewer(s.getAttribute("data-sema"), +s.getAttribute("data-page"), s);
   });
+
+  // --- Şematik görüntüleyici. Sayfalar ilk açılışta yüklenir (sema/<donanım>/<n>.js) ve bellekte tutulur.
+  var viewer = document.getElementById("viewer"), stage = document.getElementById("vstage");
+  var vtabs = document.getElementById("vtabs"), vmsg = document.getElementById("vmsg");
+  var cache = {}, waiting = {}, cur = null, opener = null;
+  var full = null, vb = null, svgEl = null, raf = 0;
+
+  window.OPERFLY_SEMA_YUKLE = function (key, text) {
+    cache[key] = text;
+    if (waiting[key]) { waiting[key](); delete waiting[key]; }
+  };
+
+  function load(key, file, done) {
+    if (cache[key]) { done(); return; }
+    waiting[key] = done;
+    var sc = document.createElement("script");
+    sc.src = file;
+    sc.onerror = function () { delete waiting[key]; if (cur && cur.key === key) vmsg.textContent = "Sayfa yüklenemedi. Bağlantıyı kontrol edip yeniden deneyin."; };
+    document.head.appendChild(sc);
+  }
+
+  function apply() {
+    raf = 0;
+    if (svgEl && vb) svgEl.setAttribute("viewBox", vb.x + " " + vb.y + " " + vb.w + " " + vb.h);
+  }
+  function redraw() { if (!raf) raf = requestAnimationFrame(apply); }
+
+  // Görünen alan her zaman sahnenin en-boy oranındadır; böylece 1 piksel = vb.w / genişlik birim olur.
+  function fit() {
+    if (!full) return;
+    var cw = stage.clientWidth || 1, ch = stage.clientHeight || 1, ar = cw / ch;
+    var w = full.w, h = full.h;
+    if (w / h > ar) h = w / ar; else w = h * ar;
+    vb = { x: full.x - (w - full.w) / 2, y: full.y - (h - full.h) / 2, w: w, h: h };
+    redraw();
+  }
+  function zoomAt(f, px, py) {
+    if (!vb) return;
+    var cw = stage.clientWidth || 1, ch = stage.clientHeight || 1;
+    var maxW = Math.max(full.w, full.h * cw / ch) * 1.05, minW = 25;
+    var w = Math.min(maxW, Math.max(minW, vb.w / f));
+    var k = w / vb.w, ux = vb.x + vb.w * px / cw, uy = vb.y + vb.h * py / ch;
+    vb = { x: ux - (ux - vb.x) * k, y: uy - (uy - vb.y) * k, w: w, h: vb.h * k };
+    redraw();
+  }
+
+  function show(id, i) {
+    var sm = SEMA[id], p = sm.sayfalar[i], key = id + "/" + (i + 1);
+    cur = { id: id, i: i, key: key };
+    document.getElementById("vtitle").textContent = sm.ad + " şematiği";
+    document.getElementById("vsub").textContent = (i + 1) + " / " + sm.sayfalar.length + " · " + p.baslik;
+    Array.prototype.forEach.call(vtabs.children, function (b, j) { b.setAttribute("aria-selected", j === i ? "true" : "false"); });
+    if (svgEl) { svgEl.remove(); svgEl = null; }
+    full = vb = null;
+    vmsg.textContent = "Yükleniyor…";
+    load(key, p.dosya, function () {
+      if (!cur || cur.key !== key) return;
+      var doc = new DOMParser().parseFromString(cache[key], "image/svg+xml");
+      var root = doc.documentElement;
+      if (!root || root.nodeName !== "svg") { vmsg.textContent = "Sayfa açılamadı."; return; }
+      var b = (root.getAttribute("viewBox") || "0 0 420 297").split(/[ ,]+/).map(Number);
+      full = { x: b[0], y: b[1], w: b[2], h: b[3] };
+      root.removeAttribute("width"); root.removeAttribute("height");
+      root.setAttribute("preserveAspectRatio", "xMidYMid meet");
+      root.setAttribute("role", "img");
+      root.setAttribute("aria-label", sm.ad + " şematiği, sayfa " + (i + 1) + ": " + p.baslik);
+      svgEl = document.importNode(root, true);
+      vmsg.textContent = "";
+      stage.appendChild(svgEl);
+      fit();
+    });
+  }
+
+  function openViewer(id, i, from) {
+    var sm = SEMA[id];
+    if (!sm) return;
+    opener = from || null;
+    vtabs.innerHTML = sm.sayfalar.map(function (p, j) {
+      return "<button type=\"button\" role=\"tab\" data-i=\"" + j + "\">" + (j + 1) + ". " + p.ad.replace(/_/g, " ") + "</button>";
+    }).join("");
+    viewer.hidden = false;
+    document.body.classList.add("vopen");
+    show(id, i);
+    document.getElementById("vclose").focus();
+  }
+  function closeViewer() {
+    viewer.hidden = true;
+    document.body.classList.remove("vopen");
+    if (svgEl) { svgEl.remove(); svgEl = null; }
+    cur = null;
+    if (opener && document.contains(opener)) opener.focus();
+  }
+
+  vtabs.addEventListener("click", function (ev) {
+    var b = ev.target.closest("button[data-i]");
+    if (b && cur) show(cur.id, +b.getAttribute("data-i"));
+  });
+  document.getElementById("vclose").addEventListener("click", closeViewer);
+  document.getElementById("vfit").addEventListener("click", fit);
+  document.getElementById("vin").addEventListener("click", function () { zoomAt(1.6, stage.clientWidth / 2, stage.clientHeight / 2); });
+  document.getElementById("vout").addEventListener("click", function () { zoomAt(1 / 1.6, stage.clientWidth / 2, stage.clientHeight / 2); });
+  document.addEventListener("keydown", function (ev) {
+    if (viewer.hidden) return;
+    if (ev.key === "Escape") closeViewer();
+    else if (ev.key === "+" || ev.key === "=") zoomAt(1.4, stage.clientWidth / 2, stage.clientHeight / 2);
+    else if (ev.key === "-") zoomAt(1 / 1.4, stage.clientWidth / 2, stage.clientHeight / 2);
+    else if (ev.key === "ArrowRight" && cur && cur.i < SEMA[cur.id].sayfalar.length - 1) show(cur.id, cur.i + 1);
+    else if (ev.key === "ArrowLeft" && cur && cur.i > 0) show(cur.id, cur.i - 1);
+  });
+  window.addEventListener("resize", function () { if (!viewer.hidden) fit(); });
+
+  // Sürükleme (tek parmak / fare), iki parmakla yakınlaştırma, tekerlek, çift dokunma.
+  var pts = {}, lastTap = 0;
+  function local(ev) { var r = stage.getBoundingClientRect(); return { x: ev.clientX - r.left, y: ev.clientY - r.top }; }
+  function ids() { return Object.keys(pts); }
+  stage.addEventListener("pointerdown", function (ev) {
+    if (ev.target.closest("button")) return;
+    stage.setPointerCapture(ev.pointerId);
+    pts[ev.pointerId] = local(ev);
+    stage.classList.add("drag");
+    var now = Date.now();
+    if (ids().length === 1 && now - lastTap < 300) { zoomAt(2, pts[ev.pointerId].x, pts[ev.pointerId].y); lastTap = 0; }
+    else lastTap = now;
+  });
+  stage.addEventListener("pointermove", function (ev) {
+    if (!pts[ev.pointerId] || !vb) return;
+    var p = local(ev), o = pts[ev.pointerId], k = ids();
+    if (k.length === 1) {
+      var u = vb.w / (stage.clientWidth || 1);
+      vb.x -= (p.x - o.x) * u; vb.y -= (p.y - o.y) * u;
+      redraw();
+    } else if (k.length === 2) {
+      var q = pts[k[0] == ev.pointerId ? k[1] : k[0]];
+      var d0 = Math.hypot(o.x - q.x, o.y - q.y), d1 = Math.hypot(p.x - q.x, p.y - q.y);
+      if (d0 > 0 && d1 > 0) zoomAt(d1 / d0, (p.x + q.x) / 2, (p.y + q.y) / 2);
+    }
+    pts[ev.pointerId] = p;
+  });
+  function up(ev) { delete pts[ev.pointerId]; if (!ids().length) stage.classList.remove("drag"); }
+  stage.addEventListener("pointerup", up);
+  stage.addEventListener("pointercancel", up);
+  stage.addEventListener("wheel", function (ev) {
+    ev.preventDefault();
+    var p = local(ev);
+    zoomAt(ev.deltaY < 0 ? 1.2 : 1 / 1.2, p.x, p.y);
+  }, { passive: false });
 
   select("hub");
 })();

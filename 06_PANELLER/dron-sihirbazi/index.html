@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Operfly Dron Toplama Sihirbazı</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Saira+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #eef1ee; --surface: #fbfcfa; --ink: #18221f; --muted: #5d6b66; --line: #c3ccc7;
+  --accent: #c2501b; --accent-soft: #f6dfd2; --ok: #1f7a4d; --ok-soft: #dcefe3;
+  --warn: #9a6a08; --warn-soft: #f6ead0; --bad: #b3261e; --bad-soft: #f8dcd9; --info: #1f66a8; --info-soft: #dbe8f5;
+  --font-display: "Saira Condensed", "Arial Narrow", sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121816; --surface: #1a2320; --ink: #e4ebe7; --muted: #93a39c; --line: #37443f;
+    --accent: #f08a4f; --accent-soft: #46291a; --ok: #6fcf9a; --ok-soft: #173326;
+    --warn: #e0aa4c; --warn-soft: #3a2e12; --bad: #f2867e; --bad-soft: #43201d; --info: #6fb1ea; --info-soft: #17293a;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.45; }
+header.top { position: sticky; top: 0; z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); padding: 10px 14px 8px; }
+.brand { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.brand h1 { font-family: var(--font-display); font-size: 22px; letter-spacing: .02em; margin: 0; text-transform: uppercase; }
+.brand h1 span { color: var(--accent); }
+.total { font-family: var(--font-mono); font-size: 13px; white-space: nowrap; }
+.total b { font-size: 15px; }
+.steps { display: flex; gap: 4px; margin-top: 8px; }
+.steps button { flex: 1; height: 6px; padding: 0; border: 0; border-radius: 3px; background: var(--line); cursor: pointer; }
+.steps button.done { background: var(--muted); }
+.steps button.cur { background: var(--accent); }
+.stepname { font-size: 12px; color: var(--muted); margin-top: 5px; }
+main { max-width: 760px; margin: 0 auto; padding: 14px 14px 96px; }
+h2 { font-family: var(--font-display); font-size: 24px; margin: 4px 0 2px; letter-spacing: .01em; }
+h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 20px 0 8px; font-weight: 600; }
+p.lead { color: var(--muted); margin: 0 0 12px; }
+.fig { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 6px; margin: 10px 0; }
+.fig svg { display: block; width: 100%; height: auto; max-height: 250px; }
+.opts { display: grid; gap: 8px; }
+.opts.two { grid-template-columns: 1fr 1fr; }
+label.opt { display: grid; grid-template-columns: 62px 1fr; gap: 10px; align-items: center; background: var(--surface); border: 1.5px solid var(--line); border-radius: 10px; padding: 9px 10px; cursor: pointer; position: relative; }
+label.opt.plain { grid-template-columns: 1fr; }
+label.opt input { position: absolute; opacity: 0; pointer-events: none; }
+label.opt.sel { border-color: var(--accent); background: var(--accent-soft); }
+label.opt:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+label.opt.dis { opacity: .55; }
+.opt svg.ico { width: 62px; height: 46px; color: var(--ink); }
+.opt .nm { font-weight: 600; }
+.opt .sp { font-size: 12.5px; color: var(--muted); }
+.opt .pr { font-family: var(--font-mono); font-size: 12.5px; margin-top: 2px; }
+.opt .pr a { color: var(--info); }
+.badge { display: inline-block; font-size: 11px; font-weight: 600; border-radius: 4px; padding: 1px 6px; margin-left: 4px; vertical-align: 1px; }
+.badge.ok { background: var(--ok-soft); color: var(--ok); } .badge.warn { background: var(--warn-soft); color: var(--warn); }
+.badge.bad { background: var(--bad-soft); color: var(--bad); } .badge.info { background: var(--info-soft); color: var(--info); }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+.row label { font-weight: 500; }
+.row small { display: block; color: var(--muted); font-weight: 400; }
+.row input[type=number] { width: 92px; font: inherit; font-family: var(--font-mono); padding: 7px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); text-align: right; }
+.row input[type=range] { width: 46%; accent-color: var(--accent); }
+.chk { display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; cursor: pointer; }
+.chk input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--accent); }
+.chk .pr { font-family: var(--font-mono); font-size: 12.5px; white-space: nowrap; }
+.chk small { display: block; color: var(--muted); }
+.note { border-left: 3px solid var(--line); padding: 6px 10px; margin: 8px 0; font-size: 13.5px; border-radius: 0 6px 6px 0; background: var(--surface); }
+.note.ok { border-color: var(--ok); } .note.warn { border-color: var(--warn); background: var(--warn-soft); }
+.note.bad { border-color: var(--bad); background: var(--bad-soft); } .note.info { border-color: var(--info); }
+.kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; }
+.kpi .v { font-family: var(--font-mono); font-size: 18px; font-weight: 500; }
+.kpi .l { font-size: 12px; color: var(--muted); }
+table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 13.5px; }
+th, td { text-align: left; padding: 7px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+td.n, th.n { text-align: right; font-family: var(--font-mono); white-space: nowrap; }
+tr.sum td { font-weight: 600; border-bottom: 0; }
+td small { color: var(--muted); display: block; }
+td a { color: var(--info); }
+.grand { background: var(--ink); color: var(--bg); border-radius: 10px; padding: 12px 14px; margin: 14px 0; display: flex; justify-content: space-between; align-items: baseline; }
+.grand b { font-family: var(--font-mono); font-size: 22px; }
+nav.bot { position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--line); padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); display: flex; gap: 10px; justify-content: center; }
+nav.bot button, .btn { font: inherit; font-weight: 600; border-radius: 8px; padding: 11px 18px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; min-width: 120px; }
+nav.bot button.pri, .btn.pri { background: var(--accent); border-color: var(--accent); color: #fff; }
+nav.bot button:disabled { opacity: .4; }
+textarea.copy { width: 100%; height: 160px; font-family: var(--font-mono); font-size: 12px; margin-top: 8px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
+.foot { font-size: 12.5px; color: var(--muted); margin-top: 18px; }
+@media (max-width: 420px) { .opts.two { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><h1>Oper<span>fly</span> · Dron sihirbazı</h1><div class="total" id="total"></div></div>
+  <div class="steps" id="steps"></div>
+  <div class="stepname" id="stepname"></div>
+</header>
+<main id="main"></main>
+<nav class="bot"><button id="prev" type="button">Geri</button><button id="next" type="button" class="pri">İleri</button></nav>
+<script>
+(function () {
+"use strict";
+var PRICE_DATE = "14 Kasım 2026";
+
+/* ---------- Satın alınacak hazır ürünler (fiyatlar web'den, PRICE_DATE tarihinde) ---------- */
+var MOTORS = [
+  { id: "u8-150", type: "mr", name: "T-Motor U8 II KV150", s: [6], thrust: 5.4, w: 273, peakA: 27, eff: 12, price: 309.99, priceNote: "aynı serinin KV100 fiyatı",
+    src: "https://irlock.com/products/t-motor-u8-efficiency-type-uav-motor-kv100", prop: { name: "T-Motor G28×9.2 karbon pervane", price: 155.45, w: 100, src: "https://store.tmotor.com/goods-409-G28%2A92+Prop-2PCSPAIR.html" },
+    sp: "6S · en çok 5,4 kg itki (29–30 inç pervaneyle) · 273 g" },
+  { id: "u8-100", type: "mr", name: "T-Motor U8 II KV100", s: [12], thrust: 7.3, w: 277, peakA: 22, eff: 11, price: 309.99,
+    src: "https://irlock.com/products/t-motor-u8-efficiency-type-uav-motor-kv100", prop: { name: "T-Motor G28×9.2 karbon pervane", price: 155.45, w: 100, src: "https://store.tmotor.com/goods-409-G28%2A92+Prop-2PCSPAIR.html" },
+    sp: "12S · en çok 7,3 kg itki · 277 g" },
+  { id: "p80", type: "mr", name: "T-Motor P80 III KV100", s: [12], thrust: 16, w: 649, peakA: 60, eff: 10, price: 199.90,
+    src: "https://store.tmotor.com/goods.php?id=783", prop: { name: "T-Motor G30×10.5 karbon pervane", price: 170, w: 120, est: true },
+    sp: "12S · en çok 16 kg itki · 649 g" },
+  { id: "x8", type: "mr", name: "Hobbywing XRotor X8 (motor + ESC + pervane)", s: [12], thrust: 15, w: 1150, peakA: 80, eff: 8, price: 149.99, integrated: true, priceNote: "bazı satıcılarda pervane ayrı",
+    src: "https://www.hobbywingdirect.com/collections/xrotor-pro-x9-series-industrial-commercial-use",
+    sp: "12S · en çok 15 kg itki · 1150 g (pervane dahil) · ESC içinde" },
+  { id: "u13", type: "mr", name: "T-Motor U13 II KV130", s: [12], thrust: 24, w: 1300, wEst: true, peakA: 118, eff: 7, price: 379.80,
+    src: "https://www.worldronemarket.com/product/t-motor-u13ii-kv130/", prop: { name: "T-Motor G32×11 karbon pervane", price: 200, w: 140, est: true },
+    sp: "12S · en çok 24 kg itki · yaklaşık 1,3 kg" },
+  { id: "at7224", type: "fw", name: "T-Motor AT7224 KV160", s: [12], thrust: 17.7, w: 780, peakA: 105, eff: 0, price: 229,
+    src: "https://irlock.com/products/t-motor-at7224-40cc-10-12s-aircraft-fixed-wing-brushless-motor-kv160", prop: { name: "Sabit kanat pervanesi 22–24 inç", price: 60, w: 120, est: true },
+    sp: "10–12S · en çok 17,7 kg itki · 780 g" }
+];
+var ESCS = [
+  { id: "alpha60-6", name: "T-Motor ALPHA 60A 6S", a: 60, s: [6], n: 1, w: 73, wEst: true, price: 69.99, src: "https://store.tmotor.com/product/alpha-60a-6s-esc.html", sp: "60 A sürekli · 6S · tekli" },
+  { id: "flame100-6", name: "T-Motor FLAME 100A 6S", a: 100, s: [6], n: 1, w: 110, wEst: true, price: 89.99, src: "https://store.tmotor.com/product/flame-100a-6s-esc.html", sp: "100 A sürekli · 4–6S · tekli" },
+  { id: "alpha60-12", name: "T-Motor ALPHA 60A 12S", a: 60, s: [12], n: 1, w: 110, wEst: true, price: 109.99, src: "https://www.ligpower.com/jp/product/xu8-x-kv85-standard-integrated-propulsion.html", sp: "60 A sürekli · 12S · tekli" },
+  { id: "flame80", name: "T-Motor FLAME 80A 12S V2.0", a: 80, s: [6, 12], n: 1, w: 94, price: 119.99, src: "https://store.tmotor.com/product/flame-80a-12s-v2-esc.html", sp: "80 A sürekli · 6–12S · tekli · 94 g" },
+  { id: "v120", name: "T-Motor V120A 14S", a: 120, s: [6, 12], n: 1, w: 200, wEst: true, price: 199.90, src: "https://www.ligpower.com/categorys/vtol-drone-escs", sp: "120 A · 14S'ye kadar · tekli" },
+  { id: "at115", name: "T-Motor AT115A (sabit kanat)", a: 115, s: [6, 12], n: 1, w: 182, price: 109.99, src: "https://store.tmotor.com/goods.php?id=905", sp: "115 A sürekli · 6–14S · dahili BEC · 182 g" },
+  { id: "c80-4", name: "T-Motor C80A 4'ü 1 arada", a: 80, s: [6], n: 4, w: 60, wEst: true, price: 77, src: "https://rcdrone.top/collections/four-in-one-fpv-escs", sp: "4 × 80 A · 4–8S" },
+  { id: "lum100-4", name: "Lumenier ELITE PRO 100A 4'ü 1 arada", a: 100, s: [6, 12], n: 4, w: 150, wEst: true, price: 519.99, src: "https://www.racedayquads.com/products/lumenier-elite-pro-100a-v2-1-6-12s-4-in-1-am32-esc-30x30", sp: "4 × 100 A · 6–12S" }
+];
+var BATTS = [
+  { id: "6s22", name: "Tattu 6S 22000 mAh 30C", s: 6, wh: 488, w: 2460, price: 427, src: "https://www.nextfpv.com/products/tattu-g-tech-6s-22000mah-30c-22-2v-lipo-battery-with-xt90-s-plug-for-uav", sp: "22,2 V · 488 Wh · 2,46 kg" },
+  { id: "6s30", name: "Tattu 6S 30000 mAh 25C", s: 6, wh: 666, w: 3673, price: 532.90, src: "https://worldronemarket.com/?p=8753", sp: "22,2 V · 666 Wh · 3,67 kg" },
+  { id: "12s22", name: "Tattu Plus 12S 22000 mAh 25C", s: 12, wh: 977, w: 6058, price: 829.99, src: "https://www.batteryspace.com/Tattu-Plus-1.0-44.4V-22000mAh-25C-12S1P-Lipo-Smart-Battery-Pack.aspx", sp: "44,4 V · 977 Wh · 6,06 kg" }
+];
+var ENGINES = [
+  { id: "dle61", name: "DLE 61 (61 cc, tek silindir)", hp: 6, w: 1750, price: 519.99, src: "https://www.horizonhobby.com/dle-61-61cc-gas-engine-with-electronic-ignition-and-muffler-p-dleg0061", sp: "6 hp · 1,75 kg · ateşleme ve susturucu dahil" },
+  { id: "dle111", name: "DLE 111 (111 cc, çift silindir)", hp: 11.2, w: 2860, price: 815, priceNote: "749,99 €; kur 1,09 varsayıldı", src: "https://www.lindinger.at/en/AIRPLANES/GAS-GLOW-POWERPLANTS/Fuel-Engines/DLE-Engines-DLE-111-2-cylinder-gasoline-engine-genuine/78867", sp: "11,2 hp · 2,86 kg" },
+  { id: "dle170", name: "DLE 170 (170 cc, çift silindir)", hp: 17.5, w: 4110, price: 1129, src: "https://reach.dog/shop/fpvmodel/products/dle-170-170cc-twin-gas-engine-with-electronic-ignition-and-mufflers", sp: "17,5 hp · 4,11 kg" }
+];
+var CAM_NAV = [
+  { id: "none", name: "Seyir kamerası yok", price: 0, w: 0, sp: "Pilot görüntüsü olmadan uçuş" },
+  { id: "a8", name: "SIYI A8 mini", price: 246.19, w: 95, src: "https://irlock.com/products/siyi-a8-mini-4k-8mp-ultra-hd-6x-digital-zoom-gimbal-camera-with-1-1-7-sony-sensor-ai-smart-identify-and-tracking-hdr-starlight-night-vision-mini-3-axis-stabilizer-95g-lightweight-55x55x70mm-for-uav-ugv-usv-rc-planes-and-fpv-drones", sp: "4K · 3 eksen gimbal · Ethernet çıkışı · 95 g" },
+  { id: "zt6", name: "SIYI ZT6 (termal + 4K)", price: 3699.90, w: 200, wEst: true, src: "https://irlock.com/products/siyi-zt6-mini-optical-pod-dual-sensors-4k-8mp-6x-digital-zoom-gimbal-camera", sp: "640×512 termal + 4K · 3 eksen · Ethernet" }
+];
+var CAM_INS = [
+  { id: "none", name: "INS kamerası yok", price: 0, w: 0, sp: "Görüntü destekli seyir kullanılmaz" },
+  { id: "bfs", name: "Teledyne FLIR Blackfly S BFS-PGE-16S2M", price: 371, w: 36, src: "https://teledynevisionsolutions.com/products/blackfly-s-gige", sp: "Global shutter · GigE · PTP eşleme · 1440×1080 · 36 g", lens: true }
+];
+var SERVO = { name: "Hitec D845WP servo", price: 114.99, w: 227, src: "https://amainhobbies.com/hitec-d845wp-waterproof-monster-torque-steel-gear-large-scale-servo-hrc36845/p469129", sp: "50 kg·cm (7,4 V) · su geçirmez · 227 g" };
+
+/* ---------- Operfly kartları: malzeme maliyeti tahmini (BOM), ağırlık ve güç tahmini ---------- */
+var OP = {
+  core:    { name: "Operfly Core", d: "Uçuş kontrol kartı", cost: 513, w: 80, pw: 8, ports: 2 },
+  hub:     { name: "Operfly Hub", d: "12 portlu omurga anahtarı", cost: 857, w: 150, pw: 10, ports: 0 },
+  power:   { name: "Operfly Power", d: "Güç dağıtımı, 2S–12S", cost: 548, w: 120, pw: 0, ports: 1 },
+  nav:     { name: "Operfly Nav", d: "GNSS + RTK (mosaic-X5)", cost: 923, w: 60, pw: 4, ports: 1 },
+  rx:      { name: "Operfly RX", d: "12 kanal kumanda alıcısı", cost: 458, w: 50, pw: 6, ports: 1 },
+  radio:   { name: "Operfly Radio", d: "12 km video + telemetri", cost: 827, w: 90, pw: 12, ports: 1 },
+  vision:  { name: "Operfly Vision", d: "Jetson Orin NX görüntü işleme", cost: 1433, w: 350, pw: 25, ports: 1 },
+  air:     { name: "Operfly Air", d: "Hava hızı (pitot)", cost: 388, w: 30, pw: 1, ports: 1 },
+  engine:  { name: "Operfly Engine", d: "Benzinli motor izleme, ateşleme kesme", cost: 383, w: 40, pw: 2, ports: 1 },
+  range10: { name: "Operfly Range 10", d: "10 m mesafe sensörü (iniş)", cost: 398, w: 60, pw: 3, ports: 1 },
+  range30: { name: "Operfly Range 30", d: "30 m mesafe sensörü (arazi takibi)", cost: 498, w: 60, pw: 3, ports: 1 },
+  range100:{ name: "Operfly Range 100", d: "100 m mesafe sensörü (sabit kanat yaklaşma)", cost: 748, w: 80, pw: 4, ports: 1 },
+  cell:    { name: "Operfly Cell", d: "5G telemetri ve görüntü", cost: 657, w: 90, pw: 10, ports: 1 },
+  shield:  { name: "Operfly Shield", d: "Karıştırma önleyici GNSS anteni (4 kanal, L1)", cost: 1715, w: 250, pw: 8, ports: 1 },
+  pilot12: { name: "Operfly Pilot 12", d: "12 kanal kumanda, ekransız", cost: 982, ground: true },
+  pilott:  { name: "Operfly Pilot T", d: "Kumanda + küçük telemetri ekranı", cost: 1012, ground: true },
+  pilotpro:{ name: "Operfly Pilot Pro", d: "10 inç ekranlı, Jetson'lu yer istasyonu kumandası", cost: 2963, ground: true },
+  gr:      { name: "Operfly Ground Radio", d: "Yer radyosu (video + telemetri + kumanda)", cost: 1044, ground: true },
+  pca:     { name: "Operfly PC adaptörü", d: "Yer radyosunu bilgisayara bağlar", cost: 392, ground: true },
+  base:    { name: "Operfly Base", d: "RTK baz istasyonu", cost: 918, ground: true },
+  tracker: { name: "Operfly Tracker", d: "Yönlü yer antenini araca çevirir", cost: 613, ground: true }
+};
+var LAYOUTS = { quad: { n: 4, name: "Dört motor (Quad X)" }, hexa: { n: 6, name: "Altı motor (Hexa)" }, octo: { n: 8, name: "Sekiz motor (Okto)" }, x8: { n: 8, name: "Sekiz motor, koaksiyel (X8)", coax: true } };
+var STEPS = ["Araç tipi", "Yapı", "Ağırlık", "Tahrik", "Enerji", "Kameralar", "Operfly kartları", "Özet"];
+
+/* ---------- Durum ---------- */
+var DEF = { step: 0, type: "mr", layout: "quad", fwDrive: "gas", fwMotors: 1, fwPos: "tractor", span: 4, mtow: 30, payload: 2, volt: 6,
+  motor: "", cm: { thrust: 12, w: 600, price: 300, peakA: 80 }, esc: "", batt: "", battN: 2, engine: "", tank: 8, gen: true, servos: 6,
+  camNav: "a8", camIns: "bfs", radio: true, range10: true, range30: false, range100: false, cell: false, shield: false,
+  gnssless: false, track: false, swarm: false, ctrl: "pilott", base: false, tracker: false };
+var S = JSON.parse(JSON.stringify(DEF));
+try { var saved = JSON.parse(localStorage.getItem("operfly-sihirbaz") || "null"); if (saved && saved.type) { for (var k in DEF) if (saved[k] !== undefined) S[k] = saved[k]; } } catch (e) {}
+function save() { try { localStorage.setItem("operfly-sihirbaz", JSON.stringify(S)); } catch (e) {} }
+
+/* ---------- Yardımcılar ---------- */
+function $(id) { return document.getElementById(id); }
+function money(n) { return Math.round(n).toLocaleString("tr-TR") + " $"; }
+function num(n, d) { return n.toLocaleString("tr-TR", { maximumFractionDigits: d === undefined ? 1 : d }); }
+function byId(arr, id) { for (var i = 0; i < arr.length; i++) if (arr[i].id === id) return arr[i]; return null; }
+function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
+function isElec() { return S.type === "mr" || S.fwDrive === "elec"; }
+function isGas() { return S.type === "fw" && S.fwDrive === "gas"; }
+function sysS() { return S.type === "fw" ? 12 : S.volt; }
+function nMotors() { return S.type === "mr" ? LAYOUTS[S.layout].n : S.fwMotors; }
+function motorList() { var t = S.type, v = sysS(); return MOTORS.filter(function (m) { return m.type === t && m.s.indexOf(v) >= 0; }); }
+function selMotor() {
+  if (!isElec()) return null;
+  if (S.motor === "custom") return { id: "custom", name: "Kendi motorum", thrust: +S.cm.thrust || 0, w: +S.cm.w || 0, peakA: +S.cm.peakA || 0, eff: 9, price: +S.cm.price || 0, custom: true, s: [sysS()] };
+  var m = byId(MOTORS, S.motor); return m && motorList().indexOf(m) >= 0 ? m : null;
+}
+function escList() {
+  var m = selMotor(), v = sysS(), n = nMotors();
+  return ESCS.filter(function (e) { if (e.s.indexOf(v) < 0) return false; if (e.n === 4 && (S.type !== "mr" || n % 4 !== 0)) return false; if (S.type === "mr" && e.id === "at115") return false; return true; })
+    .map(function (e) { return { e: e, ok: !m || e.a >= m.peakA }; });
+}
+function selEsc() { var m = selMotor(); if (!m || m.integrated) return null; var l = escList(); for (var i = 0; i < l.length; i++) if (l[i].e.id === S.esc) return l[i].e; return null; }
+function battList() { var v = sysS(); return BATTS.filter(function (b) { return b.s === v || (v === 12 && b.s === 6); }); }
+function selBatt() { var b = byId(BATTS, S.batt); return b && battList().indexOf(b) >= 0 ? b : null; }
+function battCount() { var b = selBatt(); if (!b) return 0; var n = Math.max(1, Math.round(+S.battN || 1)); if (sysS() === 12 && b.s === 6 && n % 2) n += 1; return n; }
+function selEngine() { return isGas() ? byId(ENGINES, S.engine) : null; }
+function visionNeeded() { return S.camNav !== "none" || S.camIns !== "none" || S.gnssless || S.track; }
+
+/* Araçtaki Operfly kartları ve gerekçeleri */
+function opAir() {
+  var a = [["core", "zorunlu"], ["hub", "zorunlu"], ["power", "zorunlu"], ["nav", "zorunlu"], ["rx", "zorunlu"]];
+  if (S.radio || S.swarm) a.push(["radio", S.swarm && !S.radio ? "sürü haberleşmesi için" : "seçildi"]);
+  if (visionNeeded()) a.push(["vision", S.camIns !== "none" || S.camNav !== "none" ? "kameralar buna bağlanır" : "GNSS'siz uçuş / hedef takibi için"]);
+  if (S.type === "fw") a.push(["air", "sabit kanatta zorunlu"]);
+  if (isGas()) a.push(["engine", "benzinli motorda zorunlu"]);
+  ["range10", "range30", "range100", "cell", "shield"].forEach(function (k) { if (S[k]) a.push([k, "seçildi"]); });
+  return a;
+}
+function opGround() {
+  var a = [[S.ctrl, "kumanda"]];
+  if ((S.radio || S.swarm) && S.ctrl !== "pilotpro") { a.push(["gr", "Radio'nun yer ucu"]); a.push(["pca", "yer radyosunu bilgisayara bağlar"]); }
+  if (S.base) a.push(["base", "seçildi"]);
+  if (S.tracker) a.push(["tracker", "seçildi"]);
+  return a;
+}
+
+/* Satın alınacaklar listesi */
+function buyList() {
+  var L = [], n = nMotors(), m = selMotor(), e = selEsc(), b = selBatt(), g = selEngine();
+  function add(name, qty, unit, o) { o = o || {}; L.push({ name: name, qty: qty, unit: unit, total: qty * unit, src: o.src, est: !!o.est, note: o.note, w: (o.w || 0) * qty, wEst: !!o.wEst }); }
+  if (m) {
+    add(m.name, n, m.price, { src: m.src, w: m.w, wEst: m.wEst || m.custom, est: m.custom, note: m.custom ? "sizin girdiğiniz değer" : m.priceNote });
+    if (m.prop && !m.integrated) add(m.prop.name, n, m.prop.price, { src: m.prop.src, est: m.prop.est, w: m.prop.w, wEst: true });
+    if (m.custom) add("Pervane (motorunuza uygun)", n, 100, { est: true, w: 100, wEst: true });
+  }
+  if (e) add(e.name, Math.ceil(n / e.n), e.price, { src: e.src, w: e.w, wEst: e.wEst });
+  if (g) {
+    add(g.name, 1, g.price, { src: g.src, w: g.w, note: g.priceNote || g.priceSrcNote });
+    add("Benzinli motor pervanesi", 1, 80, { est: true, w: 250, wEst: true });
+    add("Yakıt deposu ve hortum seti (" + num(+S.tank) + " L)", 1, 60, { est: true, w: 400, wEst: true });
+    if (S.gen) add("Jeneratör + regülatör (model seçilmedi)", 1, 400, { est: true, w: 600, wEst: true });
+    add("Aviyonik bataryası, 6S 10000 mAh", 1, 180, { est: true, w: 1300, wEst: true });
+  }
+  if (b) add(b.name, battCount(), b.price, { src: b.src, w: b.w });
+  if (S.type === "fw") add(SERVO.name, Math.max(0, Math.round(+S.servos || 0)) + (isGas() ? 1 : 0), SERVO.price, { src: SERVO.src, w: SERVO.w, note: isGas() ? "gaz servosu dahil" : "" });
+  var cn = byId(CAM_NAV, S.camNav), ci = byId(CAM_INS, S.camIns);
+  if (cn && cn.id !== "none") add(cn.name + " (seyir kamerası)", 1, cn.price, { src: cn.src, w: cn.w, wEst: cn.wEst });
+  if (ci && ci.id !== "none") { add(ci.name + " (INS kamerası)", 1, ci.price, { src: ci.src, w: ci.w }); add("INS kamerası merceği (CS bağlantı)", 1, 60, { est: true, w: 40, wEst: true }); }
+  add("Güç kabloları, konnektörler, bağlantı elemanları", 1, S.mtow > 20 ? 250 : 120, { est: true, w: S.mtow > 20 ? 800 : 300, wEst: true });
+  return L;
+}
+function opList(arr) { return arr.map(function (x) { var o = OP[x[0]]; return { key: x[0], name: o.name, d: o.d, why: x[1], total: o.cost, w: o.w || 0, pw: o.pw || 0, ports: o.ports || 0, ground: !!o.ground }; }); }
+
+/* Hesaplar ve denetimler */
+function calc() {
+  var R = { checks: [] }, n = nMotors(), m = selMotor(), e = selEsc(), b = selBatt(), g = selEngine();
+  function chk(lvl, t) { R.checks.push({ lvl: lvl, t: t }); }
+  var air = opList(opAir()), ground = opList(opGround()), buy = buyList();
+  R.air = air; R.ground = ground; R.buy = buy;
+  R.costOp = air.concat(ground).reduce(function (a, x) { return a + x.total; }, 0);
+  R.costBuy = buy.reduce(function (a, x) { return a + x.total; }, 0);
+  R.wParts = (buy.reduce(function (a, x) { return a + x.w; }, 0) + air.reduce(function (a, x) { return a + x.w; }, 0)) / 1000;
+  var fuelKg = g ? (+S.tank || 0) * 0.74 : 0;
+  R.wParts += fuelKg;
+  R.wFrame = S.mtow - S.payload - R.wParts;
+  // İtki / güç
+  if (isElec()) {
+    if (!m) chk("bad", "Motor seçilmedi.");
+    else {
+      var coax = S.type === "mr" && LAYOUTS[S.layout].coax;
+      R.thrust = m.thrust * n * (coax ? 0.85 : 1);
+      R.tw = R.thrust / S.mtow;
+      if (S.type === "mr") {
+        if (R.tw >= 2) chk("ok", "İtki yeterli: toplam " + num(R.thrust) + " kg, ağırlığın " + num(R.tw, 2) + " katı.");
+        else if (R.tw >= 1.6) chk("warn", "İtki sınırda: toplam " + num(R.thrust) + " kg, ağırlığın " + num(R.tw, 2) + " katı. Rüzgârda ve manevrada pay az; hedef en az 2 kat.");
+        else chk("bad", "İtki yetersiz: toplam " + num(R.thrust) + " kg, ağırlığın " + num(R.tw, 2) + " katı. Bu MTOW için motor başına en az " + num(S.mtow * 2 / n / (coax ? 0.85 : 1)) + " kg itki gerekir.");
+      } else {
+        if (R.tw >= 0.4) chk("ok", "İtki yeterli: " + num(R.thrust) + " kg, ağırlığın " + num(R.tw, 2) + " katı.");
+        else if (R.tw >= 0.25) chk("warn", "İtki sınırda: ağırlığın " + num(R.tw, 2) + " katı. Uzun pist veya mancınık gerekebilir; hedef 0,4.");
+        else chk("bad", "İtki yetersiz: ağırlığın " + num(R.tw, 2) + " katı. İkinci motor ekleyin veya MTOW'u düşürün.");
+      }
+      if (!m.integrated) {
+        if (!e) chk("bad", "ESC seçilmedi.");
+        else if (e.a < m.peakA) chk("bad", "ESC akımı yetersiz: motor " + num(m.peakA, 0) + " A çekebilir, ESC " + e.a + " A.");
+        else chk("ok", "ESC uygun: " + e.a + " A, motorun en yüksek akımı " + num(m.peakA, 0) + " A.");
+      }
+    }
+    if (!b) chk("bad", "Batarya seçilmedi.");
+    else {
+      R.wh = b.wh * battCount();
+      var tw = R.tw || 2, effK = S.type === "mr" ? (0.2 + 0.4 * Math.min(tw, 2)) * (LAYOUTS[S.layout].coax ? 0.85 : 1) : 1;
+      var p = S.type === "mr" ? (S.mtow * 1000) / ((m ? m.eff : 9) * effK) : S.mtow * 41;
+      if (S.type === "mr" && m && tw < 1.05) chk("bad", "Bu motorlarla araç bu ağırlıkta havalanamaz; uçuş süresi hesaplanmadı.");
+      else { R.pCruise = p; R.endur = R.wh * 0.8 / p * 60;
+      chk("info", (S.type === "mr" ? "Askıda" : "Seyirde") + " güç yaklaşık " + num(p / 1000, 1) + " kW; tahmini uçuş süresi " + num(R.endur, 0) + " dakika (bataryanın %80'i ile, kaba tahmin)."); }
+      if (m && S.type === "mr") { var iMax = m.peakA * n; var c = b.id === "6s22" ? 30 : 25; var cap = (b.wh / (b.s * 3.7)) * (sysS() === 12 && b.s === 6 ? battCount() / 2 : battCount()); if (iMax > cap * c) chk("warn", "Tam gazda toplam akım (" + num(iMax, 0) + " A) bataryanın sürekli akım sınırını (" + num(cap * c, 0) + " A) aşıyor."); }
+    }
+    if (sysS() === 12 && S.type === "mr") chk("info", "12S seçtiniz. Power kartı 12S'yi destekler; ancak \"şimdilik en büyük batarya 6S\" kararınızla çelişir.");
+  } else {
+    if (!g) chk("bad", "Benzinli motor seçilmedi.");
+    else {
+      R.hpkg = g.hp / S.mtow;
+      if (R.hpkg >= 0.12) chk("ok", "Motor gücü yeterli: " + num(g.hp) + " hp, kg başına " + num(R.hpkg, 2) + " hp.");
+      else if (R.hpkg >= 0.08) chk("warn", "Motor gücü sınırda: kg başına " + num(R.hpkg, 2) + " hp. Hedef 0,12; kalkış mesafesi uzar.");
+      else chk("bad", "Motor gücü yetersiz: kg başına " + num(R.hpkg, 2) + " hp. Bu MTOW için en az " + num(S.mtow * 0.12) + " hp gerekir.");
+      var burn = g.hp * 0.746 * 0.5 * 0.6;
+      R.endur = fuelKg / burn * 60;
+      chk("info", "Yarı güçte yakıt tüketimi yaklaşık " + num(burn / 0.74, 1) + " L/saat; " + num(+S.tank) + " L depo ile tahmini " + num(R.endur / 60, 1) + " saat (kaba tahmin).");
+      if (!S.gen) chk("warn", "Jeneratör yok: aviyonik yalnızca bataryadan beslenir, uçuş süresi aviyonik bataryasıyla sınırlanır.");
+    }
+  }
+  // Ağırlık bütçesi
+  if (S.payload >= S.mtow) chk("bad", "Faydalı yük MTOW'dan küçük olmalı.");
+  var fr = R.wFrame / S.mtow;
+  if (R.wFrame < 0) chk("bad", "Ağırlık bütçesi aşıldı: parçalar + faydalı yük MTOW'u " + num(-R.wFrame) + " kg geçiyor.");
+  else if (fr < 0.2) chk("warn", "Gövde için yalnızca " + num(R.wFrame) + " kg kalıyor (MTOW'a oranı %" + num(fr * 100, 0) + "). Tipik gövde payı %25–35.");
+  else chk("ok", "Gövde, iniş takımı ve montaj için " + num(R.wFrame) + " kg kalıyor (MTOW'a oranı %" + num(fr * 100, 0) + ").");
+  // Operfly sınırları
+  R.ports = air.reduce(function (a, x) { return a + x.ports; }, 0);
+  R.pw = air.reduce(function (a, x) { return a + x.pw; }, 0);
+  if (R.ports > 12) chk("bad", "Hub'da 12 port var; seçilen kartlar " + R.ports + " port istiyor.");
+  else chk("ok", "Hub portları: 12'den " + R.ports + " tanesi dolu.");
+  if (R.pw > 150) chk("bad", "Omurga gücü aşıldı: " + R.pw + " W (sınır 150 W)."); else chk("ok", "Omurga gücü: yaklaşık " + R.pw + " W (sınır 150 W, tahmin).");
+  var outs = (isElec() ? n : 1) + (S.type === "fw" ? Math.round(+S.servos || 0) : 0);
+  if (outs > 12) chk("bad", "Core'da 12 çıkış var; motor ve servolar " + outs + " çıkış istiyor."); else chk("ok", "Core çıkışları: 12'den " + outs + " tanesi kullanılıyor.");
+  if (S.camNav !== "none" && !S.radio && !S.cell && !S.swarm) chk("warn", "Seyir kamerası var ama görüntüyü yere taşıyacak Radio veya Cell seçilmedi.");
+  if (S.shield) chk("info", "Shield takılıyken Nav yalnızca L1 ile çalışır; karıştırma koruması sırasında çok bantlı RTK devre dışı kalır.");
+  if (S.base && !S.radio && !S.cell) chk("warn", "RTK düzeltmesini araca taşımak için Radio veya Cell gerekir.");
+  if (S.tracker && !S.radio) chk("warn", "Tracker, Radio bağlantısının yer anteni içindir; Radio seçili değil.");
+  R.total = R.costOp + R.costBuy;
+  return R;
+}
+
+/* ---------- Çizimler (özgün şematik çizimler) ---------- */
+function svgAir() {
+  var o = '<svg viewBox="0 0 320 220" role="img" aria-label="Aracın üstten şematik görünümü" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+  if (S.type === "mr") {
+    var L = LAYOUTS[S.layout], k = L.coax ? 4 : L.n, cx = 160, cy = 108, R = k === 4 ? 70 : 76, r = k === 4 ? 36 : k === 6 ? 28 : 22;
+    for (var i = 0; i < k; i++) {
+      var a = (i + 0.5) * 2 * Math.PI / k - Math.PI / 2, x = cx + R * Math.cos(a), y = cy + R * Math.sin(a);
+      o += '<line x1="' + cx + '" y1="' + cy + '" x2="' + x.toFixed(1) + '" y2="' + y.toFixed(1) + '" stroke-width="5"/>';
+      o += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + r + '" stroke="var(--accent)" stroke-width="1.5" opacity=".9"/>';
+      if (L.coax) o += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + (r - 6) + '" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4"/>';
+      o += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="5" fill="currentColor"/>';
+    }
+    o += '<rect x="' + (cx - 24) + '" y="' + (cy - 20) + '" width="48" height="40" rx="9" fill="var(--surface)"/>';
+    o += '<path d="M' + cx + ' ' + (cy - 12) + ' l7 10 h-14 z" fill="var(--accent)" stroke="none"/>';
+    o += '<text x="160" y="214" text-anchor="middle" font-size="12" fill="var(--muted)" stroke="none">' + L.name + ' · ' + L.n + ' motor</text>';
+  } else {
+    var ww = 120 + (Math.min(6, Math.max(1.5, +S.span)) - 1.5) / 4.5 * 170, x0 = 160 - ww / 2, gas = S.fwDrive === "gas";
+    o += '<path d="M160 22 C172 30 174 60 172 110 L166 196 H154 L148 110 C146 60 148 30 160 22 Z" fill="var(--surface)"/>';
+    o += '<rect x="' + x0.toFixed(0) + '" y="82" width="' + ww.toFixed(0) + '" height="24" rx="10" fill="var(--surface)"/>';
+    o += '<rect x="122" y="180" width="76" height="14" rx="6" fill="var(--surface)"/><line x1="160" y1="170" x2="160" y2="200" stroke-width="4"/>';
+    function prop(px, py) { return '<line x1="' + (px - 24) + '" y1="' + py + '" x2="' + (px + 24) + '" y2="' + py + '" stroke="var(--accent)" stroke-width="3"/><circle cx="' + px + '" cy="' + py + '" r="4" fill="var(--accent)" stroke="none"/>'; }
+    if (S.fwMotors === 2 && !gas) { var dx = ww / 4; o += '<rect x="' + (160 - dx - 6) + '" y="70" width="12" height="22" rx="4" fill="currentColor"/><rect x="' + (160 + dx - 6) + '" y="70" width="12" height="22" rx="4" fill="currentColor"/>' + prop(160 - dx, 66) + prop(160 + dx, 66); }
+    else if (S.fwPos === "pusher") { o += prop(160, 204); if (gas) o += '<rect x="152" y="186" width="16" height="12" rx="2" fill="var(--accent)" stroke="none"/>'; }
+    else { o += prop(160, 18); if (gas) o += '<rect x="152" y="24" width="16" height="14" rx="3" fill="var(--accent)" stroke="none"/>'; }
+    o += '<text x="' + (x0 + 2).toFixed(0) + '" y="124" font-size="12" fill="var(--muted)" stroke="none">açıklık ' + num(+S.span) + ' m</text>';
+    o += '<text x="160" y="216" text-anchor="middle" font-size="12" fill="var(--muted)" stroke="none">' + (gas ? "Benzinli" : "Elektrikli") + ' sabit kanat</text>';
+  }
+  return o + '</svg>';
+}
+var ICO = {
+  motor: '<ellipse cx="32" cy="14" rx="18" ry="6"/><path d="M14 14v16c0 3.3 8 6 18 6s18-2.7 18-6V14"/><path d="M14 22c0 3.3 8 6 18 6s18-2.7 18-6"/><line x1="32" y1="4" x2="32" y2="14"/><path d="M20 38h24v4H20z"/>',
+  integ: '<ellipse cx="32" cy="16" rx="14" ry="5"/><path d="M18 16v10c0 2.8 6 5 14 5s14-2.2 14-5V16"/><line x1="4" y1="9" x2="60" y2="9" stroke="var(--accent)"/><rect x="24" y="33" width="16" height="10" rx="2"/><line x1="28" y1="38" x2="36" y2="38"/>',
+  esc: '<rect x="8" y="12" width="48" height="24" rx="3"/><line x1="16" y1="12" x2="16" y2="36"/><line x1="24" y1="12" x2="24" y2="36"/><line x1="32" y1="12" x2="32" y2="36"/><line x1="40" y1="12" x2="40" y2="36"/><line x1="48" y1="12" x2="48" y2="36"/><path d="M2 20h6M2 28h6M56 18h6M56 24h6M56 30h6"/>',
+  esc4: '<rect x="12" y="6" width="40" height="36" rx="4"/><rect x="20" y="14" width="24" height="20" rx="2"/><path d="M12 12H4M12 36H4M52 12h8M52 36h8"/><circle cx="16" cy="10" r="1.5"/><circle cx="48" cy="10" r="1.5"/><circle cx="16" cy="38" r="1.5"/><circle cx="48" cy="38" r="1.5"/>',
+  batt: '<rect x="6" y="12" width="48" height="26" rx="3"/><rect x="54" y="20" width="4" height="10"/><line x1="16" y1="12" x2="16" y2="38"/><line x1="26" y1="12" x2="26" y2="38"/><line x1="36" y1="12" x2="36" y2="38"/><path d="M41 25h8M45 21v8" stroke="var(--accent)"/>',
+  engine: '<rect x="22" y="14" width="20" height="22" rx="2"/><rect x="4" y="18" width="18" height="14" rx="2"/><rect x="42" y="18" width="18" height="14" rx="2"/><path d="M8 18v14M12 18v14M16 18v14M48 18v14M52 18v14M56 18v14"/><line x1="32" y1="4" x2="32" y2="14"/><line x1="20" y1="5" x2="44" y2="5" stroke="var(--accent)"/>',
+  cam: '<path d="M22 6h20v8H22z"/><path d="M26 14v6h12v-6"/><rect x="18" y="20" width="28" height="20" rx="6"/><circle cx="32" cy="30" r="6" stroke="var(--accent)"/>',
+  cambox: '<rect x="8" y="12" width="30" height="24" rx="2"/><rect x="38" y="16" width="14" height="16" rx="1"/><path d="M52 18h6v12h-6"/><circle cx="23" cy="24" r="5" stroke="var(--accent)"/>',
+  none: '<circle cx="32" cy="24" r="14"/><line x1="22" y1="34" x2="42" y2="14"/>',
+  ctrl: '<rect x="6" y="12" width="52" height="26" rx="8"/><circle cx="20" cy="25" r="5"/><circle cx="44" cy="25" r="5"/><line x1="32" y1="12" x2="32" y2="4"/>',
+  ctrlT: '<rect x="6" y="12" width="52" height="26" rx="8"/><circle cx="17" cy="25" r="4"/><circle cx="47" cy="25" r="4"/><rect x="25" y="18" width="14" height="12" rx="1" stroke="var(--accent)"/><line x1="32" y1="12" x2="32" y2="4"/>',
+  ctrlP: '<rect x="4" y="8" width="56" height="32" rx="5"/><rect x="16" y="13" width="32" height="22" rx="1" stroke="var(--accent)"/><circle cx="10" cy="24" r="3"/><circle cx="54" cy="24" r="3"/>',
+  quad: '<line x1="18" y1="10" x2="46" y2="38"/><line x1="46" y1="10" x2="18" y2="38"/><circle cx="18" cy="10" r="7" stroke="var(--accent)"/><circle cx="46" cy="10" r="7" stroke="var(--accent)"/><circle cx="18" cy="38" r="7" stroke="var(--accent)"/><circle cx="46" cy="38" r="7" stroke="var(--accent)"/>',
+  wing: '<path d="M32 4c3 2 4 8 3 18l-1 20h-4l-1-20c-1-10 0-16 3-18z"/><rect x="4" y="17" width="56" height="8" rx="4"/><rect x="22" y="37" width="20" height="5" rx="2"/>'
+};
+function ico(k) { return '<svg class="ico" viewBox="0 0 64 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + (ICO[k] || ICO.none) + '</svg>'; }
+
+/* ---------- Arayüz parçaları ---------- */
+function opt(key, val, icon, name, sp, pr, o) {
+  o = o || {}; var sel = String(S[key]) === String(val);
+  return '<label class="opt' + (sel ? " sel" : "") + (icon ? "" : " plain") + '"><input type="radio" name="' + key + '" data-k="' + key + '" value="' + esc(val) + '"' + (sel ? " checked" : "") + '>' + (icon ? ico(icon) : "") +
+    '<span><span class="nm">' + name + (o.badge || "") + '</span>' + (sp ? '<span class="sp"><br>' + sp + '</span>' : "") + (pr ? '<div class="pr">' + pr + '</div>' : "") + '</span></label>';
+}
+function priceLine(p) { if (!p.price) return ""; return money(p.price) + (p.est ? " (tahmin)" : "") + (p.priceNote ? " · " + p.priceNote : "") + (p.src ? ' · <a href="' + p.src + '" target="_blank" rel="noopener">satıcı</a>' : ""); }
+function numRow(key, label, small, min, max, step, unit) { return '<div class="row"><label for="f-' + key + '">' + label + (small ? "<small>" + small + "</small>" : "") + '</label><span><input id="f-' + key + '" type="number" inputmode="decimal" data-k="' + key + '" data-num="1" min="' + min + '" max="' + max + '" step="' + step + '" value="' + esc(key.indexOf("cm.") === 0 ? S.cm[key.slice(3)] : S[key]) + '"> ' + (unit || "") + '</span></div>'; }
+function chkRow(key, o, why, locked) { var on = locked || !!S[key]; return '<label class="chk"><input type="checkbox" data-k="' + key + '"' + (on ? " checked" : "") + (locked ? " disabled" : "") + '><span><b>' + o.name + '</b><small>' + o.d + (why ? " · <i>" + why + "</i>" : "") + '</small></span><span class="pr">' + money(o.cost) + '</span></label>'; }
+function notes(list) { return list.map(function (c) { return '<div class="note ' + c.lvl + '">' + c.t + '</div>'; }).join(""); }
+function badge(lvl, t) { return '<span class="badge ' + lvl + '">' + t + '</span>'; }
+
+/* ---------- Adımlar ---------- */
+var VIEW = [
+  function () {
+    return '<h2>Hangi aracı topluyoruz?</h2><p class="lead">Seçiminize göre gereken Operfly kartları ve satın alınacak parçalar belirlenir.</p><div class="fig">' + svgAir() + '</div><div class="opts">' +
+      opt("type", "mr", "quad", "Multirotor", "Dikey kalkış, askıda kalma. Elektrikli.") + opt("type", "fw", "wing", "Sabit kanat", "Uzun menzil ve süre. Elektrikli veya benzinli.") + '</div>';
+  },
+  function () {
+    var h = '<h2>Yapı</h2><div class="fig">' + svgAir() + '</div>';
+    if (S.type === "mr") {
+      h += '<h3>Motor yerleşimi</h3><div class="opts two">';
+      for (var k in LAYOUTS) h += opt("layout", k, "", LAYOUTS[k].name, LAYOUTS[k].coax ? "4 kol, kol başına 2 motor; itki %15 düşer, motor arızasına dayanıklı" : LAYOUTS[k].n >= 6 ? "Bir motor kaybında kontrol korunabilir" : "En basit ve hafif; motor kaybında düşer");
+      h += '</div>';
+    } else {
+      h += '<h3>Tahrik</h3><div class="opts two">' + opt("fwDrive", "gas", "engine", "Benzinli", "Uzun uçuş süresi; Engine kartı gerekir") + opt("fwDrive", "elec", "motor", "Elektrikli", "Sessiz ve basit; süre bataryayla sınırlı") + '</div>';
+      h += '<h3>Motor konumu</h3><div class="opts two">' + opt("fwPos", "tractor", "", "Burunda (çekici)", "Pervane önde") + opt("fwPos", "pusher", "", "Kuyrukta (itici)", "Burun kamera ve sensöre kalır") + '</div>';
+      if (S.fwDrive === "elec") h += '<h3>Motor sayısı</h3><div class="opts two">' + opt("fwMotors", 1, "", "Tek motor", "") + opt("fwMotors", 2, "", "Çift motor", "Kanatlarda; yedeklilik sağlar") + '</div>';
+      h += '<h3>Kanat</h3><div class="row"><label for="f-span">Kanat açıklığı<small>' + num(+S.span) + ' m</small></label><input id="f-span" type="range" data-k="span" data-num="1" min="1.5" max="6" step="0.1" value="' + S.span + '"></div>';
+      h += numRow("servos", "Kontrol yüzeyi servosu", "kanatçık, irtifa, istikamet, flap", 2, 11, 1, "adet");
+    }
+    return h;
+  },
+  function () {
+    var h = '<h2>Ağırlık</h2><p class="lead">Parça seçenekleri bu değerlere göre değerlendirilir.</p>' +
+      numRow("mtow", "En yüksek kalkış ağırlığı (MTOW)", "araç + batarya/yakıt + faydalı yük", 1, 150, 0.5, "kg") + numRow("payload", "Faydalı yük", "kamera, yük, görev ekipmanı", 0, 100, 0.5, "kg");
+    if (S.type === "mr") h += '<h3>Batarya gerilimi</h3><div class="opts two">' + opt("volt", 6, "batt", "6S (22,2 V)", "Şimdiki kararınız: en büyük batarya 6S") + opt("volt", 12, "batt", "12S (44,4 V)", "Ağır araçlarda akım yarıya iner; Power destekler") + '</div>';
+    else if (S.fwDrive === "elec") h += '<div class="note info">Elektrikli sabit kanat için listedeki motor 10–12S çalışır; sistem 12S alınır.</div>';
+    var n = nMotors();
+    if (S.type === "mr") h += '<div class="note info">Bu ağırlıkta ' + n + ' motorla, motor başına en az <b>' + num(S.mtow * 2 / n / (LAYOUTS[S.layout].coax ? 0.85 : 1)) + ' kg</b> itki gerekir (ağırlığın 2 katı kuralı).</div>';
+    else if (isGas()) h += '<div class="note info">Bu ağırlık için en az <b>' + num(S.mtow * 0.12) + ' hp</b> motor önerilir (kg başına 0,12 hp kuralı).</div>';
+    else h += '<div class="note info">Bu ağırlık için toplam en az <b>' + num(S.mtow * 0.4) + ' kg</b> itki önerilir (ağırlığın 0,4 katı).</div>';
+    return h;
+  },
+  function () {
+    var h = '<h2>Tahrik</h2>', n = nMotors();
+    if (isGas()) {
+      h += '<p class="lead">Satıştaki benzinli motorlar. Gerekli güç: en az ' + num(S.mtow * 0.12) + ' hp.</p><div class="opts">';
+      ENGINES.forEach(function (g) { var r = g.hp / S.mtow; h += opt("engine", g.id, "engine", g.name, g.sp, priceLine(g), { badge: r >= 0.12 ? badge("ok", "yeterli") : r >= 0.08 ? badge("warn", "sınırda") : badge("bad", "yetersiz") }); });
+      h += '</div><h3>Yakıt ve elektrik</h3>' + numRow("tank", "Yakıt deposu", "", 1, 40, 0.5, "L") +
+        '<label class="chk"><input type="checkbox" data-k="gen"' + (S.gen ? " checked" : "") + '><span><b>Jeneratör</b><small>Aviyoniği uçuş boyunca besler; Power kartının ikinci girişine bağlanır</small></span><span class="pr">' + money(400) + ' (tahmin)</span></label>';
+      return h;
+    }
+    var need = S.type === "mr" ? S.mtow * 2 / n / (LAYOUTS[S.layout].coax ? 0.85 : 1) : S.mtow * 0.4 / n;
+    h += '<p class="lead">' + sysS() + 'S ile çalışan, satıştaki motorlar. ' + n + ' adet alınır; motor başına gereken itki en az ' + num(need) + ' kg.</p><div class="opts">';
+    var ml = motorList();
+    ml.forEach(function (m) { var r = m.thrust / need; h += opt("motor", m.id, m.integrated ? "integ" : "motor", m.name, m.sp, priceLine(m) + " / adet", { badge: r >= 1 ? badge("ok", "yeterli") : r >= 0.8 ? badge("warn", "sınırda") : badge("bad", "yetersiz") }); });
+    h += opt("motor", "custom", "motor", "Listede yok, kendi motorumu gireceğim", "İtki, ağırlık, akım ve fiyatı siz yazın") + '</div>';
+    if (!ml.length) h += '<div class="note warn">Bu gerilimde listede hazır motor yok; kendi motorunuzu girin veya gerilimi değiştirin.</div>';
+    if (S.motor === "custom") h += numRow("cm.thrust", "En yüksek itki", "motor başına", 0.5, 100, 0.1, "kg") + numRow("cm.w", "Ağırlık", "motor başına", 10, 5000, 1, "g") + numRow("cm.peakA", "En yüksek akım", "", 1, 400, 1, "A") + numRow("cm.price", "Fiyat", "motor başına", 0, 5000, 1, "$");
+    var m = selMotor();
+    if (m && m.prop && !m.integrated) h += '<div class="note info">Pervane otomatik eklenir: ' + m.prop.name + ', ' + n + ' adet × ' + money(m.prop.price) + (m.prop.est ? " (tahmin)" : "") + '.</div>';
+    if (m && m.integrated) h += '<div class="note ok">Bu ürün motor, ESC ve pervaneyi birlikte içerir; ayrıca ESC seçmeniz gerekmez.</div>';
+    else if (m) {
+      h += '<h3>ESC</h3><div class="opts">';
+      var el = escList();
+      el.forEach(function (x) { var e = x.e; h += opt("esc", e.id, e.n === 4 ? "esc4" : "esc", e.name, e.sp + (e.n === 4 ? " · " + Math.ceil(n / 4) + " adet gerekir" : " · " + n + " adet gerekir"), priceLine(e) + " / adet", { badge: x.ok ? badge("ok", "uygun") : badge("bad", "akım yetersiz") }); });
+      h += '</div>';
+      if (!el.length) h += '<div class="note warn">Bu gerilim için listede ESC yok.</div>';
+    }
+    return h;
+  },
+  function () {
+    var h = '<h2>Enerji</h2>';
+    if (isGas()) {
+      var g = selEngine();
+      h += '<p class="lead">Benzinli araçta tahrik yakıttan, aviyonik bataryadan ve jeneratörden beslenir.</p><div class="opts"><label class="opt sel">' + ico("batt") + '<span><span class="nm">Aviyonik bataryası, 6S 10000 mAh</span><span class="sp"><br>Otomatik eklenir; jeneratör arızasında yedek güç</span><div class="pr">' + money(180) + ' (tahmin)</div></span></label></div>' + numRow("tank", "Yakıt deposu", "Tahrik adımındaki değerle aynı", 1, 40, 0.5, "L");
+      if (!g) h += '<div class="note bad">Önce Tahrik adımında bir motor seçin.</div>';
+      return h + notes(calc().checks.filter(function (c) { return c.t.indexOf("yakıt") >= 0 || c.t.indexOf("Jeneratör") >= 0; }));
+    }
+    h += '<p class="lead">' + sysS() + 'S sistem için satıştaki bataryalar.</p><div class="opts">';
+    battList().forEach(function (b) { h += opt("batt", b.id, "batt", b.name, b.sp + (sysS() === 12 && b.s === 6 ? " · ikişerli seri bağlanır" : ""), priceLine(b) + " / adet"); });
+    h += '</div>' + numRow("battN", "Batarya adedi", sysS() === 12 && selBatt() && selBatt().s === 6 ? "çift sayı olmalı; şu an " + battCount() : "paralel bağlanır", 1, 12, 1, "adet");
+    var R = calc();
+    if (R.wh) h += '<div class="kpis"><div class="kpi"><div class="v">' + num(R.wh, 0) + ' Wh</div><div class="l">toplam enerji</div></div><div class="kpi"><div class="v">' + (R.endur ? num(R.endur, 0) + " dk" : "—") + '</div><div class="l">tahmini uçuş süresi</div></div></div>';
+    return h + notes(R.checks.filter(function (c) { return /Batarya|akım sınır|güç yaklaşık|Ağırlık|Gövde/.test(c.t); }));
+  },
+  function () {
+    var h = '<h2>Kameralar</h2><p class="lead">İki kamera da Ethernet ile Vision kartına bağlanır. Kamera seçerseniz Vision otomatik eklenir.</p><h3>Seyir kamerası (öne bakar)</h3><div class="opts">';
+    CAM_NAV.forEach(function (c) { h += opt("camNav", c.id, c.id === "none" ? "none" : "cam", c.name, c.sp, priceLine(c)); });
+    h += '</div><h3>INS kamerası (aşağı bakar)</h3><div class="opts">';
+    CAM_INS.forEach(function (c) { h += opt("camIns", c.id, c.id === "none" ? "none" : "cambox", c.name, c.sp + (c.lens ? " · mercek ayrıca eklenir" : ""), priceLine(c)); });
+    h += '</div>';
+    if (visionNeeded()) h += '<div class="note info">Vision kartı eklendi (' + money(OP.vision.cost) + ', Jetson dahil).</div>';
+    return h;
+  },
+  function () {
+    var h = '<h2>Operfly kartları</h2><p class="lead">Zorunlu kartlar kilitlidir. Fiyatlar malzeme maliyeti tahminidir, satış fiyatı değildir.</p><h3>Görev özellikleri</h3>';
+    h += '<label class="chk"><input type="checkbox" data-k="gnssless"' + (S.gnssless ? " checked" : "") + '><span><b>GNSS\'siz uçuş</b><small>Vision gerektirir; INS kamerası önerilir</small></span><span></span></label>';
+    h += '<label class="chk"><input type="checkbox" data-k="track"' + (S.track ? " checked" : "") + '><span><b>Hedef takibi</b><small>Vision gerektirir; seyir kamerası önerilir</small></span><span></span></label>';
+    h += '<label class="chk"><input type="checkbox" data-k="swarm"' + (S.swarm ? " checked" : "") + '><span><b>Sürü uçuşu</b><small>Radio gerektirir (araçlar arası ağ ve çarpışma önleme)</small></span><span></span></label>';
+    h += '<h3>Araç üstü</h3>';
+    var req = {}; opAir().forEach(function (x) { req[x[0]] = x[1]; });
+    ["core", "hub", "power", "nav", "rx"].forEach(function (k) { h += chkRow(k, OP[k], "zorunlu", true); });
+    h += chkRow("radio", OP.radio, S.swarm ? "sürü için zorunlu" : "", S.swarm);
+    if (req.vision) h += chkRow("vision", OP.vision, req.vision, true);
+    if (req.air) h += chkRow("air", OP.air, req.air, true);
+    if (req.engine) h += chkRow("engine", OP.engine, req.engine, true);
+    ["range10", "range30", "range100", "cell", "shield"].forEach(function (k) { h += chkRow(k, OP[k], ""); });
+    h += '<h3>Kumanda</h3><div class="opts">' + opt("ctrl", "pilot12", "ctrl", OP.pilot12.name, OP.pilot12.d, money(OP.pilot12.cost)) + opt("ctrl", "pilott", "ctrlT", OP.pilott.name, OP.pilott.d, money(OP.pilott.cost)) + opt("ctrl", "pilotpro", "ctrlP", OP.pilotpro.name, OP.pilotpro.d + "; yer radyosu gerekmez", money(OP.pilotpro.cost)) + '</div><h3>Yer tarafı</h3>';
+    var gq = {}; opGround().forEach(function (x) { gq[x[0]] = x[1]; });
+    if (gq.gr) { h += chkRow("gr", OP.gr, gq.gr, true) + chkRow("pca", OP.pca, gq.pca, true); }
+    h += chkRow("base", OP.base, "santimetre hassasiyeti için") + chkRow("tracker", OP.tracker, "12 km menzilde yönlü anten için");
+    return h + notes(calc().checks.filter(function (c) { return /Hub|Omurga|Shield|RTK|Tracker|Seyir kamerası var/.test(c.t); }));
+  },
+  function () {
+    var R = calc(), h = '<h2>Özet</h2><div class="fig">' + svgAir() + '</div>';
+    h += '<div class="kpis"><div class="kpi"><div class="v">' + num(S.mtow) + ' kg</div><div class="l">MTOW · faydalı yük ' + num(S.payload) + ' kg</div></div><div class="kpi"><div class="v">' + (R.endur ? (R.endur >= 90 ? num(R.endur / 60, 1) + " sa" : num(R.endur, 0) + " dk") : "—") + '</div><div class="l">tahmini uçuş süresi</div></div>' +
+      '<div class="kpi"><div class="v">' + (isGas() ? (R.hpkg ? num(R.hpkg, 2) + " hp/kg" : "—") : (R.tw ? num(R.tw, 2) + " ×" : "—")) + '</div><div class="l">' + (isGas() ? "güç / ağırlık" : "itki / ağırlık") + '</div></div><div class="kpi"><div class="v">' + num(R.wFrame) + ' kg</div><div class="l">gövdeye kalan ağırlık</div></div></div>';
+    var order = { bad: 0, warn: 1, info: 2, ok: 3 };
+    h += '<h3>Denetimler</h3>' + notes(R.checks.slice().sort(function (a, b) { return order[a.lvl] - order[b.lvl]; }));
+    function tbl(rows, op) {
+      var t = '<table><thead><tr><th>Kalem</th><th class="n">Adet</th><th class="n">Tutar</th></tr></thead><tbody>', sum = 0;
+      rows.forEach(function (x) { sum += x.total; t += '<tr><td>' + (x.src ? '<a href="' + x.src + '" target="_blank" rel="noopener">' + x.name + '</a>' : x.name) + '<small>' + (op ? x.d + " · " + x.why : (x.est ? "fiyat tahmini" : "web fiyatı") + (x.note ? " · " + x.note : "")) + '</small></td><td class="n">' + (op ? 1 : x.qty) + '</td><td class="n">' + money(x.total) + '</td></tr>'; });
+      return t + '<tr class="sum"><td>Ara toplam</td><td></td><td class="n">' + money(sum) + '</td></tr></tbody></table>';
+    }
+    h += '<h3>Operfly ekosisteminden gerekenler · araç</h3>' + tbl(R.air, true) + '<h3>Operfly ekosisteminden gerekenler · yer</h3>' + tbl(R.ground, true) + '<h3>Satın alınacak hazır ürünler</h3>' + tbl(R.buy, false);
+    h += '<div class="grand"><span>Toplam maliyet<br><small>Operfly ' + money(R.costOp) + ' + satın alma ' + money(R.costBuy) + '</small></span><b>' + money(R.total) + '</b></div>';
+    h += '<button type="button" class="btn pri" id="copy">Listeyi kopyala</button> <button type="button" class="btn" id="reset">Baştan başla</button><div id="copyout"></div>';
+    h += '<p class="foot">Dahil olmayanlar: gövde ve iniş takımı, antenler, şarj cihazı, nakliye, gümrük ve vergi. Operfly kart tutarları malzeme maliyeti tahminidir. Hazır ürün fiyatları ' + PRICE_DATE + ' tarihinde satıcı sayfalarından alınmıştır ve değişebilir; "tahmin" yazanlar satıcı fiyatına dayanmaz. İtki, süre ve ağırlık hesapları kaba kurallara dayanır; uçuştan önce üretici verileriyle ve yer testleriyle doğrulanmalıdır.</p>';
+    return h;
+  }
+];
+
+function summaryText() {
+  var R = calc(), t = "OPERFLY DRON LİSTESİ\n" + (S.type === "mr" ? LAYOUTS[S.layout].name : (isGas() ? "Benzinli" : "Elektrikli") + " sabit kanat, " + num(+S.span) + " m") + " · MTOW " + num(S.mtow) + " kg · faydalı yük " + num(S.payload) + " kg\n\nOPERFLY (araç)\n";
+  R.air.forEach(function (x) { t += "- " + x.name + ": " + money(x.total) + "\n"; });
+  t += "\nOPERFLY (yer)\n"; R.ground.forEach(function (x) { t += "- " + x.name + ": " + money(x.total) + "\n"; });
+  t += "\nSATIN ALINACAK\n"; R.buy.forEach(function (x) { t += "- " + x.qty + " × " + x.name + ": " + money(x.total) + (x.est ? " (tahmin)" : "") + "\n"; });
+  t += "\nOperfly: " + money(R.costOp) + "\nSatın alma: " + money(R.costBuy) + "\nTOPLAM: " + money(R.total) + "\n\nUYARILAR\n";
+  R.checks.forEach(function (c) { if (c.lvl === "bad" || c.lvl === "warn") t += "! " + c.t + "\n"; });
+  return t;
+}
+
+function render(keepScroll) {
+  var st = $("steps"), h = "";
+  for (var i = 0; i < STEPS.length; i++) h += '<button type="button" data-step="' + i + '" class="' + (i === S.step ? "cur" : i < S.step ? "done" : "") + '" aria-label="' + (i + 1) + ". adım: " + STEPS[i] + '"></button>';
+  st.innerHTML = h;
+  $("stepname").textContent = (S.step + 1) + " / " + STEPS.length + " · " + STEPS[S.step];
+  $("main").innerHTML = VIEW[S.step]();
+  var R = calc();
+  $("total").innerHTML = "Toplam <b>" + money(R.total) + "</b>";
+  $("prev").disabled = S.step === 0;
+  $("next").textContent = S.step === STEPS.length - 2 ? "Özeti gör" : "İleri";
+  $("next").style.visibility = S.step === STEPS.length - 1 ? "hidden" : "visible";
+  if (!keepScroll) window.scrollTo(0, 0);
+  save();
+}
+function setVal(k, v) {
+  if (k.indexOf("cm.") === 0) { S.cm[k.slice(3)] = v; return; }
+  S[k] = v;
+  if (k === "type") { if (v === "fw") { S.mtow = 70; S.payload = 10; S.range10 = false; S.range100 = true; } else { S.mtow = 30; S.payload = 2; S.range10 = true; S.range100 = false; } S.motor = ""; S.esc = ""; S.batt = ""; }
+  if (k === "volt" || k === "fwDrive") { S.motor = ""; S.esc = ""; S.batt = ""; if (k === "fwDrive" && v === "gas") S.fwMotors = 1; }
+  if (k === "motor") S.esc = "";
+}
+document.addEventListener("change", function (ev) {
+  var t = ev.target, k = t.getAttribute && t.getAttribute("data-k"); if (!k) return;
+  var v = t.type === "checkbox" ? t.checked : t.value;
+  if (t.getAttribute("data-num") || k === "volt" || k === "fwMotors") { v = parseFloat(String(v).replace(",", ".")); if (isNaN(v)) v = 0; var mn = parseFloat(t.min), mx = parseFloat(t.max); if (!isNaN(mn) && v < mn) v = mn; if (!isNaN(mx) && v > mx) v = mx; }
+  setVal(k, v); render(true);
+});
+document.addEventListener("click", function (ev) {
+  var t = ev.target;
+  if (t.getAttribute && t.getAttribute("data-step") !== null && t.getAttribute("data-step") !== undefined && t.parentNode === $("steps")) { S.step = +t.getAttribute("data-step"); render(); return; }
+  if (t.id === "prev" && S.step > 0) { S.step--; render(); }
+  else if (t.id === "next" && S.step < STEPS.length - 1) { S.step++; render(); }
+  else if (t.id === "reset") { S = JSON.parse(JSON.stringify(DEF)); render(); }
+  else if (t.id === "copy") {
+    var txt = summaryText(), out = $("copyout");
+    function fallback() { out.innerHTML = '<textarea class="copy" readonly aria-label="Kopyalanacak liste"></textarea>'; out.firstChild.value = txt; out.firstChild.select(); }
+    try { navigator.clipboard.writeText(txt).then(function () { out.innerHTML = '<div class="note ok">Liste panoya kopyalandı.</div>'; }, fallback); } catch (e) { fallback(); }
+  }
+});
+window.__operfly = { S: function () { return S; }, set: function (k, v) { setVal(k, v); }, calc: calc, render: render };
+render();
+})();
+</script>
+</body>
+</html>

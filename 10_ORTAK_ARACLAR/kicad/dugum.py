@@ -28,6 +28,7 @@ def dugum_sayfasi(k, kok, dizin, x=25.4, y=50.8, ek=None, pps=False, ethernet=Fa
     kendi sağlar. sonlandirma=True: CAN sonlandırma dirençleri dizilir, toplam 60 ohm (yalnızca Hub);
     sonlandirma=120: 120 ohm dizilir (iki uçlu kısa bağlantının bir ucu olan kartlar, ör. PC adaptörü).
     besleme="harici": kart omurgadan beslenmez; +5V ve +3V3 ağlarını kart sağlar, port +12V uçları bağlanmaz.
+    ethernet=True: omurga fişinin dört Ethernet çifti ETH_A+ ... ETH_D- ağlarına çıkar; ethernet=2: yalnızca A ve B.
     ldo33=False: 3,3 V regülatörü bu sayfaya konmaz; +3V3 ağını kart kendi (daha güçlü) regülatörüyle +5V'tan üretir.
     """
     harici = besleme == "harici"
@@ -41,8 +42,8 @@ def dugum_sayfasi(k, kok, dizin, x=25.4, y=50.8, ek=None, pps=False, ethernet=Fa
     baglanti = {"+12V": "+12V_BUS", "GND": "GND", "CAN_A_H": "CAN_A_H", "CAN_A_L": "CAN_A_L", "CAN_B_H": "CAN_B_H", "CAN_B_L": "CAN_B_L"}
     if pps:
         baglanti["PPS"] = "PPS_BUS"
-    if ethernet:
-        baglanti.update({"ETH_%s%s" % (c, i): "ETH_%s%s" % (c, i) for c in "ABCD" for i in "+-"})
+    if ethernet:   # True: dort cift (gigabit); 2: yalnizca A ve B ciftleri (100 Mbit), C ve D bos kalir
+        baglanti.update({"ETH_%s%s" % (c, i): "ETH_%s%s" % (c, i) for c in ("AB" if ethernet == 2 else "ABCD") for i in "+-"})
     if harici:
         del baglanti["+12V"]
     if port:

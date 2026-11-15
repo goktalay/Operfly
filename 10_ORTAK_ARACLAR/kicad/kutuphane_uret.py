@@ -193,6 +193,24 @@ def rfd900ux_smt():
                 "Kumanda radyo modulu, RFDesign RFD900ux-SMT / RFD868ux-SMT, 1 W, frekans atlamali, 21x29 mm", yari=15.24, yigin=True)
 
 
+def pmddl():
+    """Microhard pMDDL2450 OEM (80 kenar pedi + alt toprak duzlemi). Uc sirasi uretici isletme kilavuzundan
+    (pMDDL Operating Manual v1.4.2, Cizim 3-5 ve Tablo 3-3). Alt toprak duzlemi kilavuzda numarasizdir; burada 81."""
+    sol = [("28", "Serial_RxD", I), ("29", "Serial_TxD", O), ("34", "Serial_RTS", I), ("31", "Serial_CTS", O), ("30", "Serial_DSR", O), ("32", "Serial_DTR", O),
+           ("16", "RESET", I), ("15", "CONFIG", I), ("14", "USB_MODE", I), ("18", "USBDP", B), ("19", "USBDM", B),
+           ("11", "CPU_STATUS_LED", O), ("20", "RSSI_LED1", O), ("21", "RSSI_LED2", O), ("22", "RSSI_LED3", O), ("23", "LED_RX", O), ("24", "LED_TX", O),
+           ("60", "ETH0_LINK_LED", O), ("49", "ETH4_LINK_LED", O)]
+    sag = [("55", "TX_P0", P), ("56", "TX_N0", P), ("58", "RX_P0", P), ("57", "RX_N0", P), ("13", "ETH_BIAS", P),
+           ("44", "TX_P4", P), ("43", "TX_N4", P), ("42", "RX_P4", P), ("41", "RX_N4", P)]
+    sag += [(str(n), "DNC", N) for n in (2, 3, 4, 5, 6)]
+    sag += [(str(n), "NC", N) for n in (7, 8, 9, 10, 12, 27, 33, 35, 36, 37, 38, 45, 46, 47, 48, 50, 51, 52, 53, 54, 59)]
+    ust = [("61", "Vcc", G), ("62", "Vcc", G), ("63", "VRF", G), ("64", "VRF", G)]
+    alt = [(str(n), "GND", G) for n in [1, 17, 25, 26, 39, 40] + list(range(65, 81)) + [81]]
+    assert len({u[0] for u in sol + sag + ust + alt}) == 81
+    return kutu("pMDDL2450", sol, sag, ust, alt, "operfly_ayak:Microhard_pMDDL_OEM",
+                "Genis bant radyo modulu, Microhard pMDDL2450 OEM, 2,4 GHz 2x2 MIMO, 1 W, 26,5x33 mm", yari=20.32, yigin=True)
+
+
 def main():
     s = '(kicad_symbol_lib (version 20231120) (generator "operfly") (generator_version "1")\n'
     s += konnektor("Operfly_Bus_20", BUS, FP_BUS, "Operfly Bus portu, Harwin Gecko-SL 20 kontak")
@@ -201,6 +219,7 @@ def main():
     s += ksz9567r()
     s += mosaic()
     s += rfd900ux_smt()
+    s += pmddl()
     s += ")\n"
     open(sys.argv[1], "w", encoding="utf-8", newline="\n").write(s)
     print("yazıldı:", sys.argv[1])

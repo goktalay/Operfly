@@ -10,6 +10,7 @@
   (lib (name "Regulator_Linear")(type "KiCad")(uri "${KICAD10_SYMBOL_DIR}/Regulator_Linear.kicad_sym")(options "")(descr ""))
   (lib (name "Regulator_Switching")(type "KiCad")(uri "${KICAD10_SYMBOL_DIR}/Regulator_Switching.kicad_sym")(options "")(descr ""))
   (lib (name "Sensor_Energy")(type "KiCad")(uri "${KICAD10_SYMBOL_DIR}/Sensor_Energy.kicad_sym")(options "")(descr ""))
+  (lib (name "Transistor_FET")(type "KiCad")(uri "${KICAD10_SYMBOL_DIR}/Transistor_FET.kicad_sym")(options "")(descr ""))
   (lib (name "operfly")(type "KiCad")(uri "${KIPRJMOD}/../../ORTAK_KUTUPHANE/semboller/operfly.kicad_sym")(options "")(descr ""))
   (lib (name "power")(type "KiCad")(uri "${KICAD10_SYMBOL_DIR}/power.kicad_sym")(options "")(descr ""))
 )

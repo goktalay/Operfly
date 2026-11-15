@@ -5,8 +5,8 @@ Batarya gerilimini omurga gerilimine (12 V) çeviren, giriş gerilimini ve akım
 ## Durum (15 Kasım 2026)
 
 - KiCad projesi: `kicad/operfly_power.kicad_pro`. Üretim ve denetim: `python 10_ORTAK_ARACLAR/kicad/denetle.py POWER operfly_power`.
-- Çizilen: **düğüm devresi** (`dugum`), **giriş** (`giris`) ve **12 V çevirici** (`cevirici`). ERC 0 hata, 0 uyarı.
-- Çizilmeyen: servo rayı ve 400 A algılayıcı girişi.
+- Şematik tamam: **düğüm** (`dugum`), **giriş** (`giris`), **12 V çevirici** (`cevirici`), **servo rayı ve akım
+  algılayıcı girişi** (`servo`). ERC 0 hata, 0 uyarı. Kart çizimi başlamadı.
 - **Çevirici ilk taslaktır.** Üreticinin örnek devresinden ölçeklendi; benzetim (LTspice), ısıl hesap ve bir güç
   elektroniği mühendisinin gözden geçirmesi olmadan üretime gönderilmemelidir.
 
@@ -59,22 +59,26 @@ Doğrulanacaklar: bobin doyma akımı (akım sınırı tepe değeri yaklaşık 2
 
 Karta özel işler için boş işlemci pinleri: PA0-PA8, PB0, PB1, PB3, PB4, PB6, PB7, PB10, PB11, PC6, PC7, PD2, PD3.
 
-## Güç katı için alınan kararlar (çizim bekliyor)
+## Servo rayı kararları (15 Kasım 2026)
 
-Sahibi kararları tasarımcıya bıraktı; aşağıdakiler mimari karardır, parça değerleri hesaplanınca kesinleşir.
+1. **İki bağımsız regülatör** (TPS54560B, 60 V, 5 A, 400 kHz), çıkışları ideal diyotla (LTC4359) birleşir. Biri
+   arızalanırsa diğeri rayı taşır; işlemci her regülatörün çıkışını ayrı ölçer ve arızayı bildirir.
+2. **Çıkış 6,0 V, toplam 5 A sürekli** (yedeklilik korunacaksa). Gerilim iki direnç değiştirilerek 5,0-8,4 V arasında
+   ayarlanır (değerler şematikte yazılı). Giriş 7 V'un altındayken (boşalmış 2S) ray 6 V'u tutamaz.
+3. **Regülatörler varsayılan açık.** İşlemci çalışmasa da servo rayı vardır; işlemci isterse her birini kapatabilir.
+4. **Kompanzasyon** üreticinin yöntemiyle hesaplandı (16,5 k + 6,8 nF, 47 pF; çıkış kondansatörü 3 x 47 µF).
+   Hata yükselticisi geçiş iletkenliği 350 µA/V varsayıldı; üretici belgesiyle doğrulanacak.
+5. **Giriş sınırı:** regülatör 60 V'a kadar çalışır (mutlak sınır 65 V). 12S yüksek gerilimli batarya (52,2 V) içindedir;
+   60 V tasarım sınırında pay azdır, girişteki kırpma diyotlarına güvenir.
+6. **400 A temassız akım algılayıcı karta takılmaz;** ana batarya kablosuna takılan harici algılayıcı 3 uçlu
+   konnektörle bağlanır (5 V, sinyal, GND). Algılayıcı seçilmedi.
+7. Servo çıkışı XT30.
 
-1. **Giriş aralığı 6-60 V** (2S-12S). 12 V'un altı ve üstü birlikte gerektiği için dört anahtarlı düşüren-yükselten
-   çevirici kullanılır. Aday denetleyici: LT8705A (80 V sınıfı). 55 V sınırlı denetleyiciler 12S yüksek gerilimli
-   bataryada pay bırakmadığı için elendi.
-2. **Çıkış 12 V, 150 W** (12,5 A). Hub'ın 12 portu aynı anda tam yüklenmez; 150 W toplam bütçedir.
-3. **Çift batarya girişi ideal diyotla birleşir** (çizildi; yukarıda). Diyot kaybı olmaz, bir batarya düşerse diğeri
-   kesintisiz devralır.
-4. **Giriş ölçümü:** gerilim, akım ve harcanan enerji için sayısal güç ölçer (INA228; çizildi).
-5. **400 A temassız akım algılayıcı** ana batarya kablosu içindir (motor akımı karttan geçmez). Parça seçilmedi.
-6. **Servo güç rayı:** yedekli, ayarlanabilir. Gerilim ve akım hedefi araç tipine bağlı; varsayılan öneri 6,0 V.
+Doğrulanacaklar: bobin (10 µH, doyma akımı en az 8 A), diyot ısıl hesabı, kompanzasyon, 6 V'ta ideal diyot
+denetleyicisinin kapı gerilimi.
 
 ## Sıradaki adımlar
 
-1. Çeviricinin benzetimle doğrulanması (kompanzasyon, verim, ısıl).
-2. Şematik sayfaları: servo rayı, 400 A algılayıcı girişi.
+1. Çeviricinin ve servo regülatörlerinin benzetimle doğrulanması (kompanzasyon, verim, ısıl).
+2. Seçilmeyen parçalar: giriş MOSFET'i, 400 A algılayıcı.
 3. Isıl hesap ve kart katman planı; ardından kart çizimi.

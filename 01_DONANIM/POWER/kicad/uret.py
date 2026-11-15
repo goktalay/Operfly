@@ -15,13 +15,16 @@ BURASI = os.path.dirname(os.path.abspath(__file__))
 k = Kart("operfly_power", "2026-11-15")
 kok = Sema(k.P, "Operfly Power", kagit="A3", tarih=k.T)
 kok.metin("Operfly Power - guc karti (OPFPWR)", 25.4, 25.4, 3.0)
-kok.metin("Sematik betikle uretilir: 01_DONANIM/POWER/kicad/uret.py. Servo rayi henuz cizilmedi (README).", 25.4, 33.02, 1.6)
+kok.metin("Sematik betikle uretilir: 01_DONANIM/POWER/kicad/uret.py.", 25.4, 33.02, 1.6)
 
 # Düğüm devresi ve karta ayrılan işlemci pinleri (KiCad pin verisindeki alternatif işlevlerle denetlendi).
 EK = {"PA0": "VBAT_A_SENS", "PA1": "VBAT_B_SENS",          # ADC1_IN0, ADC1_IN1
       "PB10": "PWR_SCL", "PB11": "PWR_SDA",                # I2C2
       "PB3": "PWR_ALERT_N",
-      "PA2": "V12_SENS"}                                   # ADC1_IN2: cevirici cikis gerilimi
+      "PA2": "V12_SENS",                                   # ADC1_IN2: cevirici cikis gerilimi
+      "PA3": "SERVO_SENS", "PA4": "SRV_A_SENS", "PA5": "SRV_B_SENS",   # ADC1_IN3..5: servo rayi ve iki regulator
+      "PA6": "IBAT_SENS",                                  # ADC1_IN6: 400 A algilayici
+      "PB6": "SRV_A_OFF", "PB7": "SRV_B_OFF"}              # 1: ilgili servo regulatorunu kapatir
 dg = dugum_sayfasi(k, kok, BURASI, ek=EK)
 
 # --- Giris: iki batarya girisi, ideal diyotlar, giris olcumu -------------------
@@ -133,6 +136,54 @@ k.R(cv, g, "47k 1%", "12V_OUT", "V12_SENS"); k.R(cv, g, "10k 1%", "V12_SENS", "G
 k.olcum_noktasi(cv, g, "12V_OUT")
 cv.yaz(os.path.join(BURASI, "cevirici.kicad_sch"))
 
+# --- Servo rayi: iki bagimsiz 6 V / 5 A regulator, ideal diyotla birlesik; 400 A algilayici girisi ----
+sv = Sema(k.P, "Operfly Power - yedekli servo rayi ve akim algilayici girisi", kagit="A1", tarih=k.T, ust=kok, ad="Servo", genel_etiket=True)
+kok.alt_sayfa(sv, "servo.kicad_sch", 254.0, 50.8)
+sv.metin("SERVO RAYI: iki bagimsiz regulator (TPS54560B, 60 V, 5 A, 400 kHz), cikislari ideal diyotla birlesir. Biri arizalanirsa digeri tasir.", 30, 28)
+sv.metin("Cikis 6,0 V (66k5 / 10k2). Baska gerilim icin ust direnc: 5,0 V 53k6, 7,4 V 84k5, 8,4 V 97k6. Regulatorler varsayilan ACIK; islemci kapatabilir.", 30, 34)
+for i, h in enumerate("AB"):
+    y0 = 75 + i * 130
+    g = Izgara(50, y0, sutun=16, dx=24)
+    n = "SRV_%s" % h
+    k.parca(sv, g, "Regulator_Switching:TPS54560BDDA", "U", "TPS54560BDDAR", {"VIN": "VIN", "EN": n + "_EN", "RT/CLK": n + "_RT", "FB": n + "_FB",
+            "COMP": n + "_COMP", "BOOT": n + "_BOOT", "SW": n + "_SW", "GND": "GND"},
+            "Package_SO:Texas_R-PDSO-G8_EP2.95x4.9mm_Mask2.4x3.1mm_ThermalVias", bosluk=2, dx=22)
+    k.C(sv, g, "2u2 100V", "VIN", fp=C1210); k.C(sv, g, "2u2 100V", "VIN", fp=C1210); k.C(sv, g, "100n 100V", "VIN", fp=C0603)
+    k.R(sv, g, "243k 1%", n + "_RT", "GND")
+    k.R(sv, g, "16k5", n + "_COMP", n + "_COMP_RC"); k.C(sv, g, "6n8", n + "_COMP_RC"); k.C(sv, g, "47p", n + "_COMP")
+    k.C(sv, g, "100n 25V", n + "_BOOT", n + "_SW", fp=C0603)
+    k.iki(sv, g, "Device:D_Schottky", "D", "PDS760 (60 V, 7 A)", n + "_SW", "GND", "Diode_SMD:D_PowerDI-5")
+    k.iki(sv, g, "Device:L", "L", "10u XAL7070-103", n + "_SW", n, "Inductor_SMD:L_Coilcraft_XAL7070-XXX")
+    g.satir()
+    for _ in range(3):
+        k.C(sv, g, "47u 16V", n, fp=C1210)
+    k.R(sv, g, "66k5 1%", n, n + "_FB"); k.R(sv, g, "10k2 1%", n + "_FB", "GND")
+    k.R(sv, g, "30k 1%", n, n + "_SENS"); k.R(sv, g, "10k 1%", n + "_SENS", "GND"); k.C(sv, g, "100n", n + "_SENS")
+    x, y = g.yer()
+    k.koy(sv, "Transistor_FET:2N7002", "Q", "2N7002", x, y, {"D": n + "_EN", "S": "GND", "G": n + "_OFF"}, "Package_TO_SOT_SMD:SOT-23")
+    k.R(sv, g, "100k", n + "_OFF", "GND")
+    k.bayrak(sv, g, n)
+    g.satir()
+    x, y = g.yer()
+    k.koy(sv, "Device:Q_NMOS", "Q", "BSC014N04LS", x, y, {"S": n, "G": n + "_GATE", "D": "SERVO_V"}, FET)
+    g.yer()
+    k.parca(sv, g, "Power_Management:LTC4359-DCB", "U", "LTC4359IDCB", {"IN": n, "SRC": n, "GATE": n + "_GATE", "OUT": "SERVO_V",
+            "Vss": n + "_VSS", "Pad": n + "_VSS"}, "Package_DFN_QFN:DFN-6-1EP_3x2mm_P0.5mm_EP1.65x1.35mm", dx=10)
+    k.R(sv, g, "1k", n + "_VSS", "GND"); k.C(sv, g, "47n 25V", "SERVO_V"); k.bayrak(sv, g, n + "_VSS")
+
+sv.metin("SERVO CIKISI (XT30) ve olcum; 400 A TEMASSIZ AKIM ALGILAYICI girisi (5 V beslemeli, analog cikisli harici algilayici; parca secilecek).", 30, 335)
+g = Izgara(50, 370, sutun=16, dx=24)
+x, y = g.yer()
+k.koy(sv, "Connector_Generic:Conn_01x02", "J", "Servo rayi (XT30)", x + 5, y, {"Pin_1": "SERVO_V", "Pin_2": "GND"}, "Connector_AMASS:AMASS_XT30U-M_1x02_P5.0mm_Vertical")
+k.C(sv, g, "47u 16V", "SERVO_V", fp=C1210); k.C(sv, g, "47u 16V", "SERVO_V", fp=C1210)
+k.R(sv, g, "30k 1%", "SERVO_V", "SERVO_SENS"); k.R(sv, g, "10k 1%", "SERVO_SENS", "GND"); k.C(sv, g, "100n", "SERVO_SENS")
+k.olcum_noktasi(sv, g, "SERVO_V"); k.bayrak(sv, g, "VIN")
+x, y = g.yer(); g.yer()
+k.koy(sv, "Connector_Generic:Conn_01x03", "J", "Akim algilayici", x + 10, y, {"Pin_1": "+5V", "Pin_2": "IBAT_RAW", "Pin_3": "GND"},
+      "Connector_JST:JST_GH_SM03B-GHS-TB_1x03-1MP_P1.25mm_Horizontal")
+k.R(sv, g, "10k 1%", "IBAT_RAW", "IBAT_SENS"); k.R(sv, g, "20k 1%", "IBAT_SENS", "GND"); k.C(sv, g, "100n", "IBAT_SENS")
+sv.yaz(os.path.join(BURASI, "servo.kicad_sch"))
+
 kok.yaz(os.path.join(BURASI, "operfly_power.kicad_sch"))
-kutuphane_tablolari(BURASI, [kok, dg, gr, cv], {"operfly": ORTAK_URI})
+kutuphane_tablolari(BURASI, [kok, dg, gr, cv, sv], {"operfly": ORTAK_URI})
 print("elemanlar:", dict(sorted(k.sayac.items())))

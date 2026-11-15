@@ -20,3 +20,5 @@ Durum;IO_LED;PB14;GPIO;
 Saat;IO_HSE_IN;PF0;RCC_OSC_IN;16 MHz kristal
 Saat;IO_HSE_OUT;PF1;RCC_OSC_OUT;
 Sıfırlama;IO_NRST_PIN;PF2;NRST;
+Gözetim;FMU_FAULT_N;PB10;GPIO;harici watchdog çıkışı: sıfırsa ana işlemci yanıt vermiyor
+Gözetim;IO_FMU_RST;PB11;GPIO;ana işlemciyi sıfırlama (direnci dizilmez, yeri hazır)

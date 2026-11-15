@@ -448,6 +448,44 @@ io.koy(lib(io, "Connector_Generic:Conn_02x13_Odd_Even"), ref("J"), "Cikis konnek
 io.metin("Konnektor: tek numarali kontaklar 1-12. cikis, cift numarali kontaklar GND, 25. kontak bos.", 30, 420)
 io.yaz(os.path.join(BURASI, "io.kicad_sch"))
 
+# --- Sayfa 9: gozetim (watchdog, guc kesintisi, enerji deposu) ve Peltier -----
+gz = Sema(P, "Operfly Core - gozetim, enerji deposu, Peltier surucusu", kagit="A2", tarih=T, ust=kok, ad="Gozetim", genel_etiket=True)
+kok.alt_sayfa(gz, "gozetim.kicad_sch", 254.0, 101.6)
+
+gz.metin("HARICI WATCHDOG (TPS3430): ana islemci WDG_KICK hattini 30-50 ms'de bir dusurur. Darbe kesilirse FMU_FAULT_N 200 ms sifira iner;", 30, 30)
+gz.metin("IO islemcisi bunu gorur ve cikislari devralir. Watchdog ana islemciyi SIFIRLAMAZ (kendi ic watchdog'u sifirlar). Besleme: +3V3_IO.", 30, 36)
+g = Izgara(50, 80, sutun=12)
+parca(gz, g, "Power_Supervisor:TPS3430WDRC", "U", "TPS3430WDRCR", {"VDD1": "+3V3_IO", "VDD2": "+3V3_IO", "GND": "GND", "CWD": "WDG_CWD", "SET0": "GND", "SET1": "GND",
+      "WDI": "WDG_WDI", "~{WDO}": "FMU_FAULT_N"}, "Package_SON:VSON-10-1EP_3x3mm_P0.5mm_EP1.2x2mm", bosluk=2, dx=20)
+R(gz, g, "10k", "+3V3_IO", "WDG_CWD"); R(gz, g, "1k", "WDG_KICK", "WDG_WDI"); R(gz, g, "100k", "WDG_WDI", "GND")
+R(gz, g, "10k", "+3V3_IO", "FMU_FAULT_N"); C(gz, g, "100n", "+3V3_IO")
+R(gz, g, "1k", "IO_FMU_RST", "MCU_NRST", dnp=True)
+
+gz.metin("GUC KESINTISI ALGILAMA (TPS3808G01): giris 10,1 V altina inince PWR_FAIL_N sifira iner; islemci durumu FRAM'e yazar.", 30, 130)
+gz.metin("ENERJI DEPOSU: 2 x 470 uF. Kesintiden sonra karti yaklasik 10-20 ms tasir (yuke bagli; olcumle dogrulanacak).", 30, 136)
+g = Izgara(50, 175, sutun=12)
+parca(gz, g, "Power_Supervisor:TPS3808DBV", "U", "TPS3808G01DBVR", {"VDD": "+3V3", "GND": "GND", "SENSE": "PF_SENSE", "~{RESET}": "PWR_FAIL_N"},
+      "Package_TO_SOT_SMD:SOT-23-6", bosluk=1, dx=15)
+R(gz, g, "240k 1%", "+12V_IN", "PF_SENSE"); R(gz, g, "10k 1%", "PF_SENSE", "GND"); C(gz, g, "1n", "PF_SENSE")
+R(gz, g, "10k", "+3V3", "PWR_FAIL_N"); C(gz, g, "100n", "+3V3")
+iki(gz, g, "Device:C_Polarized", "C", "470u 25V", "+12V_IN", "GND", "Capacitor_SMD:CP_Elec_8x10")
+iki(gz, g, "Device:C_Polarized", "C", "470u 25V", "+12V_IN", "GND", "Capacitor_SMD:CP_Elec_8x10")
+
+gz.metin("PELTIER SURUCUSU (DRV8837, 5 V, en cok 1 A): PWM_A isitir, PWM_B sogutur. Cikista bobin ve kondansator akimi duzlestirir", 30, 230)
+gz.metin("(pusula ve IMU yakininda anahtarlama gurultusunu azaltir). Islemci sifirdayken girisler ic direncle sifirdadir: surucu kapali.", 30, 236)
+g = Izgara(50, 280, sutun=12)
+parca(gz, g, "Driver_Motor:DRV8837", "U", "DRV8837DSGR", {"VM": "+5V", "VCC": "+3V3", "GND": "GND", "~{SLEEP}": "+3V3",
+      "IN1": "PELTIER_PWM_A", "IN2": "PELTIER_PWM_B", "OUT1": "TEC_SW_A", "OUT2": "TEC_SW_B"},
+      "Package_SON:Texas_DSG0008A_WSON-8-1EP_2x2mm_P0.5mm_EP0.9x1.6mm", bosluk=1, dx=15)
+iki(gz, g, "Device:L", "L", "10u 1,2A", "TEC_SW_A", "TEC_A", "Inductor_SMD:L_Taiyo-Yuden_NR-40xx")
+iki(gz, g, "Device:L", "L", "10u 1,2A", "TEC_SW_B", "TEC_B", "Inductor_SMD:L_Taiyo-Yuden_NR-40xx")
+C(gz, g, "10u 16V", "TEC_A", "TEC_B", fp=C0805); C(gz, g, "100n", "TEC_A"); C(gz, g, "100n", "TEC_B")
+C(gz, g, "10u 16V", "+5V", fp=C0805); C(gz, g, "100n", "+3V3")
+x, y = g.yer()
+gz.koy(lib(gz, "Connector_Generic:Conn_01x02"), ref("J"), "Peltier", x + 5, y, {"Pin_1": "TEC_A", "Pin_2": "TEC_B"},
+       footprint="Connector_JST:JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal")
+gz.yaz(os.path.join(BURASI, "gozetim.kicad_sch"))
+
 kok.yaz(os.path.join(BURASI, "operfly_core.kicad_sch"))
-kutuphane_tablolari(BURASI, [kok, om, mcu, gc, ds, hb, sn, io], {"operfly": "${KIPRJMOD}/../../ORTAK_KUTUPHANE/semboller/operfly.kicad_sym"})
+kutuphane_tablolari(BURASI, [kok, om, mcu, gc, ds, hb, sn, io, gz], {"operfly": "${KIPRJMOD}/../../ORTAK_KUTUPHANE/semboller/operfly.kicad_sym"})
 print("elemanlar:", dict(sorted(sayac.items())))

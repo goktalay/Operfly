@@ -5217,10 +5217,6 @@
 		(uuid "85274643-9f20-520f-863b-6f4816572292")
 	)
 	(no_connect
-		(at 138.43 160.02)
-		(uuid "886b7d3f-fcb5-5713-a984-f2ba32b73cb2")
-	)
-	(no_connect
 		(at 214.63 69.85)
 		(uuid "89e839e7-d393-5876-a559-593ef68ea2cb")
 	)
@@ -5255,10 +5251,6 @@
 	(no_connect
 		(at 138.43 116.84)
 		(uuid "b234b857-dadf-5371-ac15-86b2ee5ee1fa")
-	)
-	(no_connect
-		(at 138.43 157.48)
-		(uuid "cc9f1ffc-06a5-5c63-b602-924573244b2b")
 	)
 	(no_connect
 		(at 82.55 127)
@@ -5468,6 +5460,28 @@
 		(uuid "0a10eb45-b0b4-5d2c-ba65-26efbfcd7cdd")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 361.95 379.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "IO_FMU_RST"
+		(shape passive)
+		(at 138.43 160.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0ab254d4-6989-51b4-a777-9c522e24dfcd")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 138.43 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7250,6 +7264,28 @@
 		(uuid "843e48a2-b3b2-59f7-8063-089c9a4f39c8")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 201.93 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "FMU_FAULT_N"
+		(shape passive)
+		(at 138.43 157.48 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "84b5ce95-8ae8-5d59-ad21-095ce8955eb0")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 138.43 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

@@ -57,7 +57,7 @@ prices=[
 ("USB–Gigabit Ethernet köprüsü",10,T,"Köprü + USB göbeği + trafo; fiyat teyit edilecek","Microchip / HALO","LAN7500i, USB2514B, TG111-MSC13LF",K,S),
 ("USB Type-C konnektör",6,T,"","","",K,TS),
 ("USB göbeği ve dış USB portu",8,T,"Pilot Pro şematiği: 4 portlu göbek, 2 güç anahtarı, USB-A konnektör, korumalar; fiyat teyit edilecek","Microchip / "+TI+" / Molex","USB2514Bi-AEZG, 2 x TPS2051CDBV, 67643",K,S),
-("Anten takip motorları ve sürücüleri (2 eksen)",250,T,"","","",K,A),
+("Anten takip motorları ve sürücüleri (2 eksen)",250,T,"Tracker şematiği: eksen başına bir adım motoru sürücüsü (kartta). Motorlar ve mekanik (dişli, yatak, gövde) seçilmedi; öneri: iki fazlı, faz akımı 1 A'ya kadar, 42 mm gövdeli adım motorları. Fiyat mekanik dahil tahmindir","Analog Devices (Trinamic)","2 x TMC2209-LA",K,A),
 ("GNSS modülü",520,D,"DigiKey tek adet 472 € / 424 £. Kaynak: digikey.es/en/products/detail/septentrio-inc/410322/12503897","Septentrio","mosaic-X5",M,S),
 ("Geniş bant radyo modülü (2,4 GHz, 1 W)",450,D,"ModalAI tek adet 449,99 $. Kaynak: modalai.com/products/oem-m0048-4-1","Microhard","pMDDL2450",M,S),
 ("Kumanda radyo modülü (frekans atlamalı, 1 W)",86,D,"Karta lehimlenen sürüm; satıcıda tek adet 86 $. Kaynak: irlock.com/products/rfd900ux-smt-modem. 868 MHz sürümü (RFD868ux-SMT) aynı ayak izine oturur; fiyatı teyit edilecek","RFDesign","RFD900ux-SMT",M,S),

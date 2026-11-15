@@ -1,0 +1,133 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "d4fd7e3d-c51e-563a-97a1-88ac821f7728")
+	(paper "A3")
+	(title_block
+		(title "Operfly Tracker")
+		(date "2026-11-15")
+		(rev "A")
+		(company "Operfly")
+	)
+	(lib_symbols)
+	(text "Sematik betikle uretilir: 01_DONANIM/TRACKER/kicad/uret.py."
+		(exclude_from_sim no)
+		(at 25.4 33.02 0)
+		(effects
+			(font
+				(size 1.6 1.6)
+			)
+			(justify left bottom)
+		)
+		(uuid "2f4933de-396a-58b1-90a4-838bd6d8fb98")
+	)
+	(text "Operfly Tracker - anten takip birimi (OPFTRK)"
+		(exclude_from_sim no)
+		(at 25.4 25.4 0)
+		(effects
+			(font
+				(size 3 3)
+			)
+			(justify left bottom)
+		)
+		(uuid "b862f53d-5b63-5892-bc39-1fc19a51e3ef")
+	)
+	(sheet
+		(at 25.4 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "2e56c95d-223c-5fd6-8358-d696df97fdac")
+		(property "Sheetname" "Dugum"
+			(at 25.4 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "dugum.kicad_sch"
+			(at 25.4 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_tracker"
+				(path "/d4fd7e3d-c51e-563a-97a1-88ac821f7728"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 101.6 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "3c93addb-524e-5575-bb41-9d041a9eb9a3")
+		(property "Sheetname" "Motor"
+			(at 101.6 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "motor.kicad_sch"
+			(at 101.6 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_tracker"
+				(path "/d4fd7e3d-c51e-563a-97a1-88ac821f7728"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)

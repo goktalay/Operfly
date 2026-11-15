@@ -1,0 +1,133 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "4f376402-7d47-535d-a5c7-67a53acaf46c")
+	(paper "A3")
+	(title_block
+		(title "Operfly RX")
+		(date "2026-11-15")
+		(rev "A")
+		(company "Operfly")
+	)
+	(lib_symbols)
+	(text "Sematik betikle uretilir: 01_DONANIM/RX/kicad/uret.py."
+		(exclude_from_sim no)
+		(at 25.4 33.02 0)
+		(effects
+			(font
+				(size 1.6 1.6)
+			)
+			(justify left bottom)
+		)
+		(uuid "10a7d3a2-30e1-5dd9-b075-57405ccfe0f6")
+	)
+	(text "Operfly RX - arac tarafi kumanda alicisi (OPFRCV)"
+		(exclude_from_sim no)
+		(at 25.4 25.4 0)
+		(effects
+			(font
+				(size 3 3)
+			)
+			(justify left bottom)
+		)
+		(uuid "b875f8a8-8c63-5ad6-9723-ce5bc8faab7b")
+	)
+	(sheet
+		(at 101.6 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "736b5d05-409d-553f-94d0-7fcc2f785e5e")
+		(property "Sheetname" "Radyo"
+			(at 101.6 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "radyo.kicad_sch"
+			(at 101.6 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_rx"
+				(path "/4f376402-7d47-535d-a5c7-67a53acaf46c"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 25.4 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "fe60f53a-f9cb-5263-bdac-2fdd070ffa75")
+		(property "Sheetname" "Dugum"
+			(at 25.4 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "dugum.kicad_sch"
+			(at 25.4 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_rx"
+				(path "/4f376402-7d47-535d-a5c7-67a53acaf46c"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)

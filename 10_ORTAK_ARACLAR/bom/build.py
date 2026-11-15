@@ -23,7 +23,7 @@ prices=[
 ("microSD yuvası",2,T,"Core: uçuş kaydı. Nav: ham ölçüm kaydı. Endüstriyel microSD kart ayrıca alınır","Hirose","DM3AT-SF-PEJM5",K,S),
 ("Peltier modülü ve sürücüsü",25,T,"","","",K,A),
 ("Watchdog, gözetleyiciler, enerji deposu",20,T,"","","",K,TS),
-("Kart içi regülatörler",15,T,"Düğüm: AP63205 + LP5907; Hub ve PC adaptöründe ayrıca TPS62130; Nav'da 3,3 V için AP7361C (1 A)","Diodes / "+TI,"AP63205QWU, LP5907MFX-3.3, TPS62130, AP7361C-33E",K,S),
+("Kart içi regülatörler",15,T,"Düğüm: AP63205 + LP5907; Hub ve PC adaptöründe ayrıca TPS62130; Nav'da 3,3 V için AP7361C (1 A); RX'te radyo modülü için AP63201 (5,3 V)","Diodes / "+TI,"AP63205QWU, LP5907MFX-3.3, TPS62130, AP7361C-33E, AP63201WU",K,S),
 ("Pasifler, kristal, ESD, küçük malzeme",25,T,"0402 kılıf","","",K,TS),
 ("Operfly Bus prizi, 20 kontak",17,D,"RS tek adet 13,69 £, 5+ adet 12,29 £. Kaynak: uk.rs-online.com/web/p/pcb-sockets/2871000",HW,"Gecko-SL (G125), 20 kontak",K,S),
 ("Operfly Bus fişi + kısa kablo",45,T,"Hazır kablo takımı için kaba tahmin",HW,"Gecko-SL (G125), 20 kontak",K,S),
@@ -53,7 +53,7 @@ prices=[
 ("Anten takip motorları ve sürücüleri (2 eksen)",250,T,"","","",K,A),
 ("GNSS modülü",520,D,"DigiKey tek adet 472 € / 424 £. Kaynak: digikey.es/en/products/detail/septentrio-inc/410322/12503897","Septentrio","mosaic-X5",M,S),
 ("Geniş bant radyo modülü (2,4 GHz, 1 W)",450,D,"ModalAI tek adet 449,99 $. Kaynak: modalai.com/products/oem-m0048-4-1","Microhard","pMDDL2450",M,S),
-("Kumanda radyo modülü (frekans atlamalı, 1 W)",100,D,"Satıcılarda 83–199 $ arası. Kaynak: irlock.com/products/rfd-900x-modem. 868 MHz sürümü değerlendirilecek","RFDesign","RFD900x sınıfı",M,S),
+("Kumanda radyo modülü (frekans atlamalı, 1 W)",86,D,"Karta lehimlenen sürüm; satıcıda tek adet 86 $. Kaynak: irlock.com/products/rfd900ux-smt-modem. 868 MHz sürümü (RFD868ux-SMT) aynı ayak izine oturur; fiyatı teyit edilecek","RFDesign","RFD900ux-SMT",M,S),
 ("Jetson modülü",800,D,"Arrow liste fiyatı 699 $ (stok yok, 24 hafta); Avrupa distribütörlerinde 750–818 €. Kaynak: arrow.com/en/products/900-13767-0000-000/nvidia","NVIDIA","Jetson Orin NX 16 GB (900-13767-0000-000)",M,S),
 ("M.2 NVMe 256 GB (endüstriyel)",60,T,"","","",M,A),
 ("10 inç gün ışığında okunur dokunmatik ekran",400,T,"","","",M,A),
@@ -81,7 +81,7 @@ P=[
 ("Operfly PC adaptörü","OPFPCA",1,[("USB–Gigabit Ethernet köprüsü",1)]+node+[("USB Type-C konnektör",1),(pas,1),("Operfly Bus fişi + kısa kablo",1),(small,1),(asm,1)]),
 ("Operfly Nav","OPFNAV",2,[("GNSS modülü",1),("GNSS RF ön ucu (LNA, filtre, anten beslemesi)",1)]+node+[("Pusula",1),("microSD yuvası",1),("USB Type-C konnektör",1),(reg,1),(pas,1),(sma,2),(bus,1),(small,1),(asm,1)]),
 ("Operfly Radio","OPFRAD",2,[(WB,1)]+node+[(phy,1),(reg,1),(pas,1),(sma,2),(bus,1),(small,1),(asm,1)]),
-("Operfly RX","OPFRCV",2,[(KR,1)]+node+[(pas,1),(sma,2),(bus,1),(small,1),(asm,1)]),
+("Operfly RX","OPFRCV",2,[(KR,1)]+node+[(reg,1),(pas,1),(sma,2),(bus,1),(small,1),(asm,1)]),
 ("Operfly Pilot 12","OPFK12",2,merge([(KR,1),("Güvenli eleman",1),("Kumanda bataryası ve şarj devresi",1),(sma,2),(pas,1),(small,1),(asm,1)]+GK)),
 ("Operfly Air","OPFAIR",2,[("Fark basınç sensörü",1)]+node+[(pas,1),(bus,1),(small,1),(asm,1)]),
 ("Operfly Engine","OPFENG",2,[("Yalıtımlı motor girişleri (devir, sıcaklık, yakıt)",1)]+node+[(pas,1),(bus,1),(small,1),(asm,1)]),
@@ -196,7 +196,7 @@ for i,l in enumerate(lines,1):
     c=sv.cell(row=i,column=1,value=l); c.font=bf if i==1 else nf; c.alignment=Alignment(wrap_text=True)
 wb.save("Operfly_BOM.xlsx")
 # denetim
-exp={"Core":(517,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(413,520),"Radio":(377,450),"RX":(358,100),"Pilot 12":(882,100),"Air":(388,0),"Engine":(383,0),"Vision":(573,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,400),"Cell":(407,250),"Pilot T":(912,100),"Pilot Pro":(1153,1810),"Base":(398,520),"Ground Radio":(494,550),"Tracker":(613,0),"Shield":(373,1342)}
+exp={"Core":(517,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(413,520),"Radio":(377,450),"RX":(373,86),"Pilot 12":(882,86),"Air":(388,0),"Engine":(383,0),"Vision":(573,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,400),"Cell":(407,250),"Pilot T":(912,86),"Pilot Pro":(1153,1796),"Base":(398,520),"Ground Radio":(494,536),"Tracker":(613,0),"Shield":(373,1342)}
 tk=tm=0
 for n,c,s,its in P:
     k=sum(q*PR[i][1] for i,q in its if PR[i][6]==K); m=sum(q*PR[i][1] for i,q in its if PR[i][6]==M)

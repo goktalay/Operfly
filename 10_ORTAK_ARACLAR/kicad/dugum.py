@@ -21,8 +21,12 @@ DUGUM_PINLERI = {
 }
 
 
-def dugum_sayfasi(k, kok, dizin, x=25.4, y=50.8, ek=None, pps=False, ethernet=False):
-    """k: Kart, kok: kök Sema. ek: {işlemci pini: ağ adı} karta özel bağlantılar. Sayfayı yazar ve döndürür."""
+def dugum_sayfasi(k, kok, dizin, x=25.4, y=50.8, ek=None, pps=False, ethernet=False, port=True, sonlandirma=False):
+    """k: Kart, kok: kök Sema. ek: {işlemci pini: ağ adı} karta özel bağlantılar. Sayfayı yazar ve döndürür.
+
+    port=False: omurga portu bu sayfaya konmaz (Hub gibi portlarını kendi çizen kartlar); kart +12V_BUS ve CAN ağlarını
+    kendi sağlar. sonlandirma=True: CAN sonlandırma dirençleri dizilir (yalnızca Hub).
+    """
     s = Sema(k.P, "Dugum devresi (omurga, besleme, islemci, CAN, guvenli eleman)", kagit="A1", tarih=k.T, ust=kok, ad="Dugum", genel_etiket=True)
     kok.alt_sayfa(s, "dugum.kicad_sch", x, y)
     ek = dict(ek or {})
@@ -30,12 +34,13 @@ def dugum_sayfasi(k, kok, dizin, x=25.4, y=50.8, ek=None, pps=False, ethernet=Fa
     assert not cakisan, "düğümün kendi pinleri karta verilemez: %s" % cakisan
 
     s.metin("OMURGA PORTU ve GIRIS KORUMASI: ters baglanti diyotu, 18 V kirpma diyotu. +12V korumali omurga gerilimidir.", 30, 30)
-    port = {"+12V": "+12V_BUS", "GND": "GND", "CAN_A_H": "CAN_A_H", "CAN_A_L": "CAN_A_L", "CAN_B_H": "CAN_B_H", "CAN_B_L": "CAN_B_L"}
+    baglanti = {"+12V": "+12V_BUS", "GND": "GND", "CAN_A_H": "CAN_A_H", "CAN_A_L": "CAN_A_L", "CAN_B_H": "CAN_B_H", "CAN_B_L": "CAN_B_L"}
     if pps:
-        port["PPS"] = "PPS_BUS"
+        baglanti["PPS"] = "PPS_BUS"
     if ethernet:
-        port.update({"ETH_%s%s" % (c, i): "ETH_%s%s" % (c, i) for c in "ABCD" for i in "+-"})
-    k.koy(s, "operfly:Operfly_Bus_20", "J", "Operfly Bus", 70, 80, port, "Connector_Harwin:Harwin_Gecko_G125-MS12005M2P_2x10_P1.25mm_Vertical")
+        baglanti.update({"ETH_%s%s" % (c, i): "ETH_%s%s" % (c, i) for c in "ABCD" for i in "+-"})
+    if port:
+        k.koy(s, "operfly:Operfly_Bus_20", "J", "Operfly Bus", 70, 80, baglanti, "Connector_Harwin:Harwin_Gecko_G125-MS12005M2P_2x10_P1.25mm_Vertical")
     g = Izgara(130, 70, sutun=12)
     k.iki(s, g, "Device:D_Schottky", "D", "B360A (60 V, 3 A)", "+12V", "+12V_BUS", "Diode_SMD:D_SMA")
     k.iki(s, g, "Device:D_TVS", "D", "SMBJ18A", "+12V", "GND", "Diode_SMD:D_SMB")
@@ -86,8 +91,10 @@ def dugum_sayfasi(k, kok, dizin, x=25.4, y=50.8, ek=None, pps=False, ethernet=Fa
             "CANH": "CAN_%s_H" % h, "CANL": "CAN_%s_L" % h}, "Package_SON:HVSON-8-1EP_3x3mm_P0.65mm_EP1.6x2.4mm", dx=15)
         k.C(s, g, "100n", "+5V"); k.C(s, g, "100n", "+3V3"); k.R(s, g, "10k", "CAN_%s_S" % h, "GND")
         k.koy(s, "Power_Protection:NUP2105L", "D", "NUP2105L", *g.yer(), {"1": "CAN_%s_H" % h, "2": "CAN_%s_L" % h, "3": "GND"}, "Package_TO_SOT_SMD:SOT-23")
-        k.R(s, g, "60R4", "CAN_%s_H" % h, "CAN_%s_TERM" % h, dnp=True); k.R(s, g, "60R4", "CAN_%s_L" % h, "CAN_%s_TERM" % h, dnp=True)
-        k.C(s, g, "4n7", "CAN_%s_TERM" % h, dnp=True)
+        # Yıldız omurgada tek sonlandırma Hub'dadır: toplam 60 ohm (iki ucu sonlandırılmış hatla aynı yük).
+        rt = "30R1" if sonlandirma else "60R4"
+        k.R(s, g, rt, "CAN_%s_H" % h, "CAN_%s_TERM" % h, dnp=not sonlandirma); k.R(s, g, rt, "CAN_%s_L" % h, "CAN_%s_TERM" % h, dnp=not sonlandirma)
+        k.C(s, g, "4n7", "CAN_%s_TERM" % h, dnp=not sonlandirma)
         g.satir()
 
     s.metin("GUVENLI ELEMAN (SE050): kart kimligi ve sertifikasi. SE_ENA sifira cekilince eleman kapanir (sifirlama).", 400, 150)

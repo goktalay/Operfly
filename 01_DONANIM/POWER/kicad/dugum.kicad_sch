@@ -4838,10 +4838,6 @@
 		(uuid "00b861ad-e4f8-5111-ac6b-8ec505cf8448")
 	)
 	(no_connect
-		(at 138.43 264.16)
-		(uuid "05bc415c-0615-51ed-8db4-48af97b43aba")
-	)
-	(no_connect
 		(at 452.12 193.04)
 		(uuid "063ecf0a-9526-5454-acd1-ffc5809c491b")
 	)
@@ -6045,6 +6041,28 @@
 		(uuid "4c5a9f17-4265-5322-bcba-84b4e228ea27")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 287.02 250.19 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "V12_SENS"
+		(shape passive)
+		(at 138.43 264.16 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4d2732b4-909b-5a81-a90b-1c56d66479cd")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 138.43 264.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

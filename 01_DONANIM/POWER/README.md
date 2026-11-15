@@ -5,10 +5,34 @@ Batarya gerilimini omurga gerilimine (12 V) çeviren, giriş gerilimini ve akım
 ## Durum (15 Kasım 2026)
 
 - KiCad projesi: `kicad/operfly_power.kicad_pro`. Üretim ve denetim: `python 10_ORTAK_ARACLAR/kicad/denetle.py POWER operfly_power`.
-- Çizilen: **düğüm devresi** (`dugum`) ve **giriş** (`giris`: iki batarya girişi, ideal diyotlar, giriş ölçümü).
-  ERC 0 hata, 0 uyarı.
-- Çizilmeyen: 12 V çevirici ve servo rayı. Bu kısım üretici belgeleriyle hesap ister ve bir güç elektroniği mühendisinin
-  gözden geçirmesi şarttır.
+- Çizilen: **düğüm devresi** (`dugum`), **giriş** (`giris`) ve **12 V çevirici** (`cevirici`). ERC 0 hata, 0 uyarı.
+- Çizilmeyen: servo rayı ve 400 A algılayıcı girişi.
+- **Çevirici ilk taslaktır.** Üreticinin örnek devresinden ölçeklendi; benzetim (LTspice), ısıl hesap ve bir güç
+  elektroniği mühendisinin gözden geçirmesi olmadan üretime gönderilmemelidir.
+
+## 12 V çevirici kararları (15 Kasım 2026)
+
+Üreticinin "12 V çıkış, 4-80 V giriş" örnek devresi (5 A) temel alındı ve 12,5 A'e (150 W) ölçeklendi.
+
+1. **Denetleyici LT8705A**, 202 kHz (zamanlama direnci 215 k, örnek devredeki gibi).
+2. **Tam güç 10 V ve üzeri girişte.** Giriş akımı 18 A ile sınırlandı (akım direnci 2 mohm, ayar direnci 33,2 k);
+   10 V altında çıkış gücü kendiliğinden azalır (6 V'ta yaklaşık 100 W). 2S-3S araçlar 150 W çekmez; sınır,
+   bobini ve giriş MOSFET'lerini makul boyutta tutar.
+3. **Bobin 10 µH** (aday Coilcraft XAL1510-103). 60 V girişte akım dalgalanması yaklaşık 4,8 A (tepeden tepeye).
+4. **Bobin akım direnci 4 mohm.** Üretici formülüyle üst sınır 6,5 mohm; önerilen %30 payla 4 mohm seçildi.
+5. **MOSFET'ler:** giriş tarafı 100 V (örnek devredeki FDMS86101, ikişer adet), çıkış tarafı 40 V düşük dirençli
+   (aday BSC014N04LS). Denetleyici kapıları yaklaşık 6,35 V ile sürer; tüm MOSFET'ler bu gerilimde tam açılmalı.
+6. **Çıkış 12,1 V** (102 k / 11,3 k, örnek devredeki gibi). Denetleyicinin kendi beslemesi çıkıştan alınır (ısınmayı azaltır).
+7. **Açılış eşiği:** giriş 5,65 V'u geçince çalışır, 5,42 V'un altında kapanır. Giriş 5,8 V'a sarkarsa yük azaltılır.
+8. **Hafif yükte süreksiz çalışma** seçildi: çevirici girişe geri akım basmaz (ideal diyotlar geri akımı kesmek
+   zorunda kalmaz).
+9. **Çıkış akımı ayrıca ölçülmüyor;** aşırı akım koruması bobin akım sınırı ve Hub'daki port sigortalarıyla sağlanır.
+10. **12 V ana çıkış XT60 ile Hub'a gider.** Omurga fişi 150 W taşıyamaz (port başına 6 A); omurga fişi 2 A kendini
+    onaran sigortayla beslenir ve düğüm devresi buradan çalışır.
+11. Çıkış gerilimi düğüm işlemcisine ölçüm için gider (PA2).
+
+Doğrulanacaklar: bobin doyma akımı (akım sınırı tepe değeri yaklaşık 29 A), kompanzasyon (örnek devre değerleri:
+16,5 k + 10 nF, 220 pF), MOSFET ısıl hesabı, giriş ve çıkış kondansatörlerinin dalgalanma akımı, 40 V MOSFET seçimi.
 
 ## Giriş sayfası kararları (15 Kasım 2026)
 
@@ -51,6 +75,6 @@ Sahibi kararları tasarımcıya bıraktı; aşağıdakiler mimari karardır, par
 
 ## Sıradaki adımlar
 
-1. Güç katı hesabı: bobin, MOSFET'ler, akım algılama dirençleri, kompanzasyon (üretici tasarım aracıyla).
-2. Şematik sayfaları: 12 V çevirici, servo rayı, 400 A algılayıcı girişi.
+1. Çeviricinin benzetimle doğrulanması (kompanzasyon, verim, ısıl).
+2. Şematik sayfaları: servo rayı, 400 A algılayıcı girişi.
 3. Isıl hesap ve kart katman planı; ardından kart çizimi.

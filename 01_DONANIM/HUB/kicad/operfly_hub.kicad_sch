@@ -22,7 +22,7 @@
 		)
 		(uuid "04c6fbf5-0dad-5c65-ada2-200a5aae0811")
 	)
-	(text "Sematik betikle uretilir: 01_DONANIM/HUB/kicad/uret.py. Ethernet anahtari sayfasi henuz cizilmedi (README)."
+	(text "Sematik betikle uretilir: 01_DONANIM/HUB/kicad/uret.py. Ethernet: uc adet KSZ9567R, her biri dort porta hizmet eder."
 		(exclude_from_sim no)
 		(at 25.4 33.02 0)
 		(effects
@@ -31,7 +31,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "3a2821a7-811a-569e-be04-ef49b32c6283")
+		(uuid "5ac6eb52-f19a-5179-bafd-5b025e170091")
 	)
 	(sheet
 		(at 101.6 50.8)
@@ -75,6 +75,98 @@
 			(project "operfly_hub"
 				(path "/33cfd911-ab17-5099-b14c-a1a03bec29fb"
 					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 25.4 101.6)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "6c42d54a-b8cd-5307-8269-91ae614a1056")
+		(property "Sheetname" "Anahtar_A"
+			(at 25.4 100.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "anahtar_a.kicad_sch"
+			(at 25.4 122.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_hub"
+				(path "/33cfd911-ab17-5099-b14c-a1a03bec29fb"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 101.6 101.6)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "7a552330-7287-5679-ae0e-d86e443e370c")
+		(property "Sheetname" "Anahtar_B"
+			(at 101.6 100.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "anahtar_b.kicad_sch"
+			(at 101.6 122.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_hub"
+				(path "/33cfd911-ab17-5099-b14c-a1a03bec29fb"
+					(page "7")
 				)
 			)
 		)
@@ -167,6 +259,98 @@
 			(project "operfly_hub"
 				(path "/33cfd911-ab17-5099-b14c-a1a03bec29fb"
 					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 254 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "c5a86305-484b-5e4e-a7ad-f6beccb349c1")
+		(property "Sheetname" "Anahtar_Besleme"
+			(at 254 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "anahtar_besleme.kicad_sch"
+			(at 254 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_hub"
+				(path "/33cfd911-ab17-5099-b14c-a1a03bec29fb"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 177.8 101.6)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "eb9fce61-9c1d-506e-8799-2bd2ae8cfe95")
+		(property "Sheetname" "Anahtar_C"
+			(at 177.8 100.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "anahtar_c.kicad_sch"
+			(at 177.8 122.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_hub"
+				(path "/33cfd911-ab17-5099-b14c-a1a03bec29fb"
+					(page "8")
 				)
 			)
 		)

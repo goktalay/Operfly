@@ -11,6 +11,7 @@
   (lib (name "Power_Protection")(type "KiCad")(uri "${KICAD10_SYMBOL_DIR}/Power_Protection.kicad_sym")(options "")(descr ""))
   (lib (name "Regulator_Linear")(type "KiCad")(uri "${KICAD10_SYMBOL_DIR}/Regulator_Linear.kicad_sym")(options "")(descr ""))
   (lib (name "Regulator_Switching")(type "KiCad")(uri "${KICAD10_SYMBOL_DIR}/Regulator_Switching.kicad_sym")(options "")(descr ""))
+  (lib (name "Transformer")(type "KiCad")(uri "${KICAD10_SYMBOL_DIR}/Transformer.kicad_sym")(options "")(descr ""))
   (lib (name "operfly")(type "KiCad")(uri "${KIPRJMOD}/../../ORTAK_KUTUPHANE/semboller/operfly.kicad_sym")(options "")(descr ""))
   (lib (name "power")(type "KiCad")(uri "${KICAD10_SYMBOL_DIR}/power.kicad_sym")(options "")(descr ""))
 )

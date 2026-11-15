@@ -1,7 +1,9 @@
 """Operfly ortak ayak izi kütüphanesini üretir (01_DONANIM/ORTAK_KUTUPHANE/ayak_izleri/operfly_ayak.pretty).
 
-Kullanım: python ayak_izi_uret.py <operfly_ayak.pretty klasörü>
+Kullanım: python ayak_izi_uret.py <operfly_ayak.pretty klasörü> [ayak izi adı]
 Üretilen dosyalar eski biçim sürümüyle yazılır; ardından `kicad-cli fp upgrade <klasör>` ile güncel biçime çevrilir.
+Biçim çevirisi her seferinde yeni kimlikler (uuid) yazdığı için yalnızca değişen ayak izi adıyla üretilir;
+ad verilmezse hepsi yeniden yazılır.
 """
 import os
 import sys
@@ -49,10 +51,53 @@ def mosaic():
     return ad, s + ")\n"
 
 
+def rfd900ux_smt():
+    """RFDesign RFD900ux-SMT / RFD868ux-SMT (21 x 29 mm, kenar pedli). Olculer uretici veri sayfasindan (V1.3, Tablo 5-1,
+    Sekil 5-1, 5-2, 6-2): kenar pedi 2,4 x 1,0 mm; sutunlar arasi 21,2 mm; adim 2,0 mm (1-11 ve 18-28), anten grubunda
+    1,5 mm (12-14, 15-17), iki grup arasi 3,5 mm; isi pedleri 8 x 6,6 mm, merkezleri arasi 11,5 mm, ilki 1. pedden 7,0 mm;
+    gecis delikleri 1,5 mm adimla 5 x 5; lehim pastasi 7 x 6 mm alanda 0,5 mm aralikli dort pencere.
+    Sekildeki olculerden cikarildi; kart cizimine gecmeden ureticinin Altium bileseniyle karsilastirilacak.
+    Yon: 1. ped sol ustte; sol sutun yukaridan asagi 1-14, sag sutun asagidan yukari 15-28 (uretici sekli 180 derece donuk).
+    """
+    ad = "RFDesign_RFD900ux-SMT"
+    gx, gy = 10.5, 14.5
+    s = '(footprint "%s" (version 20240108) (generator "operfly") (generator_version "1") (layer "F.Cu")\n' % ad
+    s += '\t(descr "RFDesign RFD900ux-SMT / RFD868ux-SMT radyo modulu, 21x29 mm, 28 kenar pedi + 2 isi pedi (uretici bileseniyle dogrulanacak)")\n'
+    s += '\t(tags "RFD900ux RFD868ux SMT radio modem")\n'
+    s += '\t(property "Reference" "REF**" (at 0 %.2f 0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))\n' % (-gy - 1.6)
+    s += '\t(property "Value" "%s" (at 0 %.2f 0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))\n' % (ad, gy + 1.6)
+    s += '\t(property "Footprint" "" (at 0 0 0) (layer "F.Fab") (hide yes) (effects (font (size 1.27 1.27))))\n'
+    s += '\t(property "Datasheet" "" (at 0 0 0) (layer "F.Fab") (hide yes) (effects (font (size 1.27 1.27))))\n'
+    s += '\t(property "Description" "" (at 0 0 0) (layer "F.Fab") (hide yes) (effects (font (size 1.27 1.27))))\n'
+    s += "\t(attr smd)\n"
+    s += '\t(fp_rect (start %.2f %.2f) (end %.2f %.2f) (stroke (width 0.1) (type solid)) (fill none) (layer "F.Fab"))\n' % (-gx, -gy, gx, gy)
+    s += '\t(fp_line (start %.2f %.2f) (end %.2f %.2f) (stroke (width 0.12) (type solid)) (layer "F.SilkS"))\n' % (-gx, -gy - 0.12, gx, -gy - 0.12)
+    s += '\t(fp_line (start %.2f %.2f) (end %.2f %.2f) (stroke (width 0.12) (type solid)) (layer "F.SilkS"))\n' % (-gx, gy + 0.12, gx, gy + 0.12)
+    s += '\t(fp_circle (center %.2f %.2f) (end %.2f %.2f) (stroke (width 0.25) (type solid)) (fill none) (layer "F.SilkS"))\n' % (-12.6, -13.0, -12.47, -13.0)
+    s += '\t(fp_rect (start -12.05 %.2f) (end 12.05 %.2f) (stroke (width 0.05) (type solid)) (fill none) (layer "F.CrtYd"))\n' % (-gy - 0.25, gy + 0.25)
+    ys = [-13.0 + 2.0 * i for i in range(11)] + [10.5, 12.0, 13.5]          # pedler 1..14, yukaridan asagi
+    konum = {i + 1: (-10.6, y) for i, y in enumerate(ys)}
+    konum.update({28 - i: (10.6, y) for i, y in enumerate(ys)})              # 28 ustte, 15 altta
+    assert len(konum) == 28 and konum[15] == (10.6, 13.5) and konum[18] == (10.6, 7.0)
+    for no in range(1, 29):
+        s += '\t(pad "%d" smd rect (at %.2f %.2f) (size 2.4 1) (layers "F.Cu" "F.Paste" "F.Mask"))\n' % (no, konum[no][0], konum[no][1])
+    for no, cy in ((29, -6.0), (30, 5.5)):
+        s += '\t(pad "%d" smd rect (at 0 %.2f) (size 8 6.6) (layers "F.Cu" "F.Mask"))\n' % (no, cy)
+        for dx in (-1.875, 1.875):
+            for dy in (-1.625, 1.625):
+                s += '\t(pad "" smd rect (at %.3f %.3f) (size 3.25 2.75) (layers "F.Paste"))\n' % (dx, cy + dy)
+        for i in range(5):
+            for j in range(5):
+                s += '\t(pad "%d" thru_hole circle (at %.2f %.2f) (size 0.6 0.6) (drill 0.3) (layers "*.Cu"))\n' % (no, (i - 2) * 1.5, cy + (j - 2) * 1.5)
+    return ad, s + ")\n"
+
+
 def main():
     klasor = sys.argv[1]
     os.makedirs(klasor, exist_ok=True)
-    for ad, metin in (mosaic(),):
+    for ad, metin in (mosaic(), rfd900ux_smt()):
+        if len(sys.argv) > 2 and ad != sys.argv[2]:
+            continue
         yol = os.path.join(klasor, ad + ".kicad_mod")
         open(yol, "w", encoding="utf-8", newline="\n").write(metin)
         print("yazıldı:", yol)

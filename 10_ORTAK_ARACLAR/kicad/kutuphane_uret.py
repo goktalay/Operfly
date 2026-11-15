@@ -32,8 +32,11 @@ def konnektor(ad, pinler, fp, aciklama):
     return s + "\t\t)\n\t)\n"
 
 
-def kutu(ad, sol, sag, ust, alt, fp, aciklama, yari=10.16):
-    """Dikdörtgen entegre sembolü. Her uç: (numara, ad, tür). sol/sag yan uçlar, ust besleme, alt toprak."""
+def kutu(ad, sol, sag, ust, alt, fp, aciklama, yari=10.16, yigin=False):
+    """Dikdörtgen entegre sembolü. Her uç: (numara, ad, tür). sol/sag yan uçlar, ust besleme, alt toprak.
+
+    yigin=True: üstte ve altta aynı adı taşıyan uçlar aynı noktada üst üste durur (ilki görünür, diğerleri gizli).
+    """
     n = max(len(sol), len(sag), 1)
     y0 = (n - 1) * 1.27
     tepe = y0 + 2.54
@@ -43,15 +46,22 @@ def kutu(ad, sol, sag, ust, alt, fp, aciklama, yari=10.16):
     s += '\t\t(symbol "%s_0_1" (rectangle (start %.2f %.2f) (end %.2f %.2f) (stroke (width 0.254) (type default)) (fill (type background))))\n' % (ad, -yari, tepe, yari, -tepe)
     s += '\t\t(symbol "%s_1_1"\n' % ad
 
-    def pin(no, isim, tur, x, y, aci):
-        return '\t\t\t(pin %s line (at %.2f %.2f %d) (length 2.54) (name "%s" (effects (font (size 1.27 1.27)))) (number "%s" (effects (font (size 1.27 1.27)))))\n' % (tur, x, y, aci, isim, no)
+    def pin(no, isim, tur, x, y, aci, gizli=False):
+        return '\t\t\t(pin %s line (at %.2f %.2f %d) (length 2.54)%s (name "%s" (effects (font (size 1.27 1.27)))) (number "%s" (effects (font (size 1.27 1.27)))))\n' % (
+            "passive" if gizli else tur, x, y, aci, " hide" if gizli else "", isim, no)
     for i, (no, isim, tur) in enumerate(sol):
         s += pin(no, isim, tur, -yari - 2.54, y0 - i * 2.54, 0)
     for i, (no, isim, tur) in enumerate(sag):
         s += pin(no, isim, tur, yari + 2.54, y0 - i * 2.54, 180)
     for grup, y, aci in ((ust, tepe + 2.54, 270), (alt, -tepe - 2.54, 90)):
+        adlar = list(dict.fromkeys(u[1] for u in grup)) if yigin else None
+        gorulen = set()
         for i, (no, isim, tur) in enumerate(grup):
-            s += pin(no, isim, tur, (i - (len(grup) - 1) / 2) * 5.08, y, aci)
+            if yigin:
+                s += pin(no, isim, tur, (adlar.index(isim) - (len(adlar) - 1) / 2) * 5.08, y, aci, gizli=isim in gorulen)
+                gorulen.add(isim)
+            else:
+                s += pin(no, isim, tur, (i - (len(grup) - 1) / 2) * 5.08, y, aci)
     return s + "\t\t)\n\t)\n"
 
 
@@ -169,6 +179,20 @@ def mosaic():
     return s + "\t\t)\n\t)\n"
 
 
+def rfd900ux_smt():
+    """RFDesign RFD900ux-SMT / RFD868ux-SMT (28 kenar pedi + 2 isi pedi). Uc sirasi uretici veri sayfasindan (V1.3, Tablo 4-3;
+    isi pedleri 29 ve 30: Sekil 5-2)."""
+    sol = [("25", "RX", I), ("26", "TX", O), ("27", "RTS", O), ("28", "CTS", I), ("4", "SWO", B),
+           ("21", "GPIO0", B), ("22", "GPIO1/PPM", B), ("23", "GPIO2", B), ("24", "GPIO3", B)]
+    sag = [("13", "ANT1", P), ("16", "ANT2", P), ("10", "+3V3_OUT", V), ("1", "VUSB", P), ("2", "USB_DM", B), ("3", "USB_DP", B),
+           ("5", "P3.3", B), ("6", "P3.4", B), ("7", "P3.5", B)]
+    ust = [("19", "+5V", G)]
+    alt = [(str(n), "GND", G) for n in (8, 9, 11, 12, 14, 15, 17, 18, 20, 29, 30)]
+    assert len({u[0] for u in sol + sag + ust + alt}) == 30
+    return kutu("RFD900ux-SMT", sol, sag, ust, alt, "operfly_ayak:RFDesign_RFD900ux-SMT",
+                "Kumanda radyo modulu, RFDesign RFD900ux-SMT / RFD868ux-SMT, 1 W, frekans atlamali, 21x29 mm", yari=15.24, yigin=True)
+
+
 def main():
     s = '(kicad_symbol_lib (version 20231120) (generator "operfly") (generator_version "1")\n'
     s += konnektor("Operfly_Bus_20", BUS, FP_BUS, "Operfly Bus portu, Harwin Gecko-SL 20 kontak")
@@ -176,6 +200,7 @@ def main():
         s += kutu(*e[:7], yari=e[7])
     s += ksz9567r()
     s += mosaic()
+    s += rfd900ux_smt()
     s += ")\n"
     open(sys.argv[1], "w", encoding="utf-8", newline="\n").write(s)
     print("yazıldı:", sys.argv[1])

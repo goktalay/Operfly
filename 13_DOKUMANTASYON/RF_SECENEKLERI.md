@@ -11,6 +11,11 @@
 - Radio: geniş bant modül. RX, Pilot 12, Pilot T: kumanda modülü. Pilot Pro ve Ground Radio: ikisi birden.
 - Modül şifrelemesinin üzerinde Operfly'ın kendi uçtan uca şifrelemesi çalışır.
 
+Kumanda modülü kararı (15 Kasım 2026, RX şematiği): RFD900x'in karta lehimlenen sürümü RFDesign RFD900ux-SMT
+(21 x 29 mm; üretici RFD900x ile uyumlu olduğunu belirtiyor). 868 MHz sürümü RFD868ux-SMT aynı ayak izine oturur;
+frekans kararı kart tasarımını değiştirmez. Bu sürümde modülün kendi şifrelemesi AES-128'dir; Operfly'ın uçtan uca
+şifrelemesi bunun üzerinde çalışır. Kumandalar ve Ground Radio aynı modülü kullanır.
+
 Bırakılan özellikler: geniş bantta frekans atlama, 1,2 ve 5,2 GHz seçenekleri, 2/4/20/40 km kademeleri,
 atlama dizisinin kendi anahtarımızdan türetilmesi.
 

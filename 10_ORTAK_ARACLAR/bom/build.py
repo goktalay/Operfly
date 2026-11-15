@@ -40,7 +40,9 @@ prices=[
 ("Geniş girişli güç katı, 150 W, çift giriş",90,T,"6–60 V giriş; denetleyici, 2 ideal diyot, giriş ölçümü. MOSFET ve bobin seçimi doğrulanacak; fiyat teyit edilecek","Analog Devices / "+TI,"LT8705A, 2 x LTC4359, INA228",K,S),
 ("Servo güç rayı (yedekli)",45,T,"İki bağımsız 5 A regülatör + 2 ideal diyot; fiyat teyit edilecek",TI+" / Analog Devices","2 x TPS54560B, 2 x LTC4359",K,S),
 ("Temassız akım algılayıcı, 400 A",35,T,"","","",K,A),
-("Jetson taşıyıcı devresi (soket, güç, soğutma)",70,T,"","","",K,TS),
+("Jetson taşıyıcı devresi (soket, güç, soğutma)",70,T,"Vision şematiği: 260 uçlu soket, M.2 soketi, 2 x 3,3 V regülatör, 1,8 V, seviye çevirici, giriş MOSFET'i, fan ve USB; soğutucu kasa tasarımında","TE / "+TI+" / Vishay","SO-DIMM 260 soket, 2 x TPS62130, TXS0104E, SUD50P04-08",K,TS),
+("PCIe gigabit Ethernet denetleyici",8,T,"Vision: kamera portu başına bir adet, ayar belleğiyle; fiyat teyit edilecek","Intel / Winbond","WGI210IT, W25Q16JV",K,S),
+("Gigabit Ethernet trafosu",4,T,"Vision: omurga portu ve iki kamera portu; fiyat teyit edilecek","HALO","TG111-MSC13LF",K,S),
 ("GNSS RF ön ucu (LNA, filtre, anten beslemesi)",30,T,"Nav şematiği: alıcı anten beslemesini ve korumasını içinde taşır; kartta yalnızca anten regülatörü ve çift anten seçeneğinin elemanları var. Tahmin şematikten yüksek kaldı, fiyat teyidinde düşürülecek",TI+" / Würth","LP5907MFX-3.3, 744786139A, SESD0402X1BN",K,S),
 ("SIM yuvası, eSIM, anten bağlantıları",20,T,"","","",K,TS),
 ("Fark basınç sensörü",40,T,"Air şematiği: ±1 psi, 24 bit, çift hortum uçlu; fiyat teyit edilecek. Pitot ısıtıcı anahtarı (NCV8402) küçük malzemede","TE Connectivity","5525DSO-DB001DS",K,S),
@@ -87,7 +89,7 @@ P=[
 ("Operfly Pilot 12","OPFK12",2,merge([(KR,1),("Güvenli eleman",1),("Kumanda bataryası ve şarj devresi",1),(sma,2),(pas,1),(small,1),(asm,1)]+GK)),
 ("Operfly Air","OPFAIR",2,[("Fark basınç sensörü",1),("Barometre",1)]+node+[(pas,1),(bus,1),(small,1),(asm,1)]),
 ("Operfly Engine","OPFENG",2,[("Yalıtımlı motor girişleri (devir, sıcaklık, yakıt)",1)]+node+[(pas,1),(bus,1),(small,1),(asm,1)]),
-("Operfly Vision","OPFVIS",3,[("Jetson modülü",1),("M.2 NVMe 256 GB (endüstriyel)",1),("Jetson taşıyıcı devresi (soket, güç, soğutma)",1),("IMU 1",1)]+node+[(phy,2),(reg,1),(pas,1),(bus,3),(big,1),(asm,1)]),
+("Operfly Vision","OPFVIS",3,[("Jetson modülü",1),("M.2 NVMe 256 GB (endüstriyel)",1),("Jetson taşıyıcı devresi (soket, güç, soğutma)",1),("IMU 1",1),("PCIe gigabit Ethernet denetleyici",2),("Gigabit Ethernet trafosu",3),("Port koruması: elektronik sigorta + akım ölçümü",3)]+node+[(reg,1),(pas,1),(bus,3),(big,1),(asm,1)]),
 ("Operfly Range 10","OPFR10",3,[("Mesafe sensörü çekirdeği, 10 m",1)]+node+[(pas,1),(bus,1),(small,1),(asm,1)]),
 ("Operfly Range 30","OPFR30",3,[("Mesafe sensörü çekirdeği, 30 m",1)]+node+[(pas,1),(bus,1),(small,1),(asm,1)]),
 ("Operfly Range 100","OPFR1H",3,[("Mesafe sensörü çekirdeği, 100 m",1)]+node+[(pas,1),(bus,1),(small,1),(asm,1)]),
@@ -198,7 +200,7 @@ for i,l in enumerate(lines,1):
     c=sv.cell(row=i,column=1,value=l); c.font=bf if i==1 else nf; c.alignment=Alignment(wrap_text=True)
 wb.save("Operfly_BOM.xlsx")
 # denetim
-exp={"Core":(520,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(413,520),"Radio":(384,450),"RX":(373,86),"Pilot 12":(882,86),"Air":(393,0),"Engine":(383,0),"Vision":(573,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,400),"Cell":(407,250),"Pilot T":(912,86),"Pilot Pro":(1153,1796),"Base":(398,520),"Ground Radio":(494,536),"Tracker":(613,0),"Shield":(373,1342)}
+exp={"Core":(520,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(413,520),"Radio":(384,450),"RX":(373,86),"Pilot 12":(882,86),"Air":(393,0),"Engine":(383,0),"Vision":(611,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,400),"Cell":(407,250),"Pilot T":(912,86),"Pilot Pro":(1153,1796),"Base":(398,520),"Ground Radio":(494,536),"Tracker":(613,0),"Shield":(373,1342)}
 tk=tm=0
 for n,c,s,its in P:
     k=sum(q*PR[i][1] for i,q in its if PR[i][6]==K); m=sum(q*PR[i][1] for i,q in its if PR[i][6]==M)

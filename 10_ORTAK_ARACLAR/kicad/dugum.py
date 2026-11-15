@@ -27,11 +27,14 @@ def dugum_sayfasi(k, kok, dizin, x=25.4, y=50.8, ek=None, pps=False, ethernet=Fa
     port=False: omurga portu bu sayfaya konmaz (Hub gibi portlarını kendi çizen kartlar); kart +12V_BUS ve CAN ağlarını
     kendi sağlar. sonlandirma=True: CAN sonlandırma dirençleri dizilir, toplam 60 ohm (yalnızca Hub);
     sonlandirma=120: 120 ohm dizilir (iki uçlu kısa bağlantının bir ucu olan kartlar, ör. PC adaptörü).
+    besleme="kart": port +12V ucu +12V_BUS ağına çıkar ama giriş diyodu bu sayfaya konmaz; kart +12V ağını kendi (daha yüksek
+    akımlı) giriş korumasıyla +12V_BUS'tan üretir (ör. Vision).
     besleme="harici": kart omurgadan beslenmez; +5V ve +3V3 ağlarını kart sağlar, port +12V uçları bağlanmaz.
     ethernet=True: omurga fişinin dört Ethernet çifti ETH_A+ ... ETH_D- ağlarına çıkar; ethernet=2: yalnızca A ve B.
     ldo33=False: 3,3 V regülatörü bu sayfaya konmaz; +3V3 ağını kart kendi (daha güçlü) regülatörüyle +5V'tan üretir.
     """
     harici = besleme == "harici"
+    kart_korumasi = besleme == "kart"
     s = Sema(k.P, "Dugum devresi (omurga, besleme, islemci, CAN, guvenli eleman)", kagit="A1", tarih=k.T, ust=kok, ad="Dugum", genel_etiket=True)
     kok.alt_sayfa(s, "dugum.kicad_sch", x, y)
     ek = dict(ek or {})
@@ -50,7 +53,8 @@ def dugum_sayfasi(k, kok, dizin, x=25.4, y=50.8, ek=None, pps=False, ethernet=Fa
         k.koy(s, "operfly:Operfly_Bus_20", "J", "Operfly Bus", 70, 80, baglanti, "Connector_Harwin:Harwin_Gecko_G125-MS12005M2P_2x10_P1.25mm_Vertical")
     if not harici:
         g = Izgara(130, 70, sutun=12)
-        k.iki(s, g, "Device:D_Schottky", "D", "B360A (60 V, 3 A)", "+12V", "+12V_BUS", "Diode_SMD:D_SMA")
+        if not kart_korumasi:
+            k.iki(s, g, "Device:D_Schottky", "D", "B360A (60 V, 3 A)", "+12V", "+12V_BUS", "Diode_SMD:D_SMA")
         k.iki(s, g, "Device:D_TVS", "D", "SMBJ18A", "+12V", "GND", "Diode_SMD:D_SMB")
         k.C(s, g, "10u 50V", "+12V", fp=C1206); k.C(s, g, "100n 50V", "+12V", fp=C0603)
         for ag in ("+12V_BUS", "+12V", "GND"):

@@ -1,0 +1,271 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "7a399f56-04b7-57d7-a764-d47f51508804")
+	(paper "A3")
+	(title_block
+		(title "Operfly Vision")
+		(date "2026-11-15")
+		(rev "A")
+		(company "Operfly")
+	)
+	(lib_symbols)
+	(text "Operfly Vision - goruntu isleme karti, Jetson tasiyici (OPFVIS)"
+		(exclude_from_sim no)
+		(at 25.4 25.4 0)
+		(effects
+			(font
+				(size 3 3)
+			)
+			(justify left bottom)
+		)
+		(uuid "e1c12a77-2b0a-5cfe-9f0c-c72d98569c3c")
+	)
+	(text "Sematik betikle uretilir: 01_DONANIM/VISION/kicad/uret.py."
+		(exclude_from_sim no)
+		(at 25.4 33.02 0)
+		(effects
+			(font
+				(size 1.6 1.6)
+			)
+			(justify left bottom)
+		)
+		(uuid "f566fdf3-caca-5145-aa12-b98c8a729dfa")
+	)
+	(sheet
+		(at 101.6 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "34ba10a2-075a-5204-bdf9-e9c1a0e90b4d")
+		(property "Sheetname" "Guc"
+			(at 101.6 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "guc.kicad_sch"
+			(at 101.6 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_vision"
+				(path "/7a399f56-04b7-57d7-a764-d47f51508804"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 25.4 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "45ccce1c-0698-5ccf-b80f-e681c646d535")
+		(property "Sheetname" "Dugum"
+			(at 25.4 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "dugum.kicad_sch"
+			(at 25.4 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_vision"
+				(path "/7a399f56-04b7-57d7-a764-d47f51508804"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 254 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "4c932ad2-b45c-5627-b7d0-316bd065965b")
+		(property "Sheetname" "Ethernet"
+			(at 254 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "ethernet.kicad_sch"
+			(at 254 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_vision"
+				(path "/7a399f56-04b7-57d7-a764-d47f51508804"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 330.2 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "67ad4708-1a9c-5b7c-95b6-e41040a47a9f")
+		(property "Sheetname" "Cevre"
+			(at 330.2 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "cevre.kicad_sch"
+			(at 330.2 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_vision"
+				(path "/7a399f56-04b7-57d7-a764-d47f51508804"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 177.8 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "cab53f5e-9b79-543b-8457-34ce75387246")
+		(property "Sheetname" "Jetson"
+			(at 177.8 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "jetson.kicad_sch"
+			(at 177.8 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_vision"
+				(path "/7a399f56-04b7-57d7-a764-d47f51508804"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)

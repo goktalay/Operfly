@@ -16,4 +16,5 @@
   (lib (name "Resistor_SMD")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Resistor_SMD.pretty")(options "")(descr ""))
   (lib (name "TestPoint")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/TestPoint.pretty")(options "")(descr ""))
   (lib (name "Transformer_SMD")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Transformer_SMD.pretty")(options "")(descr ""))
+  (lib (name "operfly_ayak")(type "KiCad")(uri "${KIPRJMOD}/../../ORTAK_KUTUPHANE/ayak_izleri/operfly_ayak.pretty")(options "")(descr ""))
 )

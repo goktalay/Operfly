@@ -135,10 +135,52 @@ def pmddl():
     return ad, s + ")\n"
 
 
+def ksz9567r():
+    """Microchip KSZ9567R: 128 uçlu TQFP, 14 x 14 mm, adım 0,4 mm, 10 x 10 mm alt pedli.
+    Ölçüler üreticinin önerilen lehim deseninden (Microchip çizimi C04-2418B, veri sayfası DS00002329 Şekil 8-3):
+    ped 0,20 x 1,54 mm, karşılıklı ped merkezleri arası 15,40 mm, orta ped 10,50 x 10,50 mm.
+    Isı geçişleri (üretici önerisi: çap 0,33 mm, adım 1,20 mm) kart çiziminde orta pedin içine yerleştirilir.
+    Orta pedin lehim pastası 4 x 4 pencereye bölünmüştür (pedin yaklaşık yüzde 58'i).
+    """
+    ad = "Microchip_TQFP-128-1EP_14x14mm_P0.4mm_EP10x10mm"
+    s = '(footprint "%s" (version 20240108) (generator "operfly") (generator_version "1") (layer "F.Cu")\n' % ad
+    s += '\t(descr "Microchip 128 uclu TQFP, 14x14 mm, adim 0.4 mm, 10x10 mm alt pedli (cizim C04-2418B); isi gecisleri kart ciziminde eklenir")\n'
+    s += '\t(tags "TQFP QFP Microchip KSZ9567R")\n'
+    s += '\t(property "Reference" "REF**" (at 0 -9.9 0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))\n'
+    s += '\t(property "Value" "%s" (at 0 9.9 0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))\n' % ad
+    s += '\t(property "Footprint" "" (at 0 0 0) (layer "F.Fab") (hide yes) (effects (font (size 1.27 1.27))))\n'
+    s += '\t(property "Datasheet" "" (at 0 0 0) (layer "F.Fab") (hide yes) (effects (font (size 1.27 1.27))))\n'
+    s += '\t(property "Description" "" (at 0 0 0) (layer "F.Fab") (hide yes) (effects (font (size 1.27 1.27))))\n'
+    s += "\t(attr smd)\n"
+
+    def cizgi(x1, y1, x2, y2, katman, w):
+        return '\t(fp_line (start %.3f %.3f) (end %.3f %.3f) (stroke (width %s) (type solid)) (layer "%s"))\n' % (x1, y1, x2, y2, w, katman)
+    g, p = 7.0, 1.0   # gövde yarı kenarı, 1. uç köşesindeki pah
+    for a, b in (((-g + p, -g), (g, -g)), ((g, -g), (g, g)), ((g, g), (-g, g)), ((-g, g), (-g, -g + p)), ((-g, -g + p), (-g + p, -g))):
+        s += cizgi(a[0], a[1], b[0], b[1], "F.Fab", 0.1)
+    k, u = g + 0.11, 0.5   # serigrafi: köşe işaretleri; 1. uç köşesinde nokta
+    for sx, sy in ((1, -1), (1, 1), (-1, 1), (-1, -1)):
+        s += cizgi(sx * k, sy * k, sx * (k - u), sy * k, "F.SilkS", 0.12) + cizgi(sx * k, sy * k, sx * k, sy * (k - u), "F.SilkS", 0.12)
+    s += '\t(fp_circle (center -8.9 -6.9) (end -8.75 -6.9) (stroke (width 0.3) (type solid)) (fill none) (layer "F.SilkS"))\n'
+    s += '\t(fp_rect (start -8.72 -8.72) (end 8.72 8.72) (stroke (width 0.05) (type solid)) (fill none) (layer "F.CrtYd"))\n'
+    m, n = 7.70, 0   # ped merkezi (15,40 / 2)
+    for i in range(32):
+        d = -6.2 + 0.4 * i
+        for no, x, y, w, h in ((1 + i, -m, d, 1.54, 0.20), (33 + i, d, m, 0.20, 1.54), (65 + i, m, -d, 1.54, 0.20), (97 + i, -d, -m, 0.20, 1.54)):
+            s += '\t(pad "%d" smd rect (at %.2f %.2f) (size %.2f %.2f) (layers "F.Cu" "F.Paste" "F.Mask"))\n' % (no, x, y, w, h)
+            n += 1
+    assert n == 128
+    s += '\t(pad "129" smd rect (at 0 0) (size 10.50 10.50) (layers "F.Cu" "F.Mask"))\n'
+    for i in range(4):
+        for j in range(4):
+            s += '\t(pad "" smd rect (at %.2f %.2f) (size 2.00 2.00) (layers "F.Paste"))\n' % (-3.75 + 2.5 * i, -3.75 + 2.5 * j)
+    return ad, s + ")\n"
+
+
 def main():
     klasor = sys.argv[1]
     os.makedirs(klasor, exist_ok=True)
-    for ad, metin in (mosaic(), rfd900ux_smt(), pmddl()):
+    for ad, metin in (mosaic(), rfd900ux_smt(), pmddl(), ksz9567r()):
         if len(sys.argv) > 2 and ad != sys.argv[2]:
             continue
         yol = os.path.join(klasor, ad + ".kicad_mod")

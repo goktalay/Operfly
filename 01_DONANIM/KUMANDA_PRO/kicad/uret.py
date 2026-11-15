@@ -6,12 +6,13 @@ Kaynak bu dosyadır; `*.kicad_sch` çıktıları elle düzenlenmez.
 güç düğmesi, kumanda radyosu ve giriş kartı bağlantısı. Bu kadarıyla kart kumanda olarak çalışır.
 2. ADIM, ilk bölüm: Jetson çekirdeği ve beslemesi, NVMe, USB göbeği, omurga Ethernet'i, fan (Vision kartındaki devreler).
 3. ADIM: geniş bant radyo (Radio kartındaki devre) ve ikinci Ethernet portu (Vision'daki I210 devresi).
-HENÜZ ÇİZİLMEDİ: 10 inç ekranın görüntü ve arka ışık arayüzü (panel seçilmedi; README'de).
+4. ADIM: ekran arayüzü: HDMI görüntü çıkışı, 12 V panel beslemesi, parlaklık (panelden bağımsız; README'de).
 
 Devre değerleri üretici belgelerindendir: BQ25798 (SLUSDV2C: uç açıklamaları, Tablo 7-1, bölüm 7.3.9.5, 7.3.12, 8.2),
 STUSB4500 (DS12499 Rev 3, Şekil 10 "Typical schematic with MCU"), AP6320x (düğüm ve RX kartındaki devreler),
 RFD900ux (V1.3; RX kartındaki bağlantı), Jetson Orin NX (uç tablosu `jetson_uclari.py`; devreler Vision kartından),
-TPS26630 (Vision kartındaki sigorta), TPS54560B (SLVSBN0; Cell ve Power kartındaki devre), USB2514B (PC adaptöründeki devre).
+TPS26630 (Vision kartındaki sigorta), TPS54560B (SLVSF00; Cell ve Power kartındaki devre), USB2514B (PC adaptöründeki devre),
+HDMI (Jetson Orin NX/Nano tasarım kılavuzu DG-10931 bölüm 9; açık kaynaklı bir taşıyıcı kartın üretilmiş HDMI devresi).
 """
 import os
 import sys
@@ -33,7 +34,7 @@ TVS25_FP = "Diode_SMD:D_0603_1608Metric"
 k = Kart("operfly_pilotpro", "2026-11-15")
 kok = Sema(k.P, "Operfly Pilot Pro", kagit="A3", tarih=k.T)
 kok.metin("Operfly Pilot Pro - kumanda ana karti (OPFKPR)", 25.4, 25.4, 3.0)
-kok.metin("Sematik betikle uretilir: 01_DONANIM/KUMANDA_PRO/kicad/uret.py. Cizilmeyen: 10 inc ekranin goruntu ve arka isik arayuzu (panel secilmedi).", 25.4, 33.02, 1.6)
+kok.metin("Sematik betikle uretilir: 01_DONANIM/KUMANDA_PRO/kicad/uret.py. Ekran arayuzu panelden bagimsizdir (HDMI + 12 V + USB dokunmatik + PWM).", 25.4, 33.02, 1.6)
 
 EK = {"PB10": "PWR_SCL", "PB11": "PWR_SDA",      # I2C2: sarj entegresi, guc anlasmasi entegresi, bataryanin kendi olceri
       "PB3": "I2C_SCL", "PB4": "I2C_SDA",        # I2C3 (kole): giris kartindaki kumanda islemcisiyle dogrudan baglanti
@@ -209,13 +210,16 @@ rd.yaz(os.path.join(BURASI, "radyo.kicad_sch"))
 jt = Sema(k.P, "Pilot Pro - Jetson Orin NX soketi, beslemesi ve denetim devreleri", kagit="A1", tarih=k.T, ust=kok, ad="Jetson", genel_etiket=True)
 kok.alt_sayfa(jt, "jetson.kicad_sch", 254.0, 50.8)
 jt.birim_araligi = 200
-jt.metin("JETSON SOKETI (260 uclu SO-DIMM). Birimler: guc ve denetim | PCIe, Ethernet, USB | dusuk hizli giris-cikislar | goruntu uclari (henuz baglanmadi).", 30, 25)
-jt.metin("Uc tablosu uretici veri sayfasindan (10_ORTAK_ARACLAR/kicad/jetson_uclari.py). Devreler Vision kartindakilerin aynisidir; PCIE1 ikinci Ethernet portuna gider, PCIE2 ve goruntu uclari bostur.", 30, 31)
+jt.metin("JETSON SOKETI (260 uclu SO-DIMM). Birimler: guc ve denetim | PCIe, Ethernet, USB | dusuk hizli giris-cikislar | goruntu uclari (HDMI, Ekran sayfasi).", 30, 25)
+jt.metin("Uc tablosu uretici veri sayfasindan (10_ORTAK_ARACLAR/kicad/jetson_uclari.py). Devreler Vision kartindakilerin aynisidir; PCIE1 ikinci Ethernet portuna gider, PCIE2 bostur.", 30, 31)
 J = {"VDD_IN": "+VJET", "GND": "GND", "POWER_EN": "JET_POWER_EN_R", "SYS_RESET*": "JET_SYS_RESET_N", "SHUTDOWN_REQ*": "JET_SHDN_REQ_HV",
      "FORCE_RECOVERY*": "JET_FRC_N", "MODULE_ID": "JET_MODULE_ID", "MOD_SLEEP*": "JET_MOD_SLEEP_N", "SLEEP/WAKE*": "JET_SLEEP_WAKE_N",
      "PCIE0_CLK_P": "M2_CLK_P", "PCIE0_CLK_N": "M2_CLK_N", "PCIE0_RST*": "M2_RST_N", "PCIE0_CLKREQ*": "M2_CLKREQ_N", "PCIE_WAKE*": "PCIE_WAKE_N",
      "USB0_D_P": "USBC_DP", "USB0_D_N": "USBC_DM", "GPIO00": "USB0_VBUS_DET_N", "USB1_D_P": "HUB_UP_DP", "USB1_D_N": "HUB_UP_DM",
-     "UART1_TXD": "JET_UART_TX_1V8", "UART1_RXD": "JET_UART_RX_1V8", "UART2_TXD": "JET_DBG_TX", "UART2_RXD": "JET_DBG_RX", "GPIO14": "JET_FAN_PWM_1V8"}
+     "UART1_TXD": "JET_UART_TX_1V8", "UART1_RXD": "JET_UART_RX_1V8", "UART2_TXD": "JET_DBG_TX", "UART2_RXD": "JET_DBG_RX", "GPIO14": "JET_FAN_PWM_1V8", "GPIO13": "JET_BL_PWM_1V8",
+     "DP1_TXD0_P": "HDMI_D2_J_P", "DP1_TXD0_N": "HDMI_D2_J_N", "DP1_TXD1_P": "HDMI_D1_J_P", "DP1_TXD1_N": "HDMI_D1_J_N",
+     "DP1_TXD2_P": "HDMI_D0_J_P", "DP1_TXD2_N": "HDMI_D0_J_N", "DP1_TXD3_P": "HDMI_CK_J_P", "DP1_TXD3_N": "HDMI_CK_J_N",
+     "DP1_AUX_P": "HDMI_SCL_3V3", "DP1_AUX_N": "HDMI_SDA_3V3", "DP1_HPD": "HDMI_HPD_N_1V8"}   # HDMI kipi (Ekran sayfasi)
 for l in range(4):
     for s_ in "PN":
         J["PCIE0_RX%d_%s" % (l, s_)] = "M2_PER%d_%s" % (l, s_)
@@ -349,10 +353,10 @@ for c in "ABCD":
     k.R(cv, g, "75R", "BB_KCT_%s" % c, "BB_BS")
 k.C(cv, g, "1n 2kV", "BB_BS", fp=C1206)
 
-cv.metin("SEVIYE CEVIRICI (TXS0104E, 1,8 V <-> 3,3 V): Jetson UART1 <-> guc islemcisi (USART1), fan PWM (GPIO14). Jetson kapaliyken uclarini birakir.", 30, 400)
+cv.metin("SEVIYE CEVIRICI (TXS0104E, 1,8 V <-> 3,3 V): Jetson UART1 <-> guc islemcisi (USART1), fan PWM (GPIO14), ekran parlakligi PWM (GPIO13). Jetson kapaliyken uclarini birakir.", 30, 400)
 g = Izgara(50, 445, sutun=10)
 k.parca(cv, g, "Logic_LevelTranslator:TXS0104EPW", "U", "TXS0104EPW", {"V_{CCA}": "+1V8_JET", "V_{CCB}": "+3V3", "OE": "+1V8_JET", "GND": "GND",
-        "A1": "JET_UART_TX_1V8", "B1": "MCU_RX", "A2": "JET_UART_RX_1V8", "B2": "MCU_TX", "A4": "JET_FAN_PWM_1V8", "B4": "FAN_PWM_3V3"},
+        "A1": "JET_UART_TX_1V8", "B1": "MCU_RX", "A2": "JET_UART_RX_1V8", "B2": "MCU_TX", "A3": "JET_BL_PWM_1V8", "B3": "BL_PWM_3V3", "A4": "JET_FAN_PWM_1V8", "B4": "FAN_PWM_3V3"},
         "Package_SO:TSSOP-14_4.4x5mm_P0.65mm", bosluk=2, dx=20)
 k.C(cv, g, "100n", "+1V8_JET"); k.C(cv, g, "100n", "+3V3")
 cv.metin("FAN (5 V, 4 uclu: GND, +5V, devir, PWM; Vision ile ayni): PWM Jetson'dan; Jetson kapaliyken 10k asagi cekme fani durdurur.", 30, 490)
@@ -478,6 +482,88 @@ for c in "ABCD":
 k.C(wb, g, "1n 2kV", "WB_BS", fp=C1206)
 wb.yaz(os.path.join(BURASI, "genisbant.kicad_sch"))
 
+# --- Ekran: goruntu cikisi (HDMI), panel beslemesi, parlaklik --------------------------------
+ek = Sema(k.P, "Pilot Pro - ekran: HDMI, panel beslemesi, parlaklik", kagit="A1", tarih=k.T, ust=kok, ad="Ekran", genel_etiket=True)
+kok.alt_sayfa(ek, "ekran.kicad_sch", 101.6, 101.6)
+ek.metin("EKRAN ARAYUZU: kart belirli bir panele bagli DEGILDIR. Hedef en yuksek parlaklikli (nit), dis ortamda okunan 10 inc dokunmatik paneldir;", 30, 28)
+ek.metin("goruntu HDMI ile, besleme 12 V ile, dokunmatik USB ile (Cevre sayfasi), parlaklik PWM ile verilir. Boylece panel degisince kart degismez.", 30, 34)
+ek.metin("GORUNTU CIKISI (HDMI; Jetson DP1 uclari HDMI kipinde): uretici tasarim kilavuzu (DG-10931, bolum 9) ve acik kaynakli bir tasiyici kartin", 30, 46)
+ek.metin("uretilmis devresi esas alindi. Esleme: TXD0 = veri 2, TXD1 = veri 1, TXD2 = veri 0, TXD3 = saat; AUX_P = SCL, AUX_N = SDA.", 30, 52)
+ek.metin("Her hatta 100 nF seri kondansator, 499R asagi cekme (ortak transistorle, yalniz Jetson acikken), 0R seri direnc (gerekirse 5R1), ESD dizisi.", 30, 58)
+TMDS = (("D2", "DP1_TXD0"), ("D1", "DP1_TXD1"), ("D0", "DP1_TXD2"), ("CK", "DP1_TXD3"))
+g = Izgara(50, 100, sutun=16, dx=24)
+for ad, _ in TMDS:
+    for s_ in "PN":
+        k.C(ek, g, "100n", "HDMI_%s_J_%s" % (ad, s_), "HDMI_%s_C_%s" % (ad, s_))
+for ad, _ in TMDS:
+    for s_ in "PN":
+        k.R(ek, g, "499R 1%", "HDMI_%s_C_%s" % (ad, s_), "HDMI_RPD")
+g.satir()
+for ad, _ in TMDS:
+    for s_ in "PN":
+        k.R(ek, g, "0R", "HDMI_%s_C_%s" % (ad, s_), "HDMI_%s_K_%s" % (ad, s_))
+x, y = g.yer()
+k.koy(ek, "Transistor_FET:AO3400A", "Q", "AO3400A", x, y, {"D": "HDMI_RPD", "S": "GND", "G": "+3V3_JET"}, SOT23)
+g = Izgara(70, 215, sutun=6, dx=75)
+k.parca(ek, g, "Power_Protection:TPD4E05U06DQA", "D", "TPD4E05U06DQA", {"D1+": "HDMI_D2_K_P", "D1-": "HDMI_D2_K_N", "D2+": "HDMI_D1_K_P", "D2-": "HDMI_D1_K_N", "GND": "GND"},
+        "Package_SON:USON-10_2.5x1.0mm_P0.5mm", bosluk=0, dx=18)
+k.parca(ek, g, "Power_Protection:TPD4E05U06DQA", "D", "TPD4E05U06DQA", {"D1+": "HDMI_D0_K_P", "D1-": "HDMI_D0_K_N", "D2+": "HDMI_CK_K_P", "D2-": "HDMI_CK_K_N", "GND": "GND"},
+        "Package_SON:USON-10_2.5x1.0mm_P0.5mm", bosluk=0, dx=18)
+k.parca(ek, g, "Power_Protection:TPD4E05U06DQA", "D", "TPD4E05U06DQA", {"D1+": "HDMI_SCL_5V", "D1-": "HDMI_SDA_5V", "D2+": "HDMI_HPD_K", "GND": "GND"},
+        "Package_SON:USON-10_2.5x1.0mm_P0.5mm", bosluk=0, dx=18)
+
+ek.metin("DDC (panelin kimlik bilgisi) ve HPD (panel takili): Jetson uclari 5 V'a dayanmaz -> seviye cevirici sart (uretici notu).", 30, 262)
+ek.metin("DDC: transistorlu iki yonlu cevirici; panel tarafi 1k8 ile 5 V'a, Jetson tarafi 10k ile 3,3 V'a cekili. HPD: tersleyen transistor,", 30, 268)
+ek.metin("Jetson tarafi 10k ile 1,8 V'a cekili (panel takiliyken hat DUSUK; ureticinin kendi kartindaki gibi). CEC kullanilmaz (uclar bos).", 30, 274)
+g = Izgara(50, 315, sutun=14)
+for h in ("SCL", "SDA"):
+    k.R(ek, g, "10k", "+3V3_JET", "HDMI_%s_3V3" % h)
+    x, y = g.yer()
+    k.koy(ek, N7002[0], N7002[1], N7002[2], x, y, {"G": "+3V3_JET", "S": "HDMI_%s_3V3" % h, "D": "HDMI_%s_5V" % h}, SOT23)
+    k.R(ek, g, "1k8", "+5V_HDMI", "HDMI_%s_5V" % h)
+k.R(ek, g, "1k", "HDMI_HPD_K", "HDMI_HPD_G"); k.R(ek, g, "100k", "HDMI_HPD_G", "GND")
+x, y = g.yer()
+k.koy(ek, N7002[0], N7002[1], N7002[2], x, y, {"G": "HDMI_HPD_G", "S": "GND", "D": "HDMI_HPD_N_1V8"}, SOT23)
+k.R(ek, g, "10k", "+1V8_JET", "HDMI_HPD_N_1V8"); k.olcum_noktasi(ek, g, "HDMI_HPD_N_1V8")
+g.satir()
+k.parca(ek, g, "Power_Management:TPS2051CDBV", "U", "TPS2051CDBV", {"IN": "+5V", "GND": "GND", "EN": "JET_RUN", "~{FLT}": "HDMI_5V_FLT_N", "OUT": "+5V_HDMI"},
+        "Package_TO_SOT_SMD:SOT-23-5", bosluk=1, dx=14)
+k.C(ek, g, "1u", "+5V"); k.C(ek, g, "10u 10V", "+5V_HDMI", fp=C0805); k.C(ek, g, "100n", "+5V_HDMI")
+k.R(ek, g, "10k", "+3V3", "HDMI_5V_FLT_N"); k.olcum_noktasi(ek, g, "HDMI_5V_FLT_N")
+
+ek.metin("HDMI KONNEKTORU (A tipi, kasa icinde): panelin surucu kartina kisa bir HDMI kablosuyla baglanir. 5 V ucu 0,5 A sinirlidir (TPS2051C).", 420, 46)
+H = {"+5V": "+5V_HDMI", "GND": "GND", "SH": "GND", "D2S": "GND", "D1S": "GND", "D0S": "GND", "CKS": "GND",
+     "SCL": "HDMI_SCL_5V", "SDA": "HDMI_SDA_5V", "HPD": "HDMI_HPD_K"}
+for ad, _ in TMDS:
+    H[ad + "+"] = "HDMI_%s_K_P" % ad
+    H[ad + "-"] = "HDMI_%s_K_N" % ad
+k.koy(ek, "Connector:HDMI_A", "J", "HDMI-A (panel)", 500, 120, H, "Connector_Video:HDMI_A_Molex_208658-1001_Horizontal")
+
+ek.metin("PANEL BESLEMESI (TPS54560B, +VSYS'ten 12 V, 3 A = 36 W): 2000 nit sinifi bir panele (tahmini 20-25 W) yetecek sekilde boyutlandi.", 420, 262)
+ek.metin("Cikis = 0,8 V x (1 + 143k / 10k2) = 12,0 V; 400 kHz. Batarya 12,5 V'un altina inince cikis bataryayi izler (yaklasik 0,5 V altinda;", 420, 268)
+ek.metin("regulator tam acik calisir). Yalnizca Jetson acikken calisir (tasiyici 3,3 V'u gelince). Parlaklik: Jetson GPIO13 (PWM) -> seviye cevirici.", 420, 274)
+g = Izgara(440, 320, sutun=16, dx=24)
+k.parca(ek, g, "Regulator_Switching:TPS54560BDDA", "U", "TPS54560BDDAR", {"VIN": "+VSYS", "EN": "PNL_EN", "RT/CLK": "PNL_RT", "FB": "PNL_FB",
+        "COMP": "PNL_COMP", "BOOT": "PNL_BOOT", "SW": "PNL_SW", "GND": "GND"}, "Package_SO:Texas_R-PDSO-G8_EP2.95x4.9mm_Mask2.4x3.1mm_ThermalVias", bosluk=2, dx=22)
+k.C(ek, g, "10u 50V", "+VSYS", fp=C1206); k.C(ek, g, "10u 50V", "+VSYS", fp=C1206); k.C(ek, g, "100n 50V", "+VSYS", fp=C0603)
+k.R(ek, g, "243k 1%", "PNL_RT", "GND"); k.R(ek, g, "13k7", "PNL_COMP", "PNL_COMP_RC"); k.C(ek, g, "10n", "PNL_COMP_RC"); k.C(ek, g, "56p", "PNL_COMP")
+k.C(ek, g, "100n 25V", "PNL_BOOT", "PNL_SW", fp=C0603)
+k.iki(ek, g, "Device:D_Schottky", "D", "PDS760 (60 V, 7 A)", "PNL_SW", "GND", "Diode_SMD:D_PowerDI-5")
+k.iki(ek, g, "Device:L", "L", "10u XAL7070-103", "PNL_SW", "+12V_PNL", "Inductor_SMD:L_Coilcraft_XAL7070-XXX")
+g.satir()
+for _ in range(4):
+    k.C(ek, g, "22u 25V", "+12V_PNL", fp=C1210)
+k.R(ek, g, "143k 1%", "+12V_PNL", "PNL_FB"); k.R(ek, g, "10k2 1%", "PNL_FB", "GND")
+k.R(ek, g, "10k", "+3V3_JET", "PNL_EN"); k.R(ek, g, "100k", "PNL_EN", "GND")
+k.olcum_noktasi(ek, g, "+12V_PNL")
+k.parca(ek, g, "Connector_Generic:Conn_01x02", "J", "Panel beslemesi 12 V (Micro-Fit)", {"Pin_1": "+12V_PNL", "Pin_2": "GND"},
+        "Connector_Molex:Molex_Micro-Fit_3.0_43650-0200_1x02_P3.00mm_Horizontal", dx=8)
+g.satir()
+k.R(ek, g, "100R", "BL_PWM_3V3", "PNL_PWM"); k.R(ek, g, "100k", "PNL_PWM", "GND"); k.R(ek, g, "1k", "+3V3_JET", "PNL_ON")
+k.parca(ek, g, "Connector_Generic_MountingPin:Conn_01x03_MountingPin", "J", "Panel denetimi (ac, PWM, GND)", {"Pin_1": "PNL_ON", "Pin_2": "PNL_PWM", "Pin_3": "GND",
+        "MountPin": "GND"}, "Connector_JST:JST_GH_SM03B-GHS-TB_1x03-1MP_P1.25mm_Horizontal", bosluk=1, dx=8)
+ek.yaz(os.path.join(BURASI, "ekran.kicad_sch"))
+
 kok.yaz(os.path.join(BURASI, "operfly_pilotpro.kicad_sch"))
-kutuphane_tablolari(BURASI, [kok, dg, gc, rd, jt, cv, wb], {"operfly": ORTAK_URI, "operfly_ayak": AYAK_URI})
-print("yazildi: operfly_pilotpro (kok + 6 sayfa)")
+kutuphane_tablolari(BURASI, [kok, dg, gc, rd, jt, cv, wb, ek], {"operfly": ORTAK_URI, "operfly_ayak": AYAK_URI})
+print("yazildi: operfly_pilotpro (kok + 7 sayfa)")

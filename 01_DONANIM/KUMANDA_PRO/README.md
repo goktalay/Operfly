@@ -4,16 +4,16 @@ En üst kumanda modeli: 10 inç ekran, üzerinde çalışan yer istasyonu yazıl
 İşlemci ve güvenli eleman taşıyan ortak giriş kartıyla (`01_DONANIM/KUMANDA_GIRIS`) birlikte çalışır; iki kart
 arasındaki bağlantı: `13_DOKUMANTASYON/KUMANDA_ARAYUZU.md`.
 
-## Durum (15 Kasım 2026): şematikte yalnızca ekran arayüzü eksik
+## Durum (15 Kasım 2026): şematik tamam, kart çizimi (PCB) başlamadı
 
 - KiCad projesi: `kicad/operfly_pilotpro.kicad_pro`.
   Üretim ve denetim: `python 10_ORTAK_ARACLAR/kicad/denetle.py KUMANDA_PRO operfly_pilotpro`.
-- **Çizilenler (ERC 0 hata, 0 uyarı), 7 sayfa:** kök, güç işlemcisi (`dugum`), USB-C güç anlaşması + batarya şarjı
+- **Çizilenler (ERC 0 hata, 0 uyarı), 8 sayfa:** kök, güç işlemcisi (`dugum`), USB-C güç anlaşması + batarya şarjı
   + güç yolu + 3,3 V / 5 V + güç düğmesi (`guc`), kumanda radyosu + giriş kartı bağlantısı + sesli uyarıcı (`radyo`),
   Jetson soketi + beslemesi + denetimi (`jetson`), NVMe + USB göbeği + dış USB + omurga Ethernet'i + fan (`cevre`),
-  geniş bant radyo + ikinci Ethernet portu (`genisbant`).
-- **Henüz çizilmeyen:** 10 inç ekranın görüntü ve arka ışık arayüzü (panel seçilmedi). Aşağıda "Sonraki adım"da.
-  Bu olmadan kart ürün olarak tamam değildir.
+  geniş bant radyo + ikinci Ethernet portu (`genisbant`), ekran arayüzü: HDMI + 12 V panel beslemesi + parlaklık (`ekran`).
+- **Ekran paneli kesin seçilmedi;** bir aday ve bir hedef var (karar 18-20). Kart panele bağlı olmadığı için şematik
+  bunu beklemez.
 - Kart çizimi (PCB) başlamadı.
 
 ## Kararlar (sahibi kararı tasarımcıya bıraktı)
@@ -62,12 +62,35 @@ arasındaki bağlantı: `13_DOKUMANTASYON/KUMANDA_ARAYUZU.md`.
     kipi, verici beslemesini kesme, "çalışıyor" bilgisi. Güç işlemcisinde boş uç kalmadığı için. Radyonun ayarı
     Jetson'dan Ethernet üzerinden yapılır; seri port yalnızca kurtarma içindir (ölçüm noktaları).
 
+18. **Ekran ölçütü (sahibinin talimatı): en yüksek parlaklık, dış ortamda çalışma.** Araştırma (15 Kasım 2026):
+    10,1 inçte hazır satılan ürünlerde bulunan en yüksek değer 1500 nit; 2000 nit ve üstü yalnızca özel siparişle
+    söyleniyor (teklif ve numune gerekir). Güneşte okunurluk yalnız nit değildir: dokunmatik camın panele optik
+    yapıştırılması ve yansıma önleyici kaplama da şarttır; panel şartnamesine bunlar yazılacak.
+19. **Kart belirli bir panele bağlı değildir.** Görüntü HDMI ile, besleme 12 V ile, dokunmatik USB ile, parlaklık
+    PWM ile verilir. Gerekçe: en parlak panel bugün hazır ürün, yarın özel üretim olabilir; panel değişince kartın
+    değişmemesi gerekir. HDMI girişli sürücü kartı hem hazır monitörlerde hem özel panellerde standarttır.
+20. **Panel adayı (ilk örnek için): Lilliput TK1019/T.** 1500 nit, 1920 x 1200, 10 noktalı kapasitif dokunmatik,
+    ön yüz IP65, HDMI + USB, 12-24 V, en çok 19 W, -20...+70 °C, ortam ışığına göre otomatik karartma. Kasalı bir
+    monitördür (264 x 183 x 36 mm): ilk örnekte işi görür, el kumandası için kalın ve ağırdır. **Seri ürün hedefi:**
+    aynı arayüzle çalışan açık çerçeve özel panel (1500-2000 nit, optik yapıştırma, yansıma önleyici kaplama).
+21. **Görüntü çıkışı HDMI'dır** (Jetson'ın DP1 uçları HDMI kipinde). Devre, üreticinin tasarım kılavuzuna
+    (DG-10931, bölüm 9) ve açık kaynaklı bir taşıyıcı kartın üretilmiş HDMI devresine dayanır: her hatta 100 nF,
+    499 Ω aşağı çekme (ortak transistörle), ESD dizisi; DDC ve HPD için seviye çevirici; 5 V ucu 0,5 A sınırlı.
+    CEC kullanılmaz.
+22. **Panel beslemesi: 12 V, 3 A (36 W) ayrı regülatör (TPS54560B; Jetson'ın 3,3 V'undaki parçayla aynı).**
+    2000 nit sınıfı bir panele (tahmini 20-25 W) yetecek şekilde boyutlandı. Yalnızca Jetson açıkken çalışır.
+    Parlaklık Jetson'dan PWM ile ayarlanır (GPIO13); hazır monitörlerde ayrıca kendi otomatik karartması vardır.
+
 ## Sahibinin bilmesi gerekenler
 
 - **Batarya paketi henüz seçilmedi.** Kart 4 hücreli, I2C (SMBus) ölçerli paket bekler; konnektörü ve uç sırası
   seçilen pakete göre kesinleşecek (şematikte yer tutucu 5 uçlu konnektör var).
-- **Çalışma süresi:** 100 Wh'lik paketle, 30-35 W ortalama tüketimde yaklaşık 3 saat. Daha uzun süre için ikinci
-  paket ya da dış güç (USB-C) gerekir.
+- **Parlaklık çalışma süresini doğrudan kısaltır.** 1500 nitlik aday panel tam parlaklıkta 19 W'a kadar çeker; bu,
+  Jetson'ın kendisi kadardır. 100 Wh'lik paketle kaba tahmin: güneşte tam parlaklıkta 40-45 W ile yaklaşık 2 saat,
+  gölgede yarı parlaklıkta 30-35 W ile yaklaşık 3 saat. 2000 nit sınıfı panelle (tahmini 25 W) güneşte 2 saatin
+  altına iner. Daha uzun süre için ikinci paket ya da dış güç (USB-C) gerekir. Rakamlar ölçülmedi, tahmindir.
+- **Güneş altında panel ısınır.** Koyu yüzey doğrudan güneşte ortam sıcaklığının epey üstüne çıkar; aday panelin
+  sınırı 70 °C'dir. Sıcak iklimde (Körfez yazı gibi) bu sınır kasa tasarımında ayrıca ele alınmalıdır.
 - **Şarj süresi:** 60 W'lık USB-C adaptörle yaklaşık 2-2,5 saat; 5 V'luk sıradan USB portundan şarj olur ama çok
   yavaştır ve kumanda açıkken batarya yine de boşalır.
 - **STUSB4500'e istenen gerilim üretimde bir kez yazılır** (20 V 3 A); yazılmazsa fabrika ayarıyla daha düşük
@@ -80,11 +103,10 @@ arasındaki bağlantı: `13_DOKUMANTASYON/KUMANDA_ARAYUZU.md`.
 - **Pilot Pro'da yassı kablonun iki ucu farklı kullanılır:** I2C güç işlemcisine gider, PWR_HOLD kullanılmaz.
   Giriş kartının yazılımı kumanda modelini tanıyıp buna göre davranmalıdır (donanımı aynıdır).
 
-## Sonraki adım (henüz çizilmedi)
+## Sonraki adım
 
-- **10 inç yüksek parlaklıklı dokunmatik ekran:** panel seçilmedi. Jetson'ın görüntü çıkışı (DP/HDMI) ve arka ışık
-  beslemesi panelle birlikte çizilecek; görüntü çıkışının çevre devresi üreticinin tasarım kılavuzuyla
-  doğrulanmadan çizilmeyecek. Dokunmatik için USB konnektörü hazır.
+- **Panelin kesinleştirilmesi:** aday monitörden bir numune alınıp güneş altında denenmesi; özel açık çerçeve panel
+  için (1500-2000 nit, optik yapıştırma, yansıma önleyici kaplama, HDMI sürücü kartı, 12 V) üreticilerden teklif.
 - Isıl tasarım ve güç bütçesinin ölçümle doğrulanması (Jetson + radyo + ekran aynı kasada).
 
 ## Doğrulanacaklar
@@ -113,4 +135,20 @@ arasındaki bağlantı: `13_DOKUMANTASYON/KUMANDA_ARAYUZU.md`.
   (akış denetimi kullanılmaz; modül ayarında kapalı olmalı); 3,3 V'u kartın ortak rayından alır (toplam yük
   ölçülecek); sırt sırta trafo bağlantısında bağlantı hızı ve hata oranı numunede ölçülecek.
 - **İkinci Ethernet denetleyicisi** Vision'daki listeyi devralır (taban pedi ölçüsü, ayar belleğinin içeriği).
+- **HDMI devresi:** eşleme, 100 nF, 499 Ω ve seviye çevirici gereği üreticinin tasarım kılavuzundan ve açık kaynaklı
+  bir taşıyıcı karttan doğrulandı. Kılavuzdaki örnek şemanın (Şekil 9-6) direnç değerleri metinden okunamadı;
+  HPD ve DDC değerleri kart çiziminden önce şekille tek tek karşılaştırılacak. Bilinen açık noktalar:
+  DDC hatlarının Jetson tarafı 3,3 V'a çekili (üreticinin kılavuzu 3,3 V, kendi geliştirme kartı 1,8 V gösteriyor);
+  HPD tersleyen çeviriciyle bağlı (yazılım ayarı buna göre olmalı); 499 Ω'ların anahtarı modülün uyku ucu yerine
+  taşıyıcı 3,3 V'una bağlı (uyku kipi kullanılmıyor); seri dirençler 0 Ω (üretici HDMI 2.0 uyumu için 6 Ω'a kadar
+  önerir; görüntü bozulursa 5,1 Ω denenecek).
+- **12 V panel regülatörü:** kompanzasyon (13,7 kΩ, 10 nF, 56 pF) veri sayfası formülleriyle, 35 µF etkin çıkış
+  kapasitesi varsayımıyla hesaplandı; yük adımı ölçümüyle doğrulanacak. Batarya 12,5 V'un altına inince çıkış
+  12 V'un altına düşer (yaklaşık batarya - 0,5 V): seçilen panelin alt gerilim sınırı ve güç işlemcisinin
+  kapanma eşiği buna göre belirlenecek (aday monitör 12-24 V ister).
+- **Parlaklık PWM'i:** hazır monitörün PWM girişi yoktur (kendi ayarı ve otomatik karartması vardır); PWM ve "aç"
+  uçları açık çerçeve panelin sürücü kartı içindir. Frekans ve kutup seçilen sürücü kartına göre ayarlanacak.
+- **Fan PWM seviyesi (Vision'dan devralınan devre):** seviye çeviricinin çıkışında kendi 10 kΩ yukarı çekmesi
+  vardır; karttaki 10 kΩ aşağı çekmeyle birlikte yüksek seviye 3,3 V'a çıkmaz (yaklaşık 1,7 V). Fanın kendi
+  yukarı çekmesi durumu değiştirir; seçilen fanla ölçülecek, gerekirse aşağı çekme 100 kΩ yapılacak.
 - **PCA9536** çıkışları açılışta boştadır: sıfırlama ve ayar hatları yukarı çekili, verici beslemesi açık başlar.

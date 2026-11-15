@@ -22,7 +22,7 @@
 		)
 		(uuid "3ad73e21-a21f-505f-98f8-61df016d4a64")
 	)
-	(text "Sematik betikle uretilir: 01_DONANIM/KUMANDA_PRO/kicad/uret.py. Cizilmeyen: 10 inc ekranin goruntu ve arka isik arayuzu (panel secilmedi)."
+	(text "Sematik betikle uretilir: 01_DONANIM/KUMANDA_PRO/kicad/uret.py. Ekran arayuzu panelden bagimsizdir (HDMI + 12 V + USB dokunmatik + PWM)."
 		(exclude_from_sim no)
 		(at 25.4 33.02 0)
 		(effects
@@ -31,7 +31,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "a3e6b2c5-1fce-5c23-9e76-01c2b7d7c554")
+		(uuid "9edf725d-a66f-5006-880e-a3b80e2004ff")
 	)
 	(sheet
 		(at 25.4 50.8)
@@ -75,6 +75,52 @@
 			(project "operfly_pilotpro"
 				(path "/b7c47103-47da-5702-9736-49131f4f5275"
 					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 101.6 101.6)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "46150742-0d67-5b13-9b74-06900e87fcad")
+		(property "Sheetname" "Ekran"
+			(at 101.6 100.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "ekran.kicad_sch"
+			(at 101.6 122.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_pilotpro"
+				(path "/b7c47103-47da-5702-9736-49131f4f5275"
+					(page "8")
 				)
 			)
 		)

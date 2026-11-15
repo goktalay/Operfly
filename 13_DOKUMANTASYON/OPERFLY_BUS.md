@@ -7,7 +7,7 @@ Kartlar arası ortak omurga: tek konnektörde güç, yedekli CAN FD, Ethernet ve
 | Güç | Operfly Power'dan gelen 12 V; Hub her portta elektronik sigorta ve akım ölçümü taşır |
 | CAN FD (A ve B) | Düğüm keşfi, durum ve yönetim; iki bağımsız hat |
 | Ethernet | 1000BASE-T, PTP (IEEE 1588) destekli; Core bu ağa 100 Mbit ile bağlanır |
-| PPS | Nav'dan gelen saniye darbesi |
+| PPS | Nav'dan gelen saniye darbesi; 3,3 V lojik, yükselen kenar saniye başıdır. Alıcı kartlar tetikleyicili tamponla alır |
 
 ## Topoloji ve konnektör (14 Kasım 2026 kararları)
 

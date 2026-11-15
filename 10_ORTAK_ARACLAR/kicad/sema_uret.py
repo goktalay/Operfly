@@ -73,7 +73,7 @@ class Sema:
         self.pinler[lid] = ps
         return lid
 
-    def koy(self, lid, ref, deger, x, y, aglar, footprint=""):
+    def koy(self, lid, ref, deger, x, y, aglar, footprint="", dnp=False):
         """aglar: {pin numarası veya pin adı: ağ adı}. Verilmeyen pinler bağlı değil sayılır."""
         if footprint:
             if not hasattr(self, "ayak_izleri"):
@@ -81,7 +81,7 @@ class Sema:
             self.ayak_izleri.add(footprint)
         x, y = round(x / 1.27) * 1.27, round(y / 1.27) * 1.27  # bağlantı ızgarasına oturt
         u = uid(self.proje, ref)
-        s = '\t(symbol (lib_id "%s") (at %.2f %.2f 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "%s")\n' % (lid, x, y, u)
+        s = '\t(symbol (lib_id "%s") (at %.2f %.2f 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp %s) (uuid "%s")\n' % (lid, x, y, "yes" if dnp else "no", u)
         ys = [p[3] for p in self.pinler[lid]]
         ust, alt = max(ys) + 5.08, min(ys) - 5.08
         dikey = len(self.pinler[lid]) <= 2 and all(p[2] == 0 for p in self.pinler[lid])  # uçları üstte ve altta olan eleman

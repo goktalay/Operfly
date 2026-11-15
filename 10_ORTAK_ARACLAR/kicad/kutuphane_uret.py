@@ -211,6 +211,58 @@ def pmddl():
                 "Genis bant radyo modulu, Microhard pMDDL2450 OEM, 2,4 GHz 2x2 MIMO, 1 W, 26,5x33 mm", yari=20.32, yigin=True)
 
 
+def jetson():
+    """NVIDIA Jetson Orin NX / Orin Nano soketi (260 uclu SO-DIMM). Uc tablosu jetson_uclari.py (uretici veri sayfasi).
+
+    Dort birim: 1 guc ve denetim (GND ve VDD_IN uclari ust uste), 2 PCIe / Ethernet / USB, 3 dusuk hizli giris-cikislar,
+    4 bu ekosistemde kullanilmayan goruntu uclari (CSI, DSI, DP). Besleme disindaki uclar pasif tanimlidir.
+    """
+    from jetson_uclari import UCLAR
+    ad = "Jetson_Orin_NX"
+    denetim = ("POWER_EN", "SYS_RESET*", "SHUTDOWN_REQ*", "FORCE_RECOVERY*", "MOD_SLEEP*", "SLEEP/WAKE*", "PMIC_BBAT", "MODULE_ID", "CLK_32K_OUT")
+    gruplar = {1: [], 2: [], 3: [], 4: []}
+    gnd, vdd = [], []
+    for no in sorted(UCLAR):
+        isim = UCLAR[no]
+        if isim == "GND":
+            gnd.append(no)
+        elif isim == "VDD_IN":
+            vdd.append(no)
+        elif isim in denetim:
+            gruplar[1].append((no, isim))
+        elif isim.startswith(("PCIE", "GBE_", "USB")):
+            gruplar[2].append((no, isim))
+        elif isim.startswith(("CSI", "DSI", "DP", "HDMI", "CAM0", "CAM1")):
+            gruplar[4].append((no, isim))
+        else:
+            gruplar[3].append((no, isim))
+    assert len(gnd) + len(vdd) + sum(len(g) for g in gruplar.values()) == 260
+
+    def pin(no, isim, tur, x, y, aci, gizli=False):
+        return '\t\t\t(pin %s line (at %.2f %.2f %d) (length 2.54)%s (name "%s" (effects (font (size 1.27 1.27)))) (number "%d" (effects (font (size 1.27 1.27)))))\n' % (
+            tur, x, y, aci, " hide" if gizli else "", isim, no)
+    s = '\t(symbol "%s" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)\n' % ad
+    s += ozellik("Reference", "J", -20.32, 22.86) + ozellik("Value", ad, 20.32, -22.86)
+    s += ozellik("Footprint", "Connector_PCBEdge:SODIMM-260_DDR4_H4.0-5.2_OrientationStd_Socket", 0, 0, True) + ozellik("Datasheet", "", 0, 0, True)
+    s += ozellik("Description", "NVIDIA Jetson Orin NX / Orin Nano modul soketi, 260 uclu SO-DIMM", 0, 0, True)
+    for birim in (1, 2, 3, 4):
+        uclar = sorted(gruplar[birim], key=lambda u: (u[1], u[0]))
+        yarim = (len(uclar) + 1) // 2
+        yari = 30.48 if birim == 1 else 33.02
+        tepe = max(yarim - 1, 4) * 1.27 + 5.08
+        s += '\t\t(symbol "%s_%d_1" (rectangle (start %.2f %.2f) (end %.2f %.2f) (stroke (width 0.254) (type default)) (fill (type background)))\n' % (ad, birim, -yari, tepe, yari, -tepe)
+        for i, (no, isim) in enumerate(uclar):
+            solda = i < yarim
+            s += pin(no, isim, "passive", -yari - 2.54 if solda else yari + 2.54, (yarim - 1) * 1.27 - (i % yarim) * 2.54, 0 if solda else 180)
+        if birim == 1:
+            for i, no in enumerate(vdd):
+                s += pin(no, "VDD_IN", "power_in" if i == 0 else "passive", 0, tepe + 2.54, 270, i > 0)
+            for i, no in enumerate(gnd):
+                s += pin(no, "GND", "power_in" if i == 0 else "passive", 0, -tepe - 2.54, 90, i > 0)
+        s += "\t\t)\n"
+    return s + "\t)\n"
+
+
 def main():
     s = '(kicad_symbol_lib (version 20231120) (generator "operfly") (generator_version "1")\n'
     s += konnektor("Operfly_Bus_20", BUS, FP_BUS, "Operfly Bus portu, Harwin Gecko-SL 20 kontak")
@@ -220,6 +272,7 @@ def main():
     s += mosaic()
     s += rfd900ux_smt()
     s += pmddl()
+    s += jetson()
     s += ")\n"
     open(sys.argv[1], "w", encoding="utf-8", newline="\n").write(s)
     print("yazıldı:", sys.argv[1])

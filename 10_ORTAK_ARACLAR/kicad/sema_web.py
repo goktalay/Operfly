@@ -31,6 +31,7 @@ KARTLAR = [
     ("pilot12", "KUMANDA_12", "operfly_pilot12", "Operfly Pilot 12 ana kartı"),
     ("air", "AIR", "operfly_air", "Operfly Air"),
     ("engine", "ENGINE", "operfly_engine", "Operfly Engine"),
+    ("vision", "VISION", "operfly_vision", "Operfly Vision"),
 ]
 
 

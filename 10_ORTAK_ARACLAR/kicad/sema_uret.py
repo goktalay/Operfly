@@ -94,7 +94,7 @@ class Sema:
         kullanilan = set()
         for bn in birimler:   # çok birimli sembolde birimler yan yana konur
             pinler = [p for p in self.pinler[lid] if birim.get(p[0], 1) == bn]
-            bx = round((x + (bn - birimler[0]) * 76.2) / 1.27) * 1.27
+            bx = round((x + (bn - birimler[0]) * getattr(self, "birim_araligi", 76.2)) / 1.27) * 1.27
             u = uid(self.proje, ref) if bn == birimler[0] else uid(self.proje, ref, "birim", bn)
             s = '\t(symbol (lib_id "%s") (at %.2f %.2f 0) (unit %d) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp %s) (uuid "%s")\n' % (lid, bx, y, bn, "yes" if dnp else "no", u)
             ys = [p[3] for p in pinler]

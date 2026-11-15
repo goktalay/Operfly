@@ -50,5 +50,5 @@ Kumandanın gerçek zamanlı işlemcisi ve güvenli elemanı bu karttadır. Ana 
 - Kullanıcının dokunduğu parçalardan (çubuk, anahtar gövdesi) gelebilecek statik boşalma: kasa topraklaması ve
   gerekirse giriş koruma diyotları kart çiziminde değerlendirilecek.
 - Yassı kablonun kontak yönü ve uzunluğu (USB tam hız hattı taşıyor; kısa tutulacak).
-- Ekran seçimi (Pilot T): arayüzünün bu konnektöre uyduğu.
+- Ekran (Pilot T): EA DOGM128W-6 seçildi ve bu konnektöre uyuyor (bkz. `01_DONANIM/KUMANDA_T`); MISO ucu kullanılmıyor.
 - SE050 ayak izi geçici (düğüm devresiyle ortak not).

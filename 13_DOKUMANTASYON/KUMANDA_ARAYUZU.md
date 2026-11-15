@@ -62,4 +62,8 @@ Uç sıraları Operfly tanımıdır; satın alınan çubuk ve anahtarların kabl
 | Düğme | 2 | sinyal, GND |
 | Ekran / genişleme | 1 | +3V3, GND, SCK, MOSI, MISO, CS, DC, RST, BL, GND |
 
+Pilot T'de ekran / genişleme konnektörü 10 telli düz kabloyla ana karttaki ekrana gider (iki uçta aynı sıra). Ekran
+(EA DOGM128W-6) ana kartın 3,3 V'undan beslenir; kablodaki +3V3 ve MISO uçları ana kartta boştur. DC ucu ekranın
+komut/veri seçimidir, BL arka ışığı açar (PWM ile kısılır).
+
 12 kumanda kanalı: 4 çubuk ekseni + 2 tekerlek + 6 anahtar. Düğmeler ve yön tuşu kanal sayılmaz.

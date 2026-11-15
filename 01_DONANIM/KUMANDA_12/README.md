@@ -10,7 +10,8 @@ işlemci ve güvenli eleman ortak giriş kartındadır (`01_DONANIM/KUMANDA_GIRI
   Üretim ve denetim: `python 10_ORTAK_ARACLAR/kicad/denetle.py KUMANDA_12 operfly_pilot12`.
 - Şematik tamam, 3 sayfa: batarya/şarj/USB/güç/3,3 V (`guc`), radyo ve giriş kartı bağlantısı (`radyo`).
   ERC 0 hata, 0 uyarı. Kart çizimi başlamadı.
-- Bu kartta işlemci yok; devre değerleri üretici veri sayfalarından alındı (liste `kicad/uret.py` başında).
+- Bu kartta işlemci yok; devre değerleri üretici veri sayfalarından alındı. Devrenin kaynağı Pilot T ile ortaktır:
+  `10_ORTAK_ARACLAR/kicad/kumanda_ana.py` (veri sayfası listesi o dosyanın başında).
 
 ## Kararlar (sahibi kararı tasarımcıya bıraktı)
 

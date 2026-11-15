@@ -1,0 +1,179 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "11c74258-b363-542b-8cf4-e0f174851294")
+	(paper "A3")
+	(title_block
+		(title "Operfly Pilot T")
+		(date "2026-11-15")
+		(rev "A")
+		(company "Operfly")
+	)
+	(lib_symbols)
+	(text "Sematik betikle uretilir: 01_DONANIM/KUMANDA_T/kicad/uret.py. Islemci giris kartindadir."
+		(exclude_from_sim no)
+		(at 25.4 33.02 0)
+		(effects
+			(font
+				(size 1.6 1.6)
+			)
+			(justify left bottom)
+		)
+		(uuid "187925e3-c127-5014-985a-3aa37f475ff5")
+	)
+	(text "Operfly Pilot T - kumanda ana karti (OPFKTL)"
+		(exclude_from_sim no)
+		(at 25.4 25.4 0)
+		(effects
+			(font
+				(size 3 3)
+			)
+			(justify left bottom)
+		)
+		(uuid "ed2ededc-27dc-5fef-b588-ebff61e3c027")
+	)
+	(sheet
+		(at 25.4 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "33406df0-4e03-5fc1-bf66-7e9c635952bc")
+		(property "Sheetname" "Guc"
+			(at 25.4 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "guc.kicad_sch"
+			(at 25.4 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_pilott"
+				(path "/11c74258-b363-542b-8cf4-e0f174851294"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 177.8 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "d44a5add-1ab1-53ab-999b-4c8c9bcc0b5e")
+		(property "Sheetname" "Ekran"
+			(at 177.8 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "ekran.kicad_sch"
+			(at 177.8 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_pilott"
+				(path "/11c74258-b363-542b-8cf4-e0f174851294"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 101.6 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "d94cb913-2f10-5a04-adad-aa919c4ce9a1")
+		(property "Sheetname" "Radyo"
+			(at 101.6 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "radyo.kicad_sch"
+			(at 101.6 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_pilott"
+				(path "/11c74258-b363-542b-8cf4-e0f174851294"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)

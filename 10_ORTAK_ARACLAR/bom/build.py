@@ -57,6 +57,7 @@ prices=[
 ("USB–Gigabit Ethernet köprüsü",10,T,"Köprü + USB göbeği + trafo; fiyat teyit edilecek","Microchip / HALO","LAN7500i, USB2514B, TG111-MSC13LF",K,S),
 ("USB Type-C konnektör",6,T,"","","",K,TS),
 ("USB göbeği ve dış USB portu",8,T,"Pilot Pro şematiği: 4 portlu göbek, 2 güç anahtarı, USB-A konnektör, korumalar; fiyat teyit edilecek","Microchip / "+TI+" / Molex","USB2514Bi-AEZG, 2 x TPS2051CDBV, 67643",K,S),
+("Shield modül beslemesi ve seri arayüzü",8,T,"Shield şematiği: 12 V -> 18 V yükselten regülatör (bobin, diyot), sigorta, anahtar, RS-232 alıcı-verici, modül konnektörü; fiyat teyit edilecek",TI+" / Diodes","TPS61175PWP, MAX3232IPW, DMP3099L",K,S),
 ("Anten takip motorları ve sürücüleri (2 eksen)",250,T,"Tracker şematiği: eksen başına bir adım motoru sürücüsü (kartta). Motorlar ve mekanik (dişli, yatak, gövde) seçilmedi; öneri: iki fazlı, faz akımı 1 A'ya kadar, 42 mm gövdeli adım motorları. Fiyat mekanik dahil tahmindir","Analog Devices (Trinamic)","2 x TMC2209-LA",K,A),
 ("GNSS modülü",520,D,"DigiKey tek adet 472 € / 424 £. Kaynak: digikey.es/en/products/detail/septentrio-inc/410322/12503897","Septentrio","mosaic-X5",M,S),
 ("Geniş bant radyo modülü (2,4 GHz, 1 W)",450,D,"ModalAI tek adet 449,99 $. Kaynak: modalai.com/products/oem-m0048-4-1","Microhard","pMDDL2450",M,S),
@@ -103,7 +104,7 @@ P=[
 ("Operfly Base","OPFBAS",4,[("GNSS modülü",1),("GNSS RF ön ucu (LNA, filtre, anten beslemesi)",1)]+node+[("microSD yuvası",1),("USB Type-C konnektör",1),(reg,1),(pas,1),(sma,2),(bus,1),(small,1),(asm,1)]),
 ("Operfly Ground Radio","OPFGRD",4,[(WB,1),(KR,1)]+node+[("Ethernet trafosu (10/100)",2),("Radyo modülü soğutucusu ve ısı dolgusu",1),(reg,1),(pas,1),(sma,4),(bus,4),(big,1),(asm,1)]),
 ("Operfly Tracker","OPFTRK",4,[("Anten takip motorları ve sürücüleri (2 eksen)",1)]+node+[(reg,1),(pas,1),(bus,1),(small,1),(asm,1)]),
-("Operfly Shield","OPFSHD",4,[("CRPA modülü, 4 kanal, L1",1)]+node+[(reg,1),(pas,1),(sma,2),(bus,1),(small,1),(asm,1)]),
+("Operfly Shield","OPFSHD",4,[("CRPA modülü, 4 kanal, L1",1)]+node+[("Shield modül beslemesi ve seri arayüzü",1),(reg,1),(pas,1),(bus,1),(small,1),(asm,1)]),
 ]
 for n,c,s,its in P:
     for i,q in its: assert i in PR,(n,i)
@@ -204,7 +205,7 @@ for i,l in enumerate(lines,1):
     c=sv.cell(row=i,column=1,value=l); c.font=bf if i==1 else nf; c.alignment=Alignment(wrap_text=True)
 wb.save("Operfly_BOM.xlsx")
 # denetim
-exp={"Core":(520,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(413,520),"Radio":(384,450),"RX":(373,86),"Pilot 12":(882,86),"Air":(393,0),"Engine":(383,0),"Vision":(611,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,260),"Cell":(436,250),"Pilot T":(912,86),"Pilot Pro":(1236,1796),"Base":(411,520),"Ground Radio":(538,536),"Tracker":(613,0),"Shield":(373,1342)}
+exp={"Core":(520,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(413,520),"Radio":(384,450),"RX":(373,86),"Pilot 12":(882,86),"Air":(393,0),"Engine":(383,0),"Vision":(611,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,260),"Cell":(436,250),"Pilot T":(912,86),"Pilot Pro":(1236,1796),"Base":(411,520),"Ground Radio":(538,536),"Tracker":(613,0),"Shield":(371,1342)}
 tk=tm=0
 for n,c,s,its in P:
     k=sum(q*PR[i][1] for i,q in its if PR[i][6]==K); m=sum(q*PR[i][1] for i,q in its if PR[i][6]==M)

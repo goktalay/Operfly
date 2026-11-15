@@ -279,6 +279,18 @@ def rtl8111h():
                 "PCIe gigabit Ethernet denetleyici, Realtek RTL8111H-CG, QFN-32 4x4 mm (alt ped olcusu uretici cizimiyle dogrulanacak)", yari=12.7, yigin=True)
 
 
+def tps61175():
+    """Texas Instruments TPS61175PWP (yukselten regulator, 3 A anahtar, HTSSOP-14 + alt ped). Uc sirasi uretici veri
+    sayfasindaki uc tablosundan (SLVS892F, "Pin Functions"). NC ucu (11) uretici geregi topraga baglanir; alt ped 15."""
+    sol = [("4", "EN", I), ("6", "SYNC", I), ("10", "FREQ", P), ("5", "SS", P), ("8", "COMP", P)]
+    sag = [("1", "SW", P), ("2", "SW", P), ("9", "FB", I), ("11", "NC", P)]
+    ust = [("3", "VIN", G)]
+    alt = [("7", "AGND", G), ("15", "AGND", G), ("12", "PGND", G), ("13", "PGND", G), ("14", "PGND", G)]
+    assert len({u[0] for u in sol + sag + ust + alt}) == 15
+    return kutu("TPS61175", sol, sag, ust, alt, "Package_SO:Texas_HTSSOP-14-1EP_4.4x5mm_P0.65mm_EP3.4x5mm_Mask2.94x3.34mm_ThermalVias",
+                "Yukselten regulator, Texas Instruments TPS61175PWP, 2,9-18 V giris, 38 V'a kadar cikis, 3 A anahtar (alt ped olcusu uretici cizimiyle dogrulanacak)", yari=10.16, yigin=True)
+
+
 def main():
     s = '(kicad_symbol_lib (version 20231120) (generator "operfly") (generator_version "1")\n'
     s += konnektor("Operfly_Bus_20", BUS, FP_BUS, "Operfly Bus portu, Harwin Gecko-SL 20 kontak")
@@ -290,6 +302,7 @@ def main():
     s += pmddl()
     s += jetson()
     s += rtl8111h()
+    s += tps61175()
     s += ")\n"
     open(sys.argv[1], "w", encoding="utf-8", newline="\n").write(s)
     print("yazıldı:", sys.argv[1])

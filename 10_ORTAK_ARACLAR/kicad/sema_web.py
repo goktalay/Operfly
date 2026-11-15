@@ -39,6 +39,7 @@ KARTLAR = [
     ("base", "BASE", "operfly_base", "Operfly Base"),
     ("gr", "YER_RADYO", "operfly_groundradio", "Operfly Ground Radio"),
     ("tracker", "TRACKER", "operfly_tracker", "Operfly Tracker"),
+    ("shield", "SHIELD", "operfly_shield", "Operfly Shield"),
 ]
 
 

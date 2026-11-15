@@ -10,6 +10,7 @@ Kart ayarları `01_DONANIM/<KART>/kicad/pcb_ayar.py` dosyasındaki AYAR sözlü�
     katman           bakır katman sayısı (varsayılan 4)
     kenar_otomatik   True ise ayarda geçmeyen J konnektörleri de kenara oturtulur (omurga portu batıya, anten
                      konnektörleri kuzeye, diğerleri en boş kenara); "ic" listesindeki konnektörler kart içinde kalır
+    ic_payi          16 ve daha çok uçlu entegrelerin çevresinde bırakılan ek boşluk (mm; varsayılan 0)
     yasak            [(sol, üst, sağ, alt), ...] eleman konmayacak bölgeler (mm)
     ice_bakan        {"J2": ("B", konum)}: kenarda duran ama ağzı kartın içine bakan yuvalar (M.2 gibi; modül kartın
                      üstüne yatar)
@@ -46,7 +47,7 @@ SINIFLAR = {"Default": (0.125, 0.20, 0.60, 0.30)}
 DUZLEMLER = {"In1.Cu": "GND", "In2.Cu": "+3V3"}
 VARSAYILAN = {"en": None, "boy": None, "kenar": {}, "sabit": {}, "delik": DELIK_M3, "delik_ic": 3.5, "katman": 4,
               "tohum": 1, "bosluk": 0.30, "doluluk": 0.42, "oran": 1.35, "siniflar": {}, "guc_aglari": [], "duzlemler": DUZLEMLER,
-              "kenar_otomatik": True, "ic": [], "kenar_bosluk": 0.3, "ice_bakan": {}, "yasak": []}
+              "kenar_otomatik": True, "ic": [], "kenar_bosluk": 0.3, "ice_bakan": {}, "yasak": [], "ic_payi": 0.0}
 
 
 def ayar_oku(kart):
@@ -77,6 +78,7 @@ class Eleman:
         self.fp = fp
         self.ref = fp.GetReference()
         self.sabit = False
+        self.ek = 0.0   # çevresinde bırakılacak ek boşluk (çok uçlu entegrelerde uçlardan yol çıkabilsin diye)
         self.x = self.y = 0.0
         self.rot = 0
         self.geo = {}   # açı -> (sol, üst, sağ, alt, [(uç no, ağ, dx, dy)])
@@ -101,6 +103,7 @@ class Eleman:
 
     def kutu(self, pay=0.0):
         g = self.geo[self.rot]
+        pay += self.ek
         return (self.x + g[0] - pay, self.y + g[1] - pay, self.x + g[2] + pay, self.y + g[3] + pay)
 
     def uclar(self):
@@ -208,6 +211,9 @@ def yerlestir(kart, kok, ayar=None):
         b.Remove(cizim)
     el = sorted((Eleman(fp) for fp in b.GetFootprints()), key=lambda e: e.ref)   # sıra sabit olsun: aynı tohum = aynı yerleşim
     idx = {e.ref: i for i, e in enumerate(el)}
+    for e in el:
+        if a["ic_payi"] and e.uc_sayisi >= 16 and re.match(r"^U\d+$", e.ref):
+            e.ek = a["ic_payi"]
     pay = a["bosluk"]
     # Kart ölçüsü
     alan = sum((e.geo[0][2] - e.geo[0][0] + 2 * pay) * (e.geo[0][3] - e.geo[0][1] + 2 * pay) for e in el)

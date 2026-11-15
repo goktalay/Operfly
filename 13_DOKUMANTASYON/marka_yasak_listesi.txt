@@ -1,0 +1,10 @@
+# Dokümantasyon dışında geçmemesi gereken adlar (satır başına bir tane)
+px4
+ardupilot
+mavlink
+nuttx
+qgroundcontrol
+mission planner
+missionplanner
+pixhawk
+dronecan

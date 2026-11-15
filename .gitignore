@@ -1,0 +1,25 @@
+# KiCad
+*.bak
+*.bck
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*-backups/
+*.kicad_prl
+*.lck
+_autosave-*
+fp-info-cache
+*.net
+*.dsn
+*.ses
+# Üretim çıktıları
+out/
+gerber/
+*.zip
+# Sırlar ve çalışma verisi
+*.pem
+*.key
+*.p12
+.env
+*.sqlite
+*.dump
+gizli/

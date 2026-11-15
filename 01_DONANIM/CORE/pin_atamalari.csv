@@ -1,0 +1,98 @@
+grup;sinyal;pin;islev;not
+Ethernet (RMII, 100 Mbit);ETH_REF_CLK;PA1;ETH_REF_CLK;PHY'den 50 MHz
+Ethernet (RMII, 100 Mbit);ETH_MDIO;PA2;ETH_MDIO;
+Ethernet (RMII, 100 Mbit);ETH_MDC;PC1;ETH_MDC;
+Ethernet (RMII, 100 Mbit);ETH_CRS_DV;PA7;ETH_CRS_DV;
+Ethernet (RMII, 100 Mbit);ETH_RXD0;PC4;ETH_RXD0;
+Ethernet (RMII, 100 Mbit);ETH_RXD1;PC5;ETH_RXD1;
+Ethernet (RMII, 100 Mbit);ETH_TX_EN;PG11;ETH_TX_EN;
+Ethernet (RMII, 100 Mbit);ETH_TXD0;PG13;ETH_TXD0;
+Ethernet (RMII, 100 Mbit);ETH_TXD1;PG12;ETH_TXD1;
+Ethernet (RMII, 100 Mbit);ETH_PPS_OUT;PB5;ETH_PPS_OUT;PTP saatinden PPS çıkışı
+Ethernet (RMII, 100 Mbit);PHY_NRST;PG14;GPIO;
+Ethernet (RMII, 100 Mbit);PHY_INT;PG15;GPIO;kesme girişi
+CAN FD;CAN_A_RX;PD0;FDCAN1_RX;Operfly Bus CAN A
+CAN FD;CAN_A_TX;PD1;FDCAN1_TX;
+CAN FD;CAN_A_STB;PD3;GPIO;alıcı-verici bekleme
+CAN FD;CAN_B_RX;PB12;FDCAN2_RX;Operfly Bus CAN B
+CAN FD;CAN_B_TX;PB13;FDCAN2_TX;
+CAN FD;CAN_B_STB;PD4;GPIO;alıcı-verici bekleme
+IMU 1 (ICM-42688-P);IMU1_SCK;PA5;SPI1_SCK;her IMU ayrı SPI hattında
+IMU 1 (ICM-42688-P);IMU1_MISO;PA6;SPI1_MISO;
+IMU 1 (ICM-42688-P);IMU1_MOSI;PD7;SPI1_MOSI;
+IMU 1 (ICM-42688-P);IMU1_CS;PI9;GPIO;
+IMU 1 (ICM-42688-P);IMU1_DRDY;PI10;GPIO;kesme girişi
+IMU 2 (BMI088);IMU2_SCK;PI1;SPI2_SCK;
+IMU 2 (BMI088);IMU2_MISO;PI2;SPI2_MISO;
+IMU 2 (BMI088);IMU2_MOSI;PI3;SPI2_MOSI;
+IMU 2 (BMI088);IMU2_CS_ACC;PI4;GPIO;
+IMU 2 (BMI088);IMU2_CS_GYR;PI8;GPIO;
+IMU 2 (BMI088);IMU2_INT_ACC;PI5;GPIO;kesme girişi
+IMU 2 (BMI088);IMU2_INT_GYR;PI6;GPIO;kesme girişi
+IMU 3 (ICM-45686);IMU3_SCK;PE2;SPI4_SCK;
+IMU 3 (ICM-45686);IMU3_MISO;PE5;SPI4_MISO;
+IMU 3 (ICM-45686);IMU3_MOSI;PE6;SPI4_MOSI;
+IMU 3 (ICM-45686);IMU3_CS;PE4;GPIO;
+IMU 3 (ICM-45686);IMU3_DRDY;PE3;GPIO;kesme girişi
+FRAM;FRAM_SCK;PF7;SPI5_SCK;
+FRAM;FRAM_MISO;PF8;SPI5_MISO;
+FRAM;FRAM_MOSI;PF9;SPI5_MOSI;
+FRAM;FRAM_CS;PF6;GPIO;
+I2C sensörler A;I2C_A_SCL;PF14;I2C4_SCL;barometre 1, pusula, güvenli eleman
+I2C sensörler A;I2C_A_SDA;PF15;I2C4_SDA;
+I2C sensörler B;I2C_B_SCL;PF1;I2C2_SCL;barometre 2 (ayrı hat)
+I2C sensörler B;I2C_B_SDA;PF0;I2C2_SDA;
+I2C sensörler A;SE_NRST;PH4;GPIO;güvenli eleman sıfırlama
+IO işlemcisi;IO_UART_TX;PC6;USART6_TX;IO/failsafe işlemcisine
+IO işlemcisi;IO_UART_RX;PC7;USART6_RX;
+IO işlemcisi;IO_NRST;PG6;GPIO;IO işlemcisini sıfırlar (yazılım güncelleme)
+IO işlemcisi;IO_BOOT0;PG8;GPIO;
+IO işlemcisi;N_ARMED;PH5;GPIO;silahlanma durumu
+Hata ayıklama;DBG_UART_TX;PD8;USART3_TX;konsol
+Hata ayıklama;DBG_UART_RX;PD9;USART3_RX;
+Hata ayıklama;SWDIO;PA13;DEBUG_JTMS-SWDIO;
+Hata ayıklama;SWCLK;PA14;DEBUG_JTCK-SWCLK;
+Hata ayıklama;SWO;PB3;DEBUG_JTDO-SWO;
+USB;USB_DM;PA11;USB_OTG_FS_DM;servis portu
+USB;USB_DP;PA12;USB_OTG_FS_DP;
+USB;USB_VBUS;PA9;USB_OTG_FS_VBUS;
+microSD (öneri);SD_D0;PC8;SDMMC1_D0;uçuş kaydı için; onay bekliyor
+microSD (öneri);SD_D1;PC9;SDMMC1_D1;
+microSD (öneri);SD_D2;PC10;SDMMC1_D2;
+microSD (öneri);SD_D3;PC11;SDMMC1_D3;
+microSD (öneri);SD_CK;PC12;SDMMC1_CK;
+microSD (öneri);SD_CMD;PD2;SDMMC1_CMD;
+microSD (öneri);SD_DET;PG7;GPIO;kart algılama
+Motor/servo çıkışları;OUT1;PE9;TIM1_CH1;PWM / DShot
+Motor/servo çıkışları;OUT2;PE11;TIM1_CH2;
+Motor/servo çıkışları;OUT3;PE13;TIM1_CH3;
+Motor/servo çıkışları;OUT4;PE14;TIM1_CH4;
+Motor/servo çıkışları;OUT5;PD12;TIM4_CH1;
+Motor/servo çıkışları;OUT6;PD13;TIM4_CH2;
+Motor/servo çıkışları;OUT7;PD14;TIM4_CH3;
+Motor/servo çıkışları;OUT8;PD15;TIM4_CH4;
+Motor/servo çıkışları;OUT9;PH10;TIM5_CH1;
+Motor/servo çıkışları;OUT10;PH11;TIM5_CH2;
+Motor/servo çıkışları;OUT11;PH12;TIM5_CH3;
+Motor/servo çıkışları;OUT12;PI0;TIM5_CH4;
+Isıl kontrol;PELTIER_PWM_A;PB0;TIM3_CH3;ısıtma yönü
+Isıl kontrol;PELTIER_PWM_B;PB1;TIM3_CH4;soğutma yönü
+Zamanlama;PPS_IN;PA15;TIM2_CH1;Operfly Bus PPS girişi (yakalama)
+Analog ölçüm;V12_BUS_SENS;PA0;ADC1_INP16;omurga gerilimi
+Analog ölçüm;V5_SENS;PA3;ADC1_INP15;
+Analog ölçüm;V3V3_SENS;PA4;ADC1_INP18;sensör beslemesi
+Analog ölçüm;HW_VER;PF11;ADC1_INP2;kart sürümü direnci
+Analog ölçüm;HW_REV;PF12;ADC1_INP6;kart revizyonu direnci
+Güç ve gözetim;SENS1_EN;PG3;GPIO;IMU 1 beslemesi
+Güç ve gözetim;SENS2_EN;PG4;GPIO;IMU 2 beslemesi
+Güç ve gözetim;SENS3_EN;PG5;GPIO;IMU 3 beslemesi
+Güç ve gözetim;WDG_KICK;PH3;GPIO;harici watchdog besleme
+Güç ve gözetim;PGOOD_5V;PH6;GPIO;
+Güç ve gözetim;PWR_FAIL_N;PH8;GPIO;enerji deposu devrede (kesme)
+Durum LED;LED_R;PG0;GPIO;
+Durum LED;LED_G;PG1;GPIO;
+Durum LED;LED_B;PG2;GPIO;
+Saat;HSE_IN;PH0;RCC_OSC_IN;ana kristal
+Saat;HSE_OUT;PH1;RCC_OSC_OUT;
+Saat;LSE_IN;PC14;RCC_OSC32_IN;32,768 kHz
+Saat;LSE_OUT;PC15;RCC_OSC32_OUT;

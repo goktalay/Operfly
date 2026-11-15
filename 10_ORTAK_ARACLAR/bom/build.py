@@ -51,7 +51,7 @@ prices=[
 ("Yalıtımlı motor girişleri (devir, sıcaklık, yakıt)",35,T,"Engine şematiği: yalıtımlı besleme modülü, sayısal yalıtıcı, 8 kanallı çevirici, 2 termokupl yükselteci, 3 optokuplör, ateşleme anahtarı (2 x DMP3099L); fiyat teyit edilecek","Murata / "+TI+" / Microchip / Analog Devices / Lite-On","NXE1S0505MC, ISO7762DW, MCP3208, 2 x AD8495, 3 x LTV-817S",K,S),
 ("Hall etkili gimbal",60,T,"Model seçilmedi. Aday sınıf: 3,3 V analog çıkışlı Hall gimbal (ör. RadioMaster AG01). Ürün sayfalarında uç sırası yok; kablo numune üzerinde uyarlanır","","",K,A),
 ("Anahtar, tekerlek ve düğme seti",40,T,"6 anahtar, 2 tekerlek, 2 düğme, 5 yönlü tuş; kasa tasarımıyla seçilecek. Giriş kartına JST-GH kabloyla bağlanır","","",K,A),
-("Küçük ekran (Pilot T)",30,T,"","","",K,A),
+("Küçük ekran (Pilot T)",30,T,"Pilot T şematiği: 128 x 64 yarı geçirgen LCD + kehribar arka ışık; karta elle lehimlenir. Fiyat teyit edilecek","Display Visions","EA DOGM128W-6, EA LED55X46-A",K,S),
 ("Kumanda bataryası ve şarj devresi",70,T,"Pilot 12 şematiği: tek hücreli (1S) korumalı, NTC'li Li-ion paket (seçilmedi; öneri 5000 mAh ve üzeri) + şarj/güç yolu, batarya ölçer, 3,3 V ve radyo beslemesi",TI,"BQ24075RGT, BQ27441DRZR-G1A, TPS63001, TPS61230, LMV393",K,TS),
 ("Pilot Pro bataryası ve şarj devresi",150,T,"","","",K,A),
 ("USB–Gigabit Ethernet köprüsü",10,T,"Köprü + USB göbeği + trafo; fiyat teyit edilecek","Microchip / HALO","LAN7500i, USB2514B, TG111-MSC13LF",K,S),

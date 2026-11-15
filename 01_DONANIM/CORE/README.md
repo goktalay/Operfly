@@ -36,9 +36,8 @@ Pin haritasından çıkan tasarım notları:
   ERC çalıştırır, `out/core.pdf` çıkarır).
 - Sayfalar: kök (`operfly_core`), omurga portları (`omurga`), işlemci (`islemci`), güç (`guc`), saat/sıfırlama/ayırma
   kondansatörleri (`islemci_destek`), Ethernet/CAN/USB/microSD/PPS (`haberlesme`), sensörler/bellek/güvenli eleman
-  (`sensorler`), IO işlemcisi ve çıkışlar (`io`).
-- Durum: ERC 0 hata, 4 uyarı. Uyarılar henüz çizilmemiş iki devreden gelir: gözetim (harici watchdog ve enerji deposu:
-  `WDG_KICK`, `PWR_FAIL_N`) ve Peltier sürücüsü (`PELTIER_PWM_A/B`). Bu ikisi sahibinin kararını bekliyor (aşağıda).
+  (`sensorler`), IO işlemcisi ve çıkışlar (`io`), gözetim/enerji deposu/Peltier (`gozetim`).
+- Durum: şematik tamam; ERC 0 hata, 0 uyarı. Sıradaki iş doğrulama listesi ve kart çizimi.
 
 ## Güç ve işlemci destek kararları (15 Kasım 2026, sahibinin onayı beklenmeden alındı)
 
@@ -105,13 +104,6 @@ kullandığı, CAN hattında kabul edilen en yüksek hız için kablo boyu.
 9. **Durum LED'leri** sıfırda yanar. Kart sürümü dirençleri A revizyonu için yerleştirildi (sürüm 1:1, revizyon 10:1).
 10. **Hata ayıklama:** ana işlemci için 2x5 (1,27 mm) SWD konnektörü; konsol ve IO işlemcisi SWD hatları ölçüm noktasında.
 
-### Sahibinin kararını bekleyenler (çizilmedi)
-
-- **Harici watchdog ve enerji deposu** (`WDG_KICK`, `PWR_FAIL_N`): watchdog süresi dolduğunda ne olacağı bir güvenlik
-  kararıdır (ana işlemci uçuşta sıfırlansın mı, yoksa yalnızca IO işlemcisi mi devralsın) ve enerji deposunun kaç
-  milisaniye taşıyacağı belirlenmeli.
-- **Peltier sürücüsü** (`PELTIER_PWM_A/B`): modül akımı ve IMU ısıl hedefi belli olmadan sürücü seçilemez.
-
 ### Doğrulanacaklar (kart çizimine geçmeden)
 
 - BMP390 ve SE050 ayak izleri geçici; üretici çizimiyle yapılacak. IMU ayak izlerinde pin sırası bir kez daha bakılacak.
@@ -119,3 +111,24 @@ kullandığı, CAN hattında kabul edilen en yüksek hız için kablo boyu.
 - ICM-42688-P ayrılmış uçları: 7 ve 11 GND'ye, 2, 3 ve 10 boş.
 - TMUX1574: seçme girişinin yönü (0 = A kolu) ve 5 V beslemede 3,3 V lojikle sürülmesi.
 - STM32G0B1 fabrika yükleyicisinin PA2/PA3 seri hattını desteklediği (boş işlemcinin ana işlemci üzerinden yüklenmesi).
+- TPS3808G01 eşik gerilimi (0,405 V varsayıldı) ve 470 µF 25 V kondansatörün 8x10 mm kılıfta bulunabilirliği.
+- Enerji deposunun ilk şarj akımı: Hub port anahtarı yaklaşık 1000 µF yükü açılışta kaldırmalı.
+
+## Gözetim ve Peltier kararları (15 Kasım 2026; sahibi kararı tasarımcıya bıraktı)
+
+1. **Harici watchdog ana işlemciyi sıfırlamaz, IO işlemcisini uyarır.** Ana işlemci darbe göndermeyi keserse
+   `FMU_FAULT_N` 200 ms sıfıra iner; IO işlemcisi 1-8. çıkışları devralır ve güvenli değerleri sürer. Gerekçe: uçuşta
+   donanımın kendiliğinden sıfırlama yapması, yazılım güncelleme ve hata ayıklama sırasında da tetiklenir ve sıfırlama
+   döngüsüne yol açabilir. Ana işlemci takılırsa kendi iç watchdog'u onu sıfırlar; o yeniden başlayana kadar uçağı IO
+   işlemcisi tutar.
+2. **Watchdog penceresi:** darbe aralığı 10-93 ms arasında olmalı (yazılım 30-50 ms'de bir gönderir); kesinti en geç
+   yaklaşık 125 ms içinde algılanır. Watchdog IO işlemcisinin beslemesinden çalışır.
+3. **IO işlemcisi ana işlemciyi sıfırlayabilsin diye bir hat ayrıldı** (`IO_FMU_RST`) ama direnci dizilmez. İleride
+   istenirse tek direnç takılarak açılır.
+4. **Güç kesintisi algılama:** giriş 10,1 V altına inince `PWR_FAIL_N` sıfıra iner; işlemci kritik durumu FRAM'e yazar.
+5. **Enerji deposu: 2 x 470 µF.** Kesintiden sonra kartı yaklaşık 10-20 ms taşır (kart tüketimi 2-3 W varsayımıyla
+   hesap; ölçülecek). FRAM yazımı için yeterlidir; microSD'deki son birkaç yüz milisaniyelik kayıt kaybolabilir.
+   Süper kondansatörlü daha uzun taşıma, kart alanı ve şarj devresi gerektirdiği için seçilmedi.
+6. **Peltier sürücüsü: DRV8837**, 5 V'tan, en çok 1 A. Çıkışta bobin ve kondansatör var (anahtarlama gürültüsü pusula
+   ve IMU'yu bozmasın diye). Isıl hedef varsayılan 45 °C, yazılımla değişir; sıcaklık IMU'ların kendi sensöründen okunur.
+   Peltier modülünün kendisi mekanik tasarımla birlikte seçilecek (en çok 5 V, 1 A).

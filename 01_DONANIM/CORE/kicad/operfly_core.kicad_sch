@@ -34,6 +34,52 @@
 		(uuid "a43b60ba-4f35-5244-9364-85448981876a")
 	)
 	(sheet
+		(at 254 101.6)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "0c35bd5b-0963-5919-a2fc-6663d050eaf8")
+		(property "Sheetname" "Gozetim"
+			(at 254 100.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "gozetim.kicad_sch"
+			(at 254 122.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_core"
+				(path "/021aeb0d-29af-5cb6-83ea-514d49692429"
+					(page "9")
+				)
+			)
+		)
+	)
+	(sheet
 		(at 101.6 50.8)
 		(size 50.8 20.32)
 		(exclude_from_sim no)

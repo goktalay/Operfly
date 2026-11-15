@@ -82,3 +82,27 @@ besler ve onu omurganın Ethernet'ine bağlar.
 - **Şifreleme için ihracat/ithalat koşulları** ve modülün menşe/ihracat sınıfı teyit edilecek.
 - **Çalışma sıcaklığı:** modül −40 °C'ye kadar "genişletilmiş" aralıkta çalışır ama başarımı garanti etmez; askeri
   sıcaklık aralığı hedefi için değerlendirilecek.
+
+## Kart çizimi (otomatik)
+
+Sahibinin kararıyla kart **otomatik** çizildi: yerleşim `pcb_yerlesim.py`, yollar dış bir otomatik yol çiziciyle
+(`pcb_ciz.py`). Dosya: `kicad/operfly_cell.kicad_pcb`; ayarlar `kicad/pcb_ayar.py`.
+Yeniden üretmek için: `python 10_ORTAK_ARACLAR/kicad/pcb_ciz.py CELL operfly_cell`.
+
+- **Kart:** 110 x 85 mm, 6 katman (iç 1: toprak, iç 4: +3V3; diğer katmanlar sinyal, elemanlar üstte), 182 eleman, tamamı üst yüzde; köşelerde M3 montaj deliği.
+- **Kurallar:** yol 0,20 mm, açıklık 0,125 mm, geçiş 0,6/0,3 mm; besleme ağları, ağın en dar ucunu aşmayacak biçimde 0,2-1,0 mm (0,4 mm ve üstünde geçiş 0,8/0,4 mm); bakır-kenar 0,25 mm.
+- **Denetim:** DRC 0 ihlal, 0 bağlanmamış uç; şematik-kart uyumu temiz. 1775 yol parçası, 312 geçiş.
+
+**Bu bir mühendis çizimi değildir.** Üretimden önce bir kart tasarımcısının bakması gereken noktalar:
+
+- Yüksek hızlı fark çiftleri (PCIe, gigabit Ethernet, USB) 85/90/100 ohm empedansta, eşit uzunlukta ve kesintisiz toprak üstünde çizilmedi; bağlantı kurulamayabilir ya da hata verebilir. Bu çiftler elle yeniden çizilmeden kart işlevsel sayılmaz.
+- M.2 yuvasının yönü (modemin girdiği yan) ve modemin kart üstünde yatacağı bölge üretici çizimiyle doğrulanmadı; modem sabitleme vidası için delik ve dayama yok.
+- Modem beslemesi (3,8 V, verici darbelerinde 5 A'e kadar) dar yolla çizildi; yuva uçlarına geniş bakır ve yakın kondansatör gerekir.
+- Modem yaklaşık 5-7 W ısı üretir; soğutma tasarlanmadı.
+- Anahtarlamalı regülatörlerin (bobin, diyot, giriş/çıkış kondansatörleri) akım döngüleri küçük tutulmadı; gürültü ve verim ölçülmeli.
+- Kristal ve osilatör hatları en kısa yoldan çizilmedi; altlarından başka sinyal geçip geçmediğine bakılmalı.
+- Fark çiftleri (CAN, USB, Ethernet) çift olarak, eşit uzunlukta ve empedans denetimli çizilmedi.
+- Güç elemanlarının soğutma bakırı ve ısıl geçişleri ayrıca hesaplanmadı.
+- Eleman adları üretim katmanında bırakıldı; kart üstünde yazı (serigrafi) yok.
+- Kasa, konnektör yerleri ve montaj delikleri mekanik tasarımla eşleştirilmedi.
+- Üretim dosyaları (Gerber, delik, dizgi) henüz çıkarılmadı.

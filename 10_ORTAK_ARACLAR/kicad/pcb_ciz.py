@@ -178,8 +178,13 @@ def ciz(kart, kok, tur=40, sure="00:20:00"):
              # Ağ erişimi kapalı: araç açılışta sürüm denetimi için dışarı çıkmak ister; ölü bir vekil adresi verilir.
              "-Dhttp.proxyHost=127.0.0.1", "-Dhttp.proxyPort=9", "-Dhttps.proxyHost=127.0.0.1", "-Dhttps.proxyPort=9", "-jar", JAR,
              "--gui.enabled=false", "-da", "-de", dsn, "-do", ses, "-mp", str(tur), "--router.max_passes=%d" % tur]
-    s = subprocess.run(komut, cwd=is_dizini, env=ortam, capture_output=True, text=True, timeout=4 * 3600)
-    open(os.path.join(is_dizini, kok + ".log"), "w", encoding="utf-8").write(s.stdout + "\n" + s.stderr)
+    # Yol çizici ilerleyemediği yerleşimde çok uzun süre dönebilir: eleman sayısına göre süre sınırı konur.
+    sinir = ayar.get("sure_dk") or (8 + len(b.GetFootprints()) / 10.0)
+    try:
+        s = subprocess.run(komut, cwd=is_dizini, env=ortam, capture_output=True, text=True, timeout=sinir * 60)
+        open(os.path.join(is_dizini, kok + ".log"), "w", encoding="utf-8").write(s.stdout + "\n" + s.stderr)
+    except subprocess.TimeoutExpired:
+        print("yol çizici %.0f dakikada bitiremedi" % sinir)
     if not os.path.exists(ses) or os.path.getsize(ses) == 0 or not pcbnew.ImportSpecctraSES(b, ses):
         # Yol çizici ilerleyemeyince sonuç yazmadan çıkar: bu deneme başarısız sayılır.
         print("yol çizici bu yerleşimi bitiremedi (sonuç dosyası yok)")

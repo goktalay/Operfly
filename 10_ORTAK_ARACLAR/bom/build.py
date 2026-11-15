@@ -44,7 +44,9 @@ prices=[
 ("PCIe gigabit Ethernet denetleyici",8,T,"Vision: kamera portu başına bir adet, ayar belleğiyle; fiyat teyit edilecek","Intel / Winbond","WGI210IT, W25Q16JV",K,S),
 ("Gigabit Ethernet trafosu",4,T,"Vision: omurga portu ve iki kamera portu; fiyat teyit edilecek","HALO","TG111-MSC13LF",K,S),
 ("GNSS RF ön ucu (LNA, filtre, anten beslemesi)",30,T,"Nav şematiği: alıcı anten beslemesini ve korumasını içinde taşır; kartta yalnızca anten regülatörü ve çift anten seçeneğinin elemanları var. Tahmin şematikten yüksek kaldı, fiyat teyidinde düşürülecek",TI+" / Würth","LP5907MFX-3.3, 744786139A, SESD0402X1BN",K,S),
-("SIM yuvası, eSIM, anten bağlantıları",20,T,"","","",K,TS),
+("SIM yuvası, eSIM, anten bağlantıları",20,T,"Cell şematiği: M.2 Key B soketi, 2 x nano-SIM yuvası ve koruma dizisi, USB anahtarı; 4 anten kablosu (modül konnektöründen SMA'ya). Lehimli eSIM sonraki revizyonda","TE / GCT / "+TI+" / onsemi","2199119-x, SIM8060-6-0-14-00, TPD4E05U06, FSUSB42",K,S),
+("PCIe gigabit Ethernet denetleyici (Cell)",3,T,"Cell şematiği: modem PCIe kök kipinde bu entegreyi sürer; fiyat teyit edilecek","Realtek","RTL8111H-CG",K,S),
+("Modem besleme regülatörü (3,8 V, 5 A)",12,T,"Cell şematiği: regülatör, bobin, diyot, 2 x 220 uF polimer kondansatör; fiyat teyit edilecek",TI+" / Coilcraft","TPS54560BDDAR, XAL7070-103",K,S),
 ("Fark basınç sensörü",40,T,"Air şematiği: ±1 psi, 24 bit, çift hortum uçlu; fiyat teyit edilecek. Pitot ısıtıcı anahtarı (NCV8402) küçük malzemede","TE Connectivity","5525DSO-DB001DS",K,S),
 ("Yalıtımlı motor girişleri (devir, sıcaklık, yakıt)",35,T,"Engine şematiği: yalıtımlı besleme modülü, sayısal yalıtıcı, 8 kanallı çevirici, 2 termokupl yükselteci, 3 optokuplör, ateşleme anahtarı (2 x DMP3099L); fiyat teyit edilecek","Murata / "+TI+" / Microchip / Analog Devices / Lite-On","NXE1S0505MC, ISO7762DW, MCP3208, 2 x AD8495, 3 x LTV-817S",K,S),
 ("Hall etkili gimbal",60,T,"Model seçilmedi. Aday sınıf: 3,3 V analog çıkışlı Hall gimbal (ör. RadioMaster AG01). Ürün sayfalarında uç sırası yok; kablo numune üzerinde uyarlanır","","",K,A),
@@ -62,7 +64,7 @@ prices=[
 ("M.2 NVMe 256 GB (endüstriyel)",60,T,"","","",M,A),
 ("10 inç gün ışığında okunur dokunmatik ekran",400,T,"","","",M,A),
 ("CRPA modülü, 4 kanal, L1",1342,D,"Satıcı sayfası tek adet 1.342 $ (sayfa verisinde 1.342–1.492 aralığı). Kaynak: yundingantenna.com (YDAJ-P4065). Performans üretici beyanı; ithalat koşulları teyit edilecek","Yunding Antenna","YDAJ-P4065",M,S),
-("5G M.2 modem",250,B,"Türkiye bantları: n28 ve n78","","",M,A),
+("5G M.2 modem",250,B,"Aday: Quectel RM520N-GL (M.2 Key B, 30 x 52 mm; n28 ve n78 dahil). Avrupa satıcısında KDV dahil 289 EUR (cartft.com); cihaz kaydı ve operatör uyumluluğu teyit edilecek","Quectel","RM520N-GL",M,O),
 ("Mesafe sensörü çekirdeği, 10 m",50,T,"Aday: 12 m, 5 V, seri port/I2C; numuneyle kesinleşecek; fiyat teyit edilecek","Benewake","TFmini Plus",M,O),
 ("Mesafe sensörü çekirdeği, 30 m",150,T,"Aday: 40 m (%10 yansıtmada 13,5 m), 5 V, seri port/I2C; fiyat teyit edilecek","Benewake","TF02-Pro",M,O),
 ("Mesafe sensörü çekirdeği, 100 m",260,D,"Aday: 100 m, IP67; 5 V seri port sürümü alınmalı. Satıcılarda tek adet 205 € ile 259 $ arası. Kaynak: exp-tech.de/en/products/tf03-100uart-can, worldronemarket.com/product/benewake-tf03-100-lidar-module","Benewake","TF03-100 (UART/CAN, 5 V)",M,O),
@@ -93,7 +95,7 @@ P=[
 ("Operfly Range 10","OPFR10",3,[("Mesafe sensörü çekirdeği, 10 m",1)]+node+[(pas,1),(bus,1),(small,1),(asm,1)]),
 ("Operfly Range 30","OPFR30",3,[("Mesafe sensörü çekirdeği, 30 m",1)]+node+[(pas,1),(bus,1),(small,1),(asm,1)]),
 ("Operfly Range 100","OPFR1H",3,[("Mesafe sensörü çekirdeği, 100 m",1)]+node+[(pas,1),(bus,1),(small,1),(asm,1)]),
-("Operfly Cell","OPFCEL",4,[("5G M.2 modem",1),("SIM yuvası, eSIM, anten bağlantıları",1)]+node+[(phy,1),(reg,1),(pas,1),(sma,4),(bus,1),(small,1),(asm,1)]),
+("Operfly Cell","OPFCEL",4,[("5G M.2 modem",1),("SIM yuvası, eSIM, anten bağlantıları",1),("PCIe gigabit Ethernet denetleyici (Cell)",1),("Gigabit Ethernet trafosu",1),("Modem besleme regülatörü (3,8 V, 5 A)",1),("Radyo modülü soğutucusu ve ısı dolgusu",1),("USB Type-C konnektör",1)]+node+[(reg,1),(pas,1),(sma,4),(bus,1),(small,1),(asm,1)]),
 ("Operfly Pilot T","OPFKTL",4,merge([(KR,1),("Güvenli eleman",1),("Küçük ekran (Pilot T)",1),("Kumanda bataryası ve şarj devresi",1),(sma,2),(pas,1),(small,1),(asm,1)]+GK)),
 ("Operfly Pilot Pro","OPFKPR",4,merge([("Jetson modülü",1),(WB,1),(KR,1),("10 inç gün ışığında okunur dokunmatik ekran",1),("M.2 NVMe 256 GB (endüstriyel)",1),("Jetson taşıyıcı devresi (soket, güç, soğutma)",1),("Güvenli eleman",1),("Pilot Pro bataryası ve şarj devresi",1),(phy,1),(sma,4),(pas,1),(bus,1),(big,1),(asm,1)]+GK)),
 ("Operfly Base","OPFBAS",4,[("GNSS modülü",1),("GNSS RF ön ucu (LNA, filtre, anten beslemesi)",1)]+node+[(reg,1),(pas,1),(sma,1),(bus,1),(small,1),(asm,1)]),
@@ -200,7 +202,7 @@ for i,l in enumerate(lines,1):
     c=sv.cell(row=i,column=1,value=l); c.font=bf if i==1 else nf; c.alignment=Alignment(wrap_text=True)
 wb.save("Operfly_BOM.xlsx")
 # denetim
-exp={"Core":(520,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(413,520),"Radio":(384,450),"RX":(373,86),"Pilot 12":(882,86),"Air":(393,0),"Engine":(383,0),"Vision":(611,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,260),"Cell":(407,250),"Pilot T":(912,86),"Pilot Pro":(1153,1796),"Base":(398,520),"Ground Radio":(494,536),"Tracker":(613,0),"Shield":(373,1342)}
+exp={"Core":(520,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(413,520),"Radio":(384,450),"RX":(373,86),"Pilot 12":(882,86),"Air":(393,0),"Engine":(383,0),"Vision":(611,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,260),"Cell":(436,250),"Pilot T":(912,86),"Pilot Pro":(1153,1796),"Base":(398,520),"Ground Radio":(494,536),"Tracker":(613,0),"Shield":(373,1342)}
 tk=tm=0
 for n,c,s,its in P:
     k=sum(q*PR[i][1] for i,q in its if PR[i][6]==K); m=sum(q*PR[i][1] for i,q in its if PR[i][6]==M)

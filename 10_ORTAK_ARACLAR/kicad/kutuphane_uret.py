@@ -263,6 +263,22 @@ def jetson():
     return s + "\t)\n"
 
 
+def rtl8111h():
+    """Realtek RTL8111H-CG (PCIe gigabit Ethernet denetleyici, 32 uclu QFN + alt ped). Uc sirasi uretici veri sayfasindaki
+    uc tanim tablolarindan (Rev. 1.2, Tablo 1-8). PCIe ciftleri ve saat uclari pasif tanimlidir: kart bu entegreyi hem
+    PCIe kok aygitina hem de kok kipinde calisan bir modeme baglayabilir."""
+    sol = [("13", "HSIP", P), ("14", "HSIN", P), ("17", "HSOP", P), ("18", "HSON", P), ("15", "REFCLK_P", P), ("16", "REFCLK_N", P),
+           ("19", "PERSTB", I), ("12", "CLKREQB", B), ("21", "LANWAKEB", B), ("20", "ISOLATEB", I),
+           ("28", "CKXTAL1", I), ("29", "CKXTAL2", B), ("31", "RSET", P)]
+    sag = [("1", "MDIP0", B), ("2", "MDIN0", B), ("4", "MDIP1", B), ("5", "MDIN1", B), ("6", "MDIP2", B), ("7", "MDIN2", B), ("9", "MDIP3", B), ("10", "MDIN3", B),
+           ("27", "LED0", O), ("26", "LED1/GPO", B), ("25", "LED2", O), ("24", "REGOUT", V)]
+    ust = [("11", "AVDD33", G), ("32", "AVDD33", G), ("23", "VDDREG", G), ("3", "AVDD10", G), ("8", "AVDD10", G), ("30", "AVDD10", G), ("22", "DVDD10", G)]
+    alt = [("33", "GND", G)]
+    assert len({u[0] for u in sol + sag + ust + alt}) == 33
+    return kutu("RTL8111H", sol, sag, ust, alt, "Package_DFN_QFN:QFN-32-1EP_4x4mm_P0.4mm_EP2.9x2.9mm_ThermalVias",
+                "PCIe gigabit Ethernet denetleyici, Realtek RTL8111H-CG, QFN-32 4x4 mm (alt ped olcusu uretici cizimiyle dogrulanacak)", yari=12.7, yigin=True)
+
+
 def main():
     s = '(kicad_symbol_lib (version 20231120) (generator "operfly") (generator_version "1")\n'
     s += konnektor("Operfly_Bus_20", BUS, FP_BUS, "Operfly Bus portu, Harwin Gecko-SL 20 kontak")
@@ -273,6 +289,7 @@ def main():
     s += rfd900ux_smt()
     s += pmddl()
     s += jetson()
+    s += rtl8111h()
     s += ")\n"
     open(sys.argv[1], "w", encoding="utf-8", newline="\n").write(s)
     print("yazıldı:", sys.argv[1])

@@ -8,7 +8,7 @@ ST="STMicroelectronics"; TI="Texas Instruments"; HW="Harwin"
 # ad, fiyat, dayanak, not, üretici, parça/seri, tür, durum
 prices=[
 ("Ana işlemci",22,T,"",ST,"STM32H753IIK6",K,S),
-("IO/failsafe işlemcisi",4,T,"Ana işlemciden bağımsız",ST,"STM32F103 serisi",K,O),
+("IO/failsafe işlemcisi",8,T,"Ana işlemciden bağımsız; CAN FD ile omurgaya doğrudan bağlı",ST,"STM32G0B1 serisi",K,O),
 ("Düğüm işlemcisi",8,T,"İki CAN FD hattı olan küçük işlemci",ST,"STM32G0B1 serisi",K,O),
 ("Güvenli eleman",4,T,"P-384 anahtar desteği gerekir",  "NXP","EdgeLock SE050 serisi",K,O),
 ("IMU 1",8,T,"","TDK InvenSense","ICM-42688-P",K,S),
@@ -196,7 +196,7 @@ for i,l in enumerate(lines,1):
     c=sv.cell(row=i,column=1,value=l); c.font=bf if i==1 else nf; c.alignment=Alignment(wrap_text=True)
 wb.save("Operfly_BOM.xlsx")
 # denetim
-exp={"Core":(513,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(403,520),"Radio":(377,450),"RX":(358,100),"Pilot 12":(882,100),"Air":(388,0),"Engine":(383,0),"Vision":(573,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,400),"Cell":(407,250),"Pilot T":(912,100),"Pilot Pro":(1153,1810),"Base":(398,520),"Ground Radio":(494,550),"Tracker":(613,0),"Shield":(373,1342)}
+exp={"Core":(517,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(403,520),"Radio":(377,450),"RX":(358,100),"Pilot 12":(882,100),"Air":(388,0),"Engine":(383,0),"Vision":(573,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,400),"Cell":(407,250),"Pilot T":(912,100),"Pilot Pro":(1153,1810),"Base":(398,520),"Ground Radio":(494,550),"Tracker":(613,0),"Shield":(373,1342)}
 tk=tm=0
 for n,c,s,its in P:
     k=sum(q*PR[i][1] for i,q in its if PR[i][6]==K); m=sum(q*PR[i][1] for i,q in its if PR[i][6]==M)

@@ -7160,7 +7160,7 @@
 		)
 		(uuid "c83759f5-5f19-5ff6-94d9-0c9030a38026")
 	)
-	(text "SEVIYE CEVIRICI (TXS0104E, 1,8 V <-> 3,3 V): Jetson UART1 <-> guc islemcisi (USART1), fan PWM (GPIO14). Jetson kapaliyken uclarini birakir."
+	(text "SEVIYE CEVIRICI (TXS0104E, 1,8 V <-> 3,3 V): Jetson UART1 <-> guc islemcisi (USART1), fan PWM (GPIO14), ekran parlakligi PWM (GPIO13). Jetson kapaliyken uclarini birakir."
 		(exclude_from_sim no)
 		(at 30 400 0)
 		(effects
@@ -7169,7 +7169,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "d5186e95-6917-5564-8797-b854ed6e4f23")
+		(uuid "fc008f7c-9e2d-535d-87bd-32466e30d4b2")
 	)
 	(no_connect
 		(at 113.03 88.9)
@@ -7248,10 +7248,6 @@
 		(uuid "ab705055-6f49-5af1-a710-7647b6dd8ea2")
 	)
 	(no_connect
-		(at 59.69 447.04)
-		(uuid "b0772582-08e5-5065-9a44-314255d502ec")
-	)
-	(no_connect
 		(at 113.03 124.46)
 		(uuid "b1d8998f-d749-539b-b44d-4844cbc64f94")
 	)
@@ -7284,10 +7280,6 @@
 		(uuid "cdeae17d-1736-5354-9918-c7695b39e97c")
 	)
 	(no_connect
-		(at 80.01 447.04)
-		(uuid "d65ac29a-33b1-5532-81b8-27ca2ff5d802")
-	)
-	(no_connect
 		(at 497.84 139.7)
 		(uuid "dd278aaf-162a-5aea-90c7-d5c0ed6a61f6")
 	)
@@ -7306,6 +7298,28 @@
 	(no_connect
 		(at 113.03 109.22)
 		(uuid "f94256a7-9ccd-5b5d-a7ae-df0035bf3457")
+	)
+	(global_label "JET_BL_PWM_1V8"
+		(shape passive)
+		(at 59.69 447.04 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "02860cf3-9364-5296-9e51-587b6ec89cbd")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 59.69 447.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 	)
 	(global_label "GND"
 		(shape passive)
@@ -7715,6 +7729,28 @@
 		(uuid "17cb6eb2-699e-5104-a0f9-d49d348f2dad")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 222.25 295.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "BL_PWM_3V3"
+		(shape passive)
+		(at 80.01 447.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "180a822d-a87c-5928-a345-b36d77ab13b6")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 80.01 447.04 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

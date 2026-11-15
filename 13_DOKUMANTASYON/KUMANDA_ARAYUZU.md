@@ -58,7 +58,7 @@ kullanım şöyle değişir:
 - 17 (ALERT_N): güç işlemcisi sürer (batarya düşük, kapanma başlıyor).
 - 18 (PWR_BTN_N): güç düğmesinin durumu (diyot üzerinden); gücü güç işlemcisi yönetir.
 - 19 (PWR_HOLD): ana kartta bağlı değildir.
-- 12-13 (USB): Jetson'ın USB göbeğine gider (2. adımda çizilecek).
+- 12-13 (USB): Jetson'ın USB göbeğine gider (göbeğin 1. portu).
 
 ## Giriş konnektörleri (giriş kartında, JST-GH 1,25 mm)
 

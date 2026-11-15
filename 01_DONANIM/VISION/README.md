@@ -62,7 +62,9 @@ konum/hız desteği üretmek (GNSS'siz uçuş) ve hedef takibidir.
   listeleriyle karşılaştırılacak.
 - **PCIe hatları:** kondansatör yerleri, çift uzunluk eşleme ve empedans kart çiziminde; M.2'de dördüncü nesil hız
   hedeflenmiyorsa üçüncü nesille sınırlandırılır.
-- **Fan PWM seviyesi** (3,3 V) ve Jetson kapalıyken fanın durduğu seçilen fanla denenecek.
+- **Fan PWM seviyesi** ve Jetson kapalıyken fanın durduğu seçilen fanla denenecek. Bilinen risk: seviye çeviricinin
+  çıkışında kendi 10 kΩ yukarı çekmesi vardır; karttaki 10 kΩ aşağı çekmeyle yüksek seviye 3,3 V'a çıkmaz (yaklaşık
+  1,7 V). Fanın kendi yukarı çekmesi durumu değiştirir; gerekirse aşağı çekme 100 kΩ yapılacak.
 - **Seviye çevirici** (TXS0104E) PPS kenar gecikmesi ölçülecek; gerekirse tek yönlü çeviriciye geçilir.
 - **Kamera portlarında CAN yok;** kamera omurga düğümü olacaksa eklenir.
 - **Isıl tasarım:** elektronik sigortalar, 3,3 V regülatörleri ve giriş MOSFET'i için bakır alanı.

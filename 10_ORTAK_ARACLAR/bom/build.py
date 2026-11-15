@@ -44,7 +44,7 @@ prices=[
 ("GNSS RF ön ucu (LNA, filtre, anten beslemesi)",30,T,"Nav şematiği: alıcı anten beslemesini ve korumasını içinde taşır; kartta yalnızca anten regülatörü ve çift anten seçeneğinin elemanları var. Tahmin şematikten yüksek kaldı, fiyat teyidinde düşürülecek",TI+" / Würth","LP5907MFX-3.3, 744786139A, SESD0402X1BN",K,S),
 ("SIM yuvası, eSIM, anten bağlantıları",20,T,"","","",K,TS),
 ("Fark basınç sensörü",40,T,"Air şematiği: ±1 psi, 24 bit, çift hortum uçlu; fiyat teyit edilecek. Pitot ısıtıcı anahtarı (NCV8402) küçük malzemede","TE Connectivity","5525DSO-DB001DS",K,S),
-("Yalıtımlı motor girişleri (devir, sıcaklık, yakıt)",35,T,"","","",K,TS),
+("Yalıtımlı motor girişleri (devir, sıcaklık, yakıt)",35,T,"Engine şematiği: yalıtımlı besleme modülü, sayısal yalıtıcı, 8 kanallı çevirici, 2 termokupl yükselteci, 3 optokuplör, ateşleme anahtarı (2 x DMP3099L); fiyat teyit edilecek","Murata / "+TI+" / Microchip / Analog Devices / Lite-On","NXE1S0505MC, ISO7762DW, MCP3208, 2 x AD8495, 3 x LTV-817S",K,S),
 ("Hall etkili gimbal",60,T,"Model seçilmedi. Aday sınıf: 3,3 V analog çıkışlı Hall gimbal (ör. RadioMaster AG01). Ürün sayfalarında uç sırası yok; kablo numune üzerinde uyarlanır","","",K,A),
 ("Anahtar, tekerlek ve düğme seti",40,T,"6 anahtar, 2 tekerlek, 2 düğme, 5 yönlü tuş; kasa tasarımıyla seçilecek. Giriş kartına JST-GH kabloyla bağlanır","","",K,A),
 ("Küçük ekran (Pilot T)",30,T,"","","",K,A),

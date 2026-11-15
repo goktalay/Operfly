@@ -19,6 +19,8 @@ prices=[
 ("FRAM bellek",8,T,"","Infineon","FM25V serisi",K,O),
 ("CAN FD alıcı-verici",2,T,"",TI,"TCAN1044 serisi",K,O),
 ("Gigabit Ethernet PHY",4,T,"",TI,"DP83867 serisi",K,O),
+("10/100 Ethernet PHY (RMII)",2,T,"Core için; işlemcinin Ethernet arayüzü en çok 100 Mbit","Microchip","LAN8742A",K,O),
+("microSD yuvası",2,T,"Core; uçuş kaydı. Endüstriyel microSD kart ayrıca alınır","","",K,TS),
 ("Peltier modülü ve sürücüsü",25,T,"","","",K,A),
 ("Watchdog, gözetleyiciler, enerji deposu",20,T,"","","",K,TS),
 ("Kart içi regülatörler",15,T,"","","",K,TS),
@@ -73,7 +75,7 @@ def merge(items):
     for n,q in items: d[n]=d.get(n,0)+q
     return list(d.items())
 P=[
-("Operfly Core","OPFCOR",1,[("Ana işlemci",1),("IO/failsafe işlemcisi",1),("Güvenli eleman",1),("IMU 1",1),("IMU 2",1),("IMU 3",1),("Barometre",2),("Pusula",1),("FRAM bellek",1),("CAN FD alıcı-verici",2),(phy,1),("Peltier modülü ve sürücüsü",1),("Watchdog, gözetleyiciler, enerji deposu",1),(reg,1),(pas,1),(bus,2),("Motor/servo çıkış konnektörü, 26 kontak",1),(small,1),(asm,1)]),
+("Operfly Core","OPFCOR",1,[("Ana işlemci",1),("IO/failsafe işlemcisi",1),("Güvenli eleman",1),("IMU 1",1),("IMU 2",1),("IMU 3",1),("Barometre",2),("Pusula",1),("FRAM bellek",1),("CAN FD alıcı-verici",2),("10/100 Ethernet PHY (RMII)",1),("microSD yuvası",1),("Peltier modülü ve sürücüsü",1),("Watchdog, gözetleyiciler, enerji deposu",1),(reg,1),(pas,1),(bus,2),("Motor/servo çıkış konnektörü, 26 kontak",1),(small,1),(asm,1)]),
 ("Operfly Hub","OPFHUB",1,[("Gigabit anahtar entegresi seti (12 port, PTP)",1)]+node+[("Port koruması: elektronik sigorta + akım ölçümü",12),(reg,1),(pas,2),(bus,12),(big,1),(asm,1)]),
 ("Operfly Power","OPFPWR",1,[("Geniş girişli güç katı, 150 W, çift giriş",1),("Servo güç rayı (yedekli)",1),("Temassız akım algılayıcı, 400 A",1)]+node+[("Batarya giriş konnektörü (yüksek akım)",2),(pas,1),(bus,1),(small,1),(asm,1)]),
 ("Operfly PC adaptörü","OPFPCA",1,[("USB–Gigabit Ethernet köprüsü",1)]+node+[("USB Type-C konnektör",1),(pas,1),("Operfly Bus fişi + kısa kablo",1),(small,1),(asm,1)]),

@@ -230,7 +230,7 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
       open: ["12 portlu, PTP destekli anahtar entegresi", "Konnektörde Gigabit Ethernet'in numuneyle doğrulanması"] },
     { id: "core", name: "Core", sub: "uçuş kontrol", code: "OPFCOR", kind: "kart", stage: 1, x: 238, y: 84, w: W,
       role: "Uçuş kontrol kartı.",
-      specs: ["STM32H753 (BGA) + bağımsız IO/failsafe işlemcisi", "3 IMU (Peltier ile ısıtma ve soğutma), 2 barometre, dahili pusula", "İki Operfly Bus portu, iki bağımsız CAN FD hattı", "Harici watchdog, kara kutu kaydı, kesintiye karşı enerji deposu", "8 katman, IPC Sınıf 3, konformal kaplama", "Hedef: MIL-STD-810H ve MIL-STD-461G"] },
+      specs: ["STM32H753 (BGA) + bağımsız IO/failsafe işlemcisi", "3 IMU (Peltier ile ısıtma ve soğutma), 2 barometre, dahili pusula", "İki Operfly Bus portu, iki bağımsız CAN FD hattı", "Ethernet 100 Mbit (RMII), PTP zaman damgalı; omurganın geri kalanı gigabit", "Uçuş kaydı microSD karta; parametreler FRAM'de", "Harici watchdog, kara kutu kaydı, kesintiye karşı enerji deposu", "8 katman, IPC Sınıf 3, konformal kaplama", "Hedef: MIL-STD-810H ve MIL-STD-461G"] },
     { id: "shield", name: "Shield", sub: "CRPA · 4 kanal", code: "OPFSHD", kind: "kart", stage: 4, x: 306, y: 134, w: 62,
       role: "Karıştırma önleyici GNSS anteni. Temizlenmiş sinyali Nav'a verir.",
       specs: ["Sürüm 1: hazır modül (Yunding Antenna YDAJ-P4065, 1.342 $) + Operfly arayüz kartı", "4 elemanlı CRPA, L1 bandı; aynı anda 1–3 karıştırıcı yönü", "Modül: 65 × 65 × 23,7 mm, en çok 200 g, tipik 5 W", "Temiz tek RF çıkışı Nav'ın anten girişine", "Arayüz kartı durum ve karıştırma bilgisini omurgaya aktarır", "Sürüm 2: kendi işlem kartımız; 8 kanala hazır, ilk üretimde 4 kanal dizili"],

@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "operfly")(type "KiCad")(uri "${KIPRJMOD}/../../ORTAK_KUTUPHANE/semboller/operfly.kicad_sym")(options "")(descr "Operfly ortak semboller"))
+)

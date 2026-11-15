@@ -22,7 +22,7 @@
 		)
 		(uuid "3ad73e21-a21f-505f-98f8-61df016d4a64")
 	)
-	(text "Sematik betikle uretilir: 01_DONANIM/KUMANDA_PRO/kicad/uret.py. 1. adim: guc ve kumanda yolu. Jetson, ekran ve genis bant radyo 2. adimda."
+	(text "Sematik betikle uretilir: 01_DONANIM/KUMANDA_PRO/kicad/uret.py. Cizilmeyenler: genis bant radyo, ikinci Ethernet portu, 10 inc ekran arayuzu."
 		(exclude_from_sim no)
 		(at 25.4 33.02 0)
 		(effects
@@ -31,7 +31,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "59824e52-f598-5b93-a5f6-84be6250080c")
+		(uuid "d3f4fe23-9a90-5d77-9883-43f2f4da50d3")
 	)
 	(sheet
 		(at 25.4 50.8)
@@ -75,6 +75,98 @@
 			(project "operfly_pilotpro"
 				(path "/b7c47103-47da-5702-9736-49131f4f5275"
 					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 254 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "82f5427c-49e2-5bfe-8083-eb6c343d33b7")
+		(property "Sheetname" "Jetson"
+			(at 254 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "jetson.kicad_sch"
+			(at 254 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_pilotpro"
+				(path "/b7c47103-47da-5702-9736-49131f4f5275"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 330.2 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "a1c9a8c1-c12b-5a16-951f-34b1fb691cc2")
+		(property "Sheetname" "Cevre"
+			(at 330.2 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "cevre.kicad_sch"
+			(at 330.2 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_pilotpro"
+				(path "/b7c47103-47da-5702-9736-49131f4f5275"
+					(page "6")
 				)
 			)
 		)

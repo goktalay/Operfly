@@ -2,13 +2,15 @@
 Çalıştırma: depo kökünden `python 10_ORTAK_ARACLAR/kicad/denetle.py KUMANDA_PRO operfly_pilotpro`.
 
 Kaynak bu dosyadır; `*.kicad_sch` çıktıları elle düzenlenmez.
-1. ADIM (bu dosyanın şimdiki kapsamı): güç işlemcisi (düğüm devresi), USB Type-C güç anlaşması, 4 hücreli batarya şarjı
-ve güç yolu, 3,3 V ve 5 V, güç düğmesi, kumanda radyosu ve giriş kartı bağlantısı. Bu kadarıyla kart kumanda olarak çalışır.
-2. ADIM (henüz çizilmedi): Jetson çekirdeği, NVMe, Ethernet, geniş bant radyo, ekran ve USB göbeği (README'de liste).
+1. ADIM: güç işlemcisi (düğüm devresi), USB Type-C güç anlaşması, 4 hücreli batarya şarjı ve güç yolu, 3,3 V ve 5 V,
+güç düğmesi, kumanda radyosu ve giriş kartı bağlantısı. Bu kadarıyla kart kumanda olarak çalışır.
+2. ADIM, ilk bölüm: Jetson çekirdeği ve beslemesi, NVMe, USB göbeği, omurga Ethernet'i, fan (Vision kartındaki devreler).
+HENÜZ ÇİZİLMEDİ: geniş bant radyo ve ikinci Ethernet portu, 10 inç ekran ve dokunmatik arayüzü (README'de liste).
 
 Devre değerleri üretici belgelerindendir: BQ25798 (SLUSDV2C: uç açıklamaları, Tablo 7-1, bölüm 7.3.9.5, 7.3.12, 8.2),
 STUSB4500 (DS12499 Rev 3, Şekil 10 "Typical schematic with MCU"), AP6320x (düğüm ve RX kartındaki devreler),
-RFD900ux (V1.3; RX kartındaki bağlantı).
+RFD900ux (V1.3; RX kartındaki bağlantı), Jetson Orin NX (uç tablosu `jetson_uclari.py`; devreler Vision kartından),
+TPS26630 (Vision kartındaki sigorta), TPS54560B (SLVSBN0; Cell ve Power kartındaki devre), USB2514B (PC adaptöründeki devre).
 """
 import os
 import sys
@@ -16,7 +18,7 @@ import sys
 KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 sys.path.insert(0, os.path.join(KOK, "10_ORTAK_ARACLAR", "kicad"))
 from dugum import dugum_sayfasi  # noqa: E402
-from kart import C0603, C1206, ORTAK_URI, XAL, Izgara, Kart  # noqa: E402
+from kart import C0603, C0805, C1206, ORTAK_URI, XAL, Izgara, Kart  # noqa: E402
 from sema_uret import Sema, kutuphane_tablolari  # noqa: E402
 
 BURASI = os.path.dirname(os.path.abspath(__file__))
@@ -30,15 +32,28 @@ TVS25_FP = "Diode_SMD:D_0603_1608Metric"
 k = Kart("operfly_pilotpro", "2026-11-15")
 kok = Sema(k.P, "Operfly Pilot Pro", kagit="A3", tarih=k.T)
 kok.metin("Operfly Pilot Pro - kumanda ana karti (OPFKPR)", 25.4, 25.4, 3.0)
-kok.metin("Sematik betikle uretilir: 01_DONANIM/KUMANDA_PRO/kicad/uret.py. 1. adim: guc ve kumanda yolu. Jetson, ekran ve genis bant radyo 2. adimda.", 25.4, 33.02, 1.6)
+kok.metin("Sematik betikle uretilir: 01_DONANIM/KUMANDA_PRO/kicad/uret.py. Cizilmeyenler: genis bant radyo, ikinci Ethernet portu, 10 inc ekran arayuzu.", 25.4, 33.02, 1.6)
 
 EK = {"PB10": "PWR_SCL", "PB11": "PWR_SDA",      # I2C2: sarj entegresi, guc anlasmasi entegresi, bataryanin kendi olceri
       "PB3": "I2C_SCL", "PB4": "I2C_SDA",        # I2C3 (kole): giris kartindaki kumanda islemcisiyle dogrudan baglanti
       "PA0": "CHG_INT_N", "PA1": "PD_ALERT_N",   # kesme girisleri
       "PA4": "PWR_BTN_M",                        # guc dugmesi (0 = basili)
       "PA5": "PD_RESET",                         # 1: guc anlasmasi entegresini sifirla
-      "PA6": "ALERT_N"}                          # acik savak: giris kartina uyari (batarya dusuk, kapanma basliyor)
-dg = dugum_sayfasi(k, kok, BURASI, ek=EK, besleme="harici")
+      "PA6": "ALERT_N",                          # acik savak: giris kartina uyari (batarya dusuk, kapanma basliyor)
+      "PA2": "JET_IMON",                         # ADC1_IN2: Jetson akimi (4 A -> 3,0 V)
+      "PA3": "JET_VIN_EN",                       # 1: Jetson'a besleme ver (sifirlamada kapali)
+      "PA7": "JET_POWER_EN",                     # 1: modul acilir
+      "PA8": "JET_SHDN_REQ_N",                   # 0: modul kapanmak istiyor -> POWER_EN indirilir
+      "PB0": "JET_RESET", "PB1": "JET_RECOVERY", # 1: SYS_RESET* / FORCE_RECOVERY* dusuge cekilir
+      "PC7": "JET_MODULE_ID",                    # 1: 5-20 V destekli modul; 0: yalniz 5 V'luk eski modul -> besleme VERILMEZ
+      "PD2": "JET_RUN",                          # 1: tasiyici 3,3 V'u acik (modul SYS_RESET*'i birakti)
+      "PD3": "PWR_FLT_N",                        # 0: Jetson sigortasi hata verdi
+      "PB6": "MCU_TX", "PB7": "MCU_RX",          # USART1: Jetson UART1 (seviye ceviriciden)
+      "PC6": "FAN_TACH",                         # TIM3_CH1: fan devir darbesi
+      "PA9/PA11": "PWR_USB_DM", "PA10/PA12": "PWR_USB_DP"}   # USB: gobegin 2. portu (PA11 = D-, PA12 = D+)
+dg = dugum_sayfasi(k, kok, BURASI, ek=EK, besleme="harici", ethernet=True)
+C1210 = "Capacitor_SMD:C_1210_3225Metric"
+TANTAL = "Capacitor_Tantalum_SMD:CP_EIA-7343-31_Kemet-D"
 
 # --- Güç: USB-C, güç anlaşması, şarj, batarya, düğme, 3,3 V ve 5 V ------------------
 gc = Sema(k.P, "Pilot Pro - USB-C guc anlasmasi, batarya sarji ve guc yolu, 3,3 V, 5 V", kagit="A1", tarih=k.T, ust=kok, ad="Guc", genel_etiket=True)
@@ -52,7 +67,6 @@ k.parca(gc, g, "Connector:USB_C_Receptacle_USB2.0_16P", "J", "USB Type-C (sarj +
 x, y = g.yer(); g.yer()
 k.koy(gc, "Power_Protection:USBLC6-2P6", "D", "USBLC6-2P6", x + 10, y, {"1": "USBC_DP", "6": "USBC_DP", "3": "USBC_DM", "4": "USBC_DM", "5": "+5V", "2": "GND"},
       "Package_TO_SOT_SMD:SOT-666")
-k.olcum_noktasi(gc, g, "USBC_DP"); k.olcum_noktasi(gc, g, "USBC_DM")
 for ag in ("USBC_VBUS", "USBC_CC1", "USBC_CC2"):
     k.iki(gc, g, *TVS25, ag, "GND", TVS25_FP)
 k.C(gc, g, "4u7 50V", "USBC_VBUS", fp=C1206)
@@ -170,7 +184,7 @@ k.koy(rd, N7002[0], N7002[1], N7002[2], x, y, {"D": "RADIO_EN", "S": "GND", "G":
 k.R(rd, g, "100k", "RADIO_OFF", "GND")
 
 rd.metin("GIRIS KARTI BAGLANTISI (20 kontakli yassi kablo): uc sirasi 13_DOKUMANTASYON/KUMANDA_ARAYUZU.md ile birebir. Pilot Pro'da farklar:", 270, 150)
-rd.metin("I2C guc islemcisine gider (iki islemci arasi baglanti), PWR_HOLD kullanilmaz (gucu guc islemcisi tutar), USB 2. adimda Jetson'a baglanir.", 270, 156)
+rd.metin("I2C guc islemcisine gider (iki islemci arasi baglanti), PWR_HOLD kullanilmaz (gucu guc islemcisi tutar), USB gobegin 1. portuna gider.", 270, 156)
 ANA = ["GND", "+3V3", "+3V3", "GND", "RADIO_RXD", "RADIO_TXD", "RADIO_CTS", "RADIO_RTS", "RADIO_OFF", "RADIO_BOOT_N",
        "GND", "KUM_USB_DM", "KUM_USB_DP", "GND", "I2C_SCL", "I2C_SDA", "ALERT_N", "PWR_BTN_N", None, "BUZZER"]
 ag = {"Pin_%d" % (i + 1): a for i, a in enumerate(ANA) if a}
@@ -181,7 +195,6 @@ g = Izgara(350, 200, sutun=8)
 x, y = g.yer(); g.yer()
 k.koy(rd, "Power_Protection:USBLC6-2P6", "D", "USBLC6-2P6", x + 10, y, {"1": "KUM_USB_DP", "6": "KUM_USB_DP", "3": "KUM_USB_DM", "4": "KUM_USB_DM", "5": "+5V", "2": "GND"},
       "Package_TO_SOT_SMD:SOT-666")
-k.olcum_noktasi(rd, g, "KUM_USB_DP"); k.olcum_noktasi(rd, g, "KUM_USB_DM")
 g.satir()
 x, y = g.yer(); g.yer()
 k.koy(rd, "Device:Buzzer", "BZ", "PKLCS1212E4001", x + 5, y, {"+": "+5V", "-": "BUZZER_K"}, "Buzzer_Beeper:Buzzer_Murata_PKLCS1212E")
@@ -191,6 +204,163 @@ k.koy(rd, N7002[0], N7002[1], N7002[2], x, y, {"D": "BUZZER_K", "S": "GND", "G":
 k.R(rd, g, "100k", "BUZZER", "GND")
 rd.yaz(os.path.join(BURASI, "radyo.kicad_sch"))
 
+# --- Jetson: besleme, soket, denetim ---------------------------------------------------
+jt = Sema(k.P, "Pilot Pro - Jetson Orin NX soketi, beslemesi ve denetim devreleri", kagit="A1", tarih=k.T, ust=kok, ad="Jetson", genel_etiket=True)
+kok.alt_sayfa(jt, "jetson.kicad_sch", 254.0, 50.8)
+jt.birim_araligi = 200
+jt.metin("JETSON SOKETI (260 uclu SO-DIMM). Birimler: guc ve denetim | PCIe, Ethernet, USB | dusuk hizli giris-cikislar | goruntu uclari (henuz baglanmadi).", 30, 25)
+jt.metin("Uc tablosu uretici veri sayfasindan (10_ORTAK_ARACLAR/kicad/jetson_uclari.py). Devreler Vision kartindakilerin aynisidir; PCIE1/PCIE2 ve goruntu uclari bostur.", 30, 31)
+J = {"VDD_IN": "+VJET", "GND": "GND", "POWER_EN": "JET_POWER_EN_R", "SYS_RESET*": "JET_SYS_RESET_N", "SHUTDOWN_REQ*": "JET_SHDN_REQ_HV",
+     "FORCE_RECOVERY*": "JET_FRC_N", "MODULE_ID": "JET_MODULE_ID", "MOD_SLEEP*": "JET_MOD_SLEEP_N", "SLEEP/WAKE*": "JET_SLEEP_WAKE_N",
+     "PCIE0_CLK_P": "M2_CLK_P", "PCIE0_CLK_N": "M2_CLK_N", "PCIE0_RST*": "M2_RST_N", "PCIE0_CLKREQ*": "M2_CLKREQ_N", "PCIE_WAKE*": "PCIE_WAKE_N",
+     "USB0_D_P": "USBC_DP", "USB0_D_N": "USBC_DM", "GPIO00": "USB0_VBUS_DET_N", "USB1_D_P": "HUB_UP_DP", "USB1_D_N": "HUB_UP_DM",
+     "UART1_TXD": "JET_UART_TX_1V8", "UART1_RXD": "JET_UART_RX_1V8", "UART2_TXD": "JET_DBG_TX", "UART2_RXD": "JET_DBG_RX", "GPIO14": "JET_FAN_PWM_1V8"}
+for l in range(4):
+    for s_ in "PN":
+        J["PCIE0_RX%d_%s" % (l, s_)] = "M2_PER%d_%s" % (l, s_)
+        J["PCIE0_TX%d_%s" % (l, s_)] = "J_PCIE0_TX%d_%s" % (l, s_)
+        J["GBE_MDI%d_%s" % (l, s_)] = "JGBE_MDI%d_%s" % (l, s_)
+k.koy(jt, "operfly:Jetson_Orin_NX", "J", "Jetson Orin NX", 110, 150, J, "Connector_PCBEdge:SODIMM-260_DDR4_H4.0-5.2_OrientationStd_Socket")
+
+jt.metin("DENETIM (Vision ile ayni): POWER_EN guc islemcisinden (1k seri). SHUTDOWN_REQ* modulde besleme gerilimine cekilidir -> 100k/22k ile islemciye.", 30, 290)
+jt.metin("SYS_RESET* ve FORCE_RECOVERY* 1,8 V hatlardir: islemci yalnizca transistorle DUSUGE ceker. MODULE_ID: Orin'de bosta (100k ile 3,3 V = 1).", 30, 296)
+g = Izgara(50, 335, sutun=14)
+k.R(jt, g, "1k", "JET_POWER_EN", "JET_POWER_EN_R"); k.R(jt, g, "100k", "JET_POWER_EN", "GND")
+k.R(jt, g, "100k 1%", "JET_SHDN_REQ_HV", "JET_SHDN_REQ_N"); k.R(jt, g, "22k 1%", "JET_SHDN_REQ_N", "GND"); k.C(jt, g, "1n", "JET_SHDN_REQ_N")
+k.R(jt, g, "100k", "+3V3", "JET_MODULE_ID")
+for ag, kapi in (("JET_SYS_RESET_N", "JET_RESET"), ("JET_FRC_N", "JET_RECOVERY")):
+    x, y = g.yer()
+    k.koy(jt, N7002[0], N7002[1], N7002[2], x, y, {"D": ag, "S": "GND", "G": kapi}, SOT23)
+    k.R(jt, g, "100k", kapi, "GND")
+for ag in ("JET_SYS_RESET_N", "JET_FRC_N", "JET_MOD_SLEEP_N", "JET_SLEEP_WAKE_N", "JET_DBG_TX", "JET_DBG_RX"):
+    k.olcum_noktasi(jt, g, ag)
+g.satir()
+for l in range(4):
+    for s_ in "PN":
+        k.C(jt, g, "220n", "J_PCIE0_TX%d_%s" % (l, s_), "M2_PET%d_%s" % (l, s_))
+k.R(jt, g, "100k", "USBC_VBUS", "USB_VBUS_G"); k.R(jt, g, "100k", "USB_VBUS_G", "GND")
+x, y = g.yer()
+k.koy(jt, N7002[0], N7002[1], N7002[2], x, y, {"D": "USB0_VBUS_DET_N", "S": "GND", "G": "USB_VBUS_G"}, SOT23)
+
+jt.metin("JETSON BESLEMESI (TPS26630, akim siniri 18 / 4k53 = 4 A): modul 5-20 V kabul eder, batarya gerilimi (+VSYS, 12-17 V) dogrudan verilir.", 420, 290)
+jt.metin("Sigorta 10,4 V altinda ve 18,4 V ustunde keser. Guc islemcisi once MODULE_ID'yi okur, sonra JET_VIN_EN verir. IMON 27k (4 A -> 3,0 V).", 420, 296)
+k.koy(jt, "Power_Management:TPS26630RGE", "U", "TPS26630RGER", 470, 345, {
+    "IN": "+VSYS", "IN_SYS": "+VSYS", "UVLO": "JET_UVLO", "OVP": "JET_OVP", "GND": "GND", "MODE": "GND", "dVdT": "JET_DVDT", "ILIM": "JET_ILIM",
+    "~{SHDN}": "JET_VIN_EN", "IMON": "JET_IMON", "~{FLT}": "PWR_FLT_N", "PGTH": "JET_PGTH", "OUT": "+VJET"},
+    "Package_DFN_QFN:Texas_RGE0024H_VQFN-24-1EP_4x4mm_P0.5mm_EP2.7x2.7mm_ThermalVias")
+g = Izgara(530, 335, sutun=12)
+k.C(jt, g, "100n 50V", "+VSYS", fp=C0603); k.C(jt, g, "1u 25V", "+VJET", fp=C0603)
+k.R(jt, g, "4k53 1%", "JET_ILIM", "GND"); k.C(jt, g, "47n", "JET_DVDT"); k.R(jt, g, "27k 1%", "JET_IMON", "GND"); k.C(jt, g, "100n", "JET_IMON")
+k.R(jt, g, "47k", "JET_VIN_EN", "GND"); k.R(jt, g, "100k 1%", "+VJET", "JET_PGTH"); k.R(jt, g, "13k7 1%", "JET_PGTH", "GND")
+k.R(jt, g, "100k 1%", "+VSYS", "JET_UVLO"); k.R(jt, g, "13k 1%", "JET_UVLO", "GND")
+g.satir()
+k.R(jt, g, "100k 1%", "+VSYS", "JET_OVP"); k.R(jt, g, "6k98 1%", "JET_OVP", "GND"); k.R(jt, g, "10k", "+3V3", "PWR_FLT_N")
+k.C(jt, g, "100u 25V", "+VJET", fp=TANTAL); k.C(jt, g, "100u 25V", "+VJET", fp=TANTAL); k.olcum_noktasi(jt, g, "+VJET")
+
+jt.metin("TASIYICI 3,3 V'u (TPS54560B, +VSYS'ten, 5 A): NVMe, 1,8 V regulatoru ve ileride ikinci Ethernet denetleyicisi icin. Modul SYS_RESET*'i", 420, 410)
+jt.metin("biraktiginda acilir; ondan once kart Jetson uclarina gerilim vermez (uretici kurali). Cikis = 0,8 V x (1 + 31k6 / 10k2) = 3,28 V. JET_RUN: ray acik.", 420, 416)
+g = Izgara(440, 460, sutun=16, dx=24)
+k.parca(jt, g, "Regulator_Switching:TPS54560BDDA", "U", "TPS54560BDDAR", {"VIN": "+VSYS", "EN": "JET_SYS_RESET_N", "RT/CLK": "J33_RT", "FB": "J33_FB",
+        "COMP": "J33_COMP", "BOOT": "J33_BOOT", "SW": "J33_SW", "GND": "GND"}, "Package_SO:Texas_R-PDSO-G8_EP2.95x4.9mm_Mask2.4x3.1mm_ThermalVias", bosluk=2, dx=22)
+k.C(jt, g, "10u 50V", "+VSYS", fp=C1206); k.C(jt, g, "10u 50V", "+VSYS", fp=C1206); k.C(jt, g, "100n 50V", "+VSYS", fp=C0603)
+k.R(jt, g, "243k 1%", "J33_RT", "GND"); k.R(jt, g, "13k", "J33_COMP", "J33_COMP_RC"); k.C(jt, g, "4n7", "J33_COMP_RC"); k.C(jt, g, "47p", "J33_COMP")
+k.C(jt, g, "100n 25V", "J33_BOOT", "J33_SW", fp=C0603)
+k.iki(jt, g, "Device:D_Schottky", "D", "PDS760 (60 V, 7 A)", "J33_SW", "GND", "Diode_SMD:D_PowerDI-5")
+k.iki(jt, g, "Device:L", "L", "10u XAL7070-103", "J33_SW", "+3V3_JET", "Inductor_SMD:L_Coilcraft_XAL7070-XXX")
+g.satir()
+for _ in range(3):
+    k.C(jt, g, "47u 16V", "+3V3_JET", fp=C1210)
+k.R(jt, g, "31k6 1%", "+3V3_JET", "J33_FB"); k.R(jt, g, "10k2 1%", "J33_FB", "GND")
+k.R(jt, g, "10k", "+3V3_JET", "JET_RUN"); k.R(jt, g, "100k", "JET_RUN", "GND")
+k.bayrak(jt, g, "+3V3_JET"); k.olcum_noktasi(jt, g, "+3V3_JET")
+k.parca(jt, g, "Regulator_Linear:LP5907MFX-1.8", "U", "LP5907MFX-1.8", {"IN": "+3V3_JET", "EN": "+3V3_JET", "GND": "GND", "OUT": "+1V8_JET"}, "Package_TO_SOT_SMD:SOT-23-5", bosluk=1, dx=14)
+k.C(jt, g, "1u", "+3V3_JET"); k.C(jt, g, "1u", "+1V8_JET"); k.olcum_noktasi(jt, g, "+1V8_JET")
+jt.yaz(os.path.join(BURASI, "jetson.kicad_sch"))
+
+# --- Çevre: NVMe, USB göbeği, dış USB, omurga Ethernet'i, seviye çevirici, fan -------------
+cv = Sema(k.P, "Pilot Pro - NVMe, USB gobegi, omurga Ethernet'i, seviye cevirici, fan", kagit="A1", tarih=k.T, ust=kok, ad="Cevre", genel_etiket=True)
+kok.alt_sayfa(cv, "cevre.kicad_sch", 330.2, 50.8)
+cv.metin("M.2 NVMe (Key M, PCIE0, dort serit; Vision ile ayni): soketin PER uclari Jetson'in alicilarina dogrudan, PET uclari vericilerine 220 nF ile.", 30, 28)
+M = {"3.3V": "+3V3_JET", "GND": "GND", "~{PERST}": "M2_RST_N", "~{CLKREQ}": "M2_CLKREQ_N", "~{PEWAKE}": "PCIE_WAKE_N", "REFCLKp": "M2_CLK_P", "REFCLKn": "M2_CLK_N",
+     "DEVSLP": "M2_DEVSLP", "PERp0/SATA-B-": "M2_PER0_P", "PERn0/SATA-B+": "M2_PER0_N", "PETp0/SATA-A+": "M2_PET0_P", "PETn0/SATA-A-": "M2_PET0_N"}
+for l in (1, 2, 3):
+    M.update({"PERp%d" % l: "M2_PER%d_P" % l, "PERn%d" % l: "M2_PER%d_N" % l, "PETp%d" % l: "M2_PET%d_P" % l, "PETn%d" % l: "M2_PET%d_N" % l})
+k.koy(cv, "Connector:Bus_M.2_Socket_M", "J", "M.2 Key M (NVMe 2242/2280)", 90, 120, M, "Connector_PCBEdge:TE_M.2_M_2x38-1MP_P0.5mm")
+g = Izgara(170, 70, sutun=8)
+k.R(cv, g, "10k", "M2_DEVSLP", "GND"); k.C(cv, g, "22u 10V", "+3V3_JET", fp=C1206); k.C(cv, g, "22u 10V", "+3V3_JET", fp=C1206)
+for _ in range(3):
+    k.C(cv, g, "100n", "+3V3_JET")
+
+cv.metin("USB GOBEGI (USB2514B, 24 MHz; PC adaptorundeki devre): Jetson USB1'den dort port. 1: kumanda islemcisi (giris karti), 2: guc islemcisi,", 380, 28)
+cv.metin("3: dokunmatik ekran konnektoru, 4: dis USB-A (0,5 A sinirli). Gobek surekli beslenir ama Jetson'in 3,3 V'u yokken sifirlamada tutulur.", 380, 34)
+k.koy(cv, "Interface_USB:USB2514B_Bi", "U", "USB2514Bi-AEZG", 470, 120, {
+    "USBDP_UP": "HUB_UP_DP", "USBDM_UP": "HUB_UP_DM", "USBDP_DN1/PRT_DIS_P1": "KUM_USB_DP", "USBDM_DN1/PRT_DIS_M1": "KUM_USB_DM",
+    "USBDP_DN2/PRT_DIS_P2": "PWR_USB_DP", "USBDM_DN2/PRT_DIS_M2": "PWR_USB_DM", "USBDP_DN3/PRT_DIS_P3": "TCH_USB_DP", "USBDM_DN3/PRT_DIS_M3": "TCH_USB_DM",
+    "USBDP_DN4/PRT_DIS_P4": "EXT_USB_DP", "USBDM_DN4/PRT_DIS_M4": "EXT_USB_DM",
+    "VDD33": "+3V3", "VDDA33": "+3V3", "VSS": "GND", "TEST": "GND", "RESET_N": "HUB_RESET_N", "VBUS_DET": "HUB_VBUS_DET",
+    "CRFILT": "HUB_CRFILT", "PLLFILT": "HUB_PLLFILT", "RBIAS": "HUB_RBIAS", "XTALIN/CLKIN": "HUB_XI", "XTALOUT": "HUB_XO",
+    "HS_IND/CFG_SEL1": "HUB_CFG1", "SCL/SMBCLK/CFG_SEL0": "HUB_CFG0", "SDA/SMBDATA/NON_REM1": "HUB_NR1", "SUSP_IND/LOCAL_PWR/NON_REM0": "HUB_NR0",
+}, "Package_DFN_QFN:QFN-36-1EP_6x6mm_P0.5mm_EP3.7x3.7mm")
+g = Izgara(390, 215, sutun=14)
+k.koy(cv, "Device:Crystal_GND24", "Y", "24 MHz", *g.yer(), {"1": "HUB_XI", "3": "HUB_XO", "2": "GND", "4": "GND"}, "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm")
+k.C(cv, g, "18p", "HUB_XI"); k.C(cv, g, "18p", "HUB_XO")
+k.R(cv, g, "12k 1%", "HUB_RBIAS", "GND"); k.C(cv, g, "100n", "HUB_CRFILT"); k.C(cv, g, "100n", "HUB_PLLFILT")
+k.R(cv, g, "10k", "+3V3_JET", "HUB_RESET_N"); k.R(cv, g, "100k", "HUB_RESET_N", "GND"); k.R(cv, g, "1k", "+3V3_JET", "HUB_VBUS_DET")
+k.R(cv, g, "100k", "HUB_CFG1", "GND"); k.R(cv, g, "100k", "HUB_CFG0", "GND"); k.R(cv, g, "100k", "+3V3", "HUB_NR1"); k.R(cv, g, "100k", "HUB_NR0", "GND")
+g.satir()
+for _ in range(6):
+    k.C(cv, g, "100n", "+3V3")
+k.C(cv, g, "4u7", "+3V3", fp=C0603)
+
+cv.metin("DIS USB-A PORTU (TPS2051C, 0,5 A) ve DOKUNMATIK EKRAN USB'si (JST-GH 4: +5 V, D-, D+, GND). Ikisi de Jetson acikken beslenir.", 380, 290)
+g = Izgara(400, 330, sutun=14)
+k.parca(cv, g, "Power_Management:TPS2051CDBV", "U", "TPS2051CDBV", {"IN": "+5V", "GND": "GND", "EN": "JET_RUN", "~{FLT}": "EXT_USB_FLT_N", "OUT": "EXT_USB_5V"},
+        "Package_TO_SOT_SMD:SOT-23-5", bosluk=1, dx=14)
+k.C(cv, g, "1u", "+5V"); k.C(cv, g, "100u 10V", "EXT_USB_5V", fp=TANTAL); k.R(cv, g, "10k", "+3V3", "EXT_USB_FLT_N"); k.olcum_noktasi(cv, g, "EXT_USB_FLT_N")
+k.parca(cv, g, "Connector:USB_A", "J", "USB-A (dis)", {"VBUS": "EXT_USB_5V", "D-": "EXT_USB_DM", "D+": "EXT_USB_DP", "GND": "GND", "Shield": "GND"},
+        "Connector_USB:USB_A_Molex_67643_Horizontal", bosluk=1, dx=10)
+x, y = g.yer(); g.yer()
+k.koy(cv, "Power_Protection:USBLC6-2P6", "D", "USBLC6-2P6", x + 10, y, {"1": "EXT_USB_DP", "6": "EXT_USB_DP", "3": "EXT_USB_DM", "4": "EXT_USB_DM", "5": "EXT_USB_5V", "2": "GND"},
+      "Package_TO_SOT_SMD:SOT-666")
+g.satir()
+k.parca(cv, g, "Power_Management:TPS2051CDBV", "U", "TPS2051CDBV", {"IN": "+5V", "GND": "GND", "EN": "JET_RUN", "~{FLT}": "TCH_USB_FLT_N", "OUT": "TCH_USB_5V"},
+        "Package_TO_SOT_SMD:SOT-23-5", bosluk=1, dx=14)
+k.C(cv, g, "1u", "+5V"); k.C(cv, g, "22u 10V", "TCH_USB_5V", fp=C1206); k.R(cv, g, "10k", "+3V3", "TCH_USB_FLT_N"); k.olcum_noktasi(cv, g, "TCH_USB_FLT_N")
+k.parca(cv, g, "Connector_Generic_MountingPin:Conn_01x04_MountingPin", "J", "Dokunmatik ekran (USB)", {"Pin_1": "TCH_USB_5V", "Pin_2": "TCH_USB_DM", "Pin_3": "TCH_USB_DP",
+        "Pin_4": "GND", "MountPin": "GND"}, "Connector_JST:JST_GH_SM04B-GHS-TB_1x04-1MP_P1.25mm_Horizontal", bosluk=1, dx=8)
+x, y = g.yer(); g.yer()
+k.koy(cv, "Power_Protection:USBLC6-2P6", "D", "USBLC6-2P6", x + 10, y, {"1": "TCH_USB_DP", "6": "TCH_USB_DP", "3": "TCH_USB_DM", "4": "TCH_USB_DM", "5": "TCH_USB_5V", "2": "GND"},
+      "Package_TO_SOT_SMD:SOT-666")
+
+cv.metin("OMURGA ETHERNET'I (Vision ile ayni): Jetson'in kendi gigabit portu trafo (TG111-MSC13LF) uzerinden omurga fisinin dort ciftine gider.", 30, 250)
+cv.metin("Yer radyosu (Ground Radio), Base ve bilgisayar bu porttan baglanir. Orta uclar: Jetson tarafi 100n -> GND, kablo tarafi 75R -> 1 nF 2 kV.", 30, 256)
+tr = {}
+for c, i, (cp, cm, cc), (kp_, km_, kc_) in zip("ABCD", range(4), ((2, 3, 1), (5, 6, 4), (8, 9, 7), (11, 12, 10)), ((23, 22, 24), (20, 19, 21), (17, 16, 18), (14, 13, 15))):
+    tr.update({str(cp): "JGBE_MDI%d_P" % i, str(cm): "JGBE_MDI%d_N" % i, str(cc): "BB_CT_%s" % c,
+               str(kp_): "ETH_%s+" % c, str(km_): "ETH_%s-" % c, str(kc_): "BB_KCT_%s" % c})
+k.koy(cv, "Transformer:TG111-MSC13LF", "T", "TG111-MSC13LF", 80, 320, tr, "Transformer_SMD:Transformer_Ethernet_HALO_TG111-MSC13")
+g = Izgara(150, 300, sutun=9, dx=24)
+for c in "ABCD":
+    k.C(cv, g, "100n", "BB_CT_%s" % c)
+for c in "ABCD":
+    k.R(cv, g, "75R", "BB_KCT_%s" % c, "BB_BS")
+k.C(cv, g, "1n 2kV", "BB_BS", fp=C1206)
+
+cv.metin("SEVIYE CEVIRICI (TXS0104E, 1,8 V <-> 3,3 V): Jetson UART1 <-> guc islemcisi (USART1), fan PWM (GPIO14). Jetson kapaliyken uclarini birakir.", 30, 400)
+g = Izgara(50, 445, sutun=10)
+k.parca(cv, g, "Logic_LevelTranslator:TXS0104EPW", "U", "TXS0104EPW", {"V_{CCA}": "+1V8_JET", "V_{CCB}": "+3V3", "OE": "+1V8_JET", "GND": "GND",
+        "A1": "JET_UART_TX_1V8", "B1": "MCU_RX", "A2": "JET_UART_RX_1V8", "B2": "MCU_TX", "A4": "JET_FAN_PWM_1V8", "B4": "FAN_PWM_3V3"},
+        "Package_SO:TSSOP-14_4.4x5mm_P0.65mm", bosluk=2, dx=20)
+k.C(cv, g, "100n", "+1V8_JET"); k.C(cv, g, "100n", "+3V3")
+cv.metin("FAN (5 V, 4 uclu: GND, +5V, devir, PWM; Vision ile ayni): PWM Jetson'dan; Jetson kapaliyken 10k asagi cekme fani durdurur.", 30, 490)
+g = Izgara(50, 530, sutun=10)
+k.parca(cv, g, "Connector_Generic:Conn_01x04", "J", "Fan (PicoBlade)", {"Pin_1": "GND", "Pin_2": "+5V", "Pin_3": "FAN_TACH_K", "Pin_4": "FAN_PWM"},
+        "Connector_Molex:Molex_PicoBlade_53047-0410_1x04_P1.25mm_Vertical", dx=8)
+k.R(cv, g, "100R", "FAN_PWM_3V3", "FAN_PWM"); k.R(cv, g, "10k", "FAN_PWM", "GND")
+k.R(cv, g, "10k", "+3V3", "FAN_TACH"); k.R(cv, g, "10k", "FAN_TACH_K", "FAN_TACH"); k.C(cv, g, "1n", "FAN_TACH")
+k.C(cv, g, "10u 10V", "+5V", fp=C0805)
+cv.yaz(os.path.join(BURASI, "cevre.kicad_sch"))
+
 kok.yaz(os.path.join(BURASI, "operfly_pilotpro.kicad_sch"))
-kutuphane_tablolari(BURASI, [kok, dg, gc, rd], {"operfly": ORTAK_URI, "operfly_ayak": AYAK_URI})
-print("yazildi: operfly_pilotpro (kok + 3 sayfa)")
+kutuphane_tablolari(BURASI, [kok, dg, gc, rd, jt, cv], {"operfly": ORTAK_URI, "operfly_ayak": AYAK_URI})
+print("yazildi: operfly_pilotpro (kok + 5 sayfa)")

@@ -5630,9 +5630,9 @@
 			)
 		)
 	)
-	(global_label "USBC_DM"
+	(global_label "+VSYS"
 		(shape passive)
-		(at 186.69 85.09 270)
+		(at 322.58 360.68 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5641,7 +5641,7 @@
 		)
 		(uuid "0242a304-4c51-5e28-933b-d9dd8b7cd6ad")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 186.69 85.09 0)
+			(at 322.58 360.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6556,7 +6556,7 @@
 	)
 	(global_label "PD_VS"
 		(shape passive)
-		(at 49.53 116.84 270)
+		(at 323.85 88.9 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6565,7 +6565,7 @@
 		)
 		(uuid "36315075-d63f-55c8-9cc5-0470029ba34f")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 49.53 116.84 0)
+			(at 323.85 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6576,9 +6576,9 @@
 			)
 		)
 	)
-	(global_label "CHG_REGN"
+	(global_label "+3V3"
 		(shape passive)
-		(at 345.44 360.68 270)
+		(at 655.32 490.22 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6587,7 +6587,7 @@
 		)
 		(uuid "369bd152-27c2-5098-a468-df1196136549")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 345.44 360.68 0)
+			(at 655.32 490.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6886,7 +6886,7 @@
 	)
 	(global_label "PD_VSF"
 		(shape passive)
-		(at 49.53 109.22 90)
+		(at 323.85 81.28 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6895,7 +6895,7 @@
 		)
 		(uuid "43c13179-eb3a-5f1b-8810-68c189919742")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 49.53 109.22 0)
+			(at 323.85 81.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6928,9 +6928,9 @@
 			)
 		)
 	)
-	(global_label "+VSYS"
+	(global_label "+BATT"
 		(shape passive)
-		(at 322.58 360.68 270)
+		(at 609.6 284.48 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6939,7 +6939,7 @@
 		)
 		(uuid "45bd0838-cf92-5525-9524-2f3a9f5f3ca8")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 322.58 360.68 0)
+			(at 609.6 284.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7084,7 +7084,7 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 346.71 88.9 270)
+		(at 300.99 88.9 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7093,7 +7093,7 @@
 		)
 		(uuid "4e2eb986-cb75-5a53-b8fd-03fffe829bb0")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 346.71 88.9 0)
+			(at 300.99 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7150,7 +7150,7 @@
 	)
 	(global_label "USBC_CC2"
 		(shape passive)
-		(at 251.46 85.09 180)
+		(at 205.74 85.09 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7159,7 +7159,7 @@
 		)
 		(uuid "4fdbe43d-645d-5c06-ab32-52c2dc3cf058")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 251.46 85.09 0)
+			(at 205.74 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7700,7 +7700,7 @@
 	)
 	(global_label "PD_VSF"
 		(shape passive)
-		(at 346.71 81.28 90)
+		(at 300.99 81.28 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7709,7 +7709,7 @@
 		)
 		(uuid "65f1aabd-f5ef-57b8-819a-083e29bb48c8")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 346.71 81.28 0)
+			(at 300.99 81.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7754,28 +7754,6 @@
 		(uuid "67ec2b87-28b2-5c13-bdc6-adae345a08fa")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 95.25 203.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3"
-		(shape passive)
-		(at 655.32 490.22 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "686217ce-bbbe-5c25-923d-10d5ae714e85")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 655.32 490.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7908,28 +7886,6 @@
 		(uuid "6f2673b5-4215-5305-bcd9-88f0530b97ae")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 74.93 204.47 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+5V"
-		(shape passive)
-		(at 655.32 518.16 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "72213776-50ef-54b5-83b1-a93e52fdab91")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 655.32 518.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8096,7 +8052,7 @@
 	)
 	(global_label "USBC_VBUS"
 		(shape passive)
-		(at 327.66 85.09 0)
+		(at 281.94 85.09 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8105,7 +8061,7 @@
 		)
 		(uuid "78d00a47-9e5a-5990-bc56-f7d7600bf5b8")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 327.66 85.09 0)
+			(at 281.94 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8360,7 +8316,7 @@
 	)
 	(global_label "PD_VSF"
 		(shape passive)
-		(at 320.04 85.09 180)
+		(at 274.32 85.09 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8369,7 +8325,7 @@
 		)
 		(uuid "869b66ce-d779-58cd-a93c-24a2bde97b30")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 320.04 85.09 0)
+			(at 274.32 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8470,7 +8426,7 @@
 	)
 	(global_label "USBC_VBUS"
 		(shape passive)
-		(at 205.74 85.09 180)
+		(at 160.02 85.09 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8479,7 +8435,7 @@
 		)
 		(uuid "8a492ed1-f42e-5285-9580-6fd462a469d2")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 205.74 85.09 0)
+			(at 160.02 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8666,9 +8622,9 @@
 			)
 		)
 	)
-	(global_label "USBC_DP"
+	(global_label "VCHG"
 		(shape passive)
-		(at 163.83 85.09 270)
+		(at 232.41 199.39 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8677,7 +8633,7 @@
 		)
 		(uuid "94a6f4d9-d7f7-55c8-8ac2-c0059f61f4bf")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 163.83 85.09 0)
+			(at 232.41 199.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8800,7 +8756,7 @@
 	)
 	(global_label "USBC_VBUS"
 		(shape passive)
-		(at 300.99 81.28 90)
+		(at 255.27 81.28 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8809,7 +8765,7 @@
 		)
 		(uuid "9b33e3f2-9e14-5ebb-8014-1c19d33a06ee")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 300.99 81.28 0)
+			(at 255.27 81.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9394,7 +9350,7 @@
 	)
 	(global_label "USBC_VBUS"
 		(shape passive)
-		(at 278.13 81.28 90)
+		(at 232.41 81.28 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9403,7 +9359,7 @@
 		)
 		(uuid "b5f6cb59-c3e8-5d20-ae3c-f6cebe7ed5fe")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 278.13 81.28 0)
+			(at 232.41 81.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9504,7 +9460,7 @@
 	)
 	(global_label "USBC_CC1"
 		(shape passive)
-		(at 228.6 85.09 180)
+		(at 182.88 85.09 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9513,7 +9469,7 @@
 		)
 		(uuid "bc533cc6-0548-5042-bdc8-6f156fa2d14e")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 228.6 85.09 0)
+			(at 182.88 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9658,7 +9614,7 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 236.22 85.09 0)
+		(at 190.5 85.09 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9667,7 +9623,7 @@
 		)
 		(uuid "c2fb14fc-a838-5229-8c15-63bfdd4e7ddd")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 236.22 85.09 0)
+			(at 190.5 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9832,9 +9788,9 @@
 			)
 		)
 	)
-	(global_label "+BATT"
+	(global_label "+5V"
 		(shape passive)
-		(at 609.6 284.48 270)
+		(at 655.32 518.16 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9843,7 +9799,7 @@
 		)
 		(uuid "c6f0dd34-cc3c-551e-847f-709a90f468f1")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 609.6 284.48 0)
+			(at 655.32 518.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10164,7 +10120,7 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 278.13 88.9 270)
+		(at 232.41 88.9 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -10173,7 +10129,7 @@
 		)
 		(uuid "dbebe730-0eaf-55ab-8b08-0ce8c6283dd2")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 278.13 88.9 0)
+			(at 232.41 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10340,7 +10296,7 @@
 	)
 	(global_label "PD_VSF"
 		(shape passive)
-		(at 300.99 88.9 270)
+		(at 255.27 88.9 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -10349,7 +10305,29 @@
 		)
 		(uuid "e3173e96-829a-55b4-87bf-92dcdf59ea69")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 300.99 88.9 0)
+			(at 255.27 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 167.64 85.09 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e502416a-d32b-5db2-b6a3-a602a62f7d48")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 167.64 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10369,31 +10347,9 @@
 			)
 			(justify left)
 		)
-		(uuid "e502416a-d32b-5db2-b6a3-a602a62f7d48")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 213.36 85.09 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 259.08 85.09 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "e5d2ac9a-7811-57cf-9c4b-abec6dc62568")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 259.08 85.09 0)
+			(at 213.36 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10448,9 +10404,9 @@
 			)
 		)
 	)
-	(global_label "VCHG"
+	(global_label "CHG_REGN"
 		(shape passive)
-		(at 232.41 199.39 270)
+		(at 345.44 360.68 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -10459,7 +10415,7 @@
 		)
 		(uuid "f068f85a-ef14-5b7a-b7cf-2686326f61d6")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 232.41 199.39 0)
+			(at 345.44 360.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10934,7 +10890,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 49.53 113.03 0)
+		(at 323.85 85.09 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10944,7 +10900,7 @@
 		(dnp no)
 		(uuid "04a1dec5-5c91-5534-89ff-91e6821c8ba0")
 		(property "Reference" "R13"
-			(at 52.07 111.76 0)
+			(at 326.39 83.82 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10955,7 +10911,7 @@
 			)
 		)
 		(property "Value" "1k"
-			(at 52.07 114.3 0)
+			(at 326.39 86.36 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10966,7 +10922,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 49.53 113.03 0)
+			(at 323.85 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10977,7 +10933,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 49.53 113.03 0)
+			(at 323.85 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10988,7 +10944,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 49.53 113.03 0)
+			(at 323.85 85.09 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11264,7 +11220,7 @@
 	)
 	(symbol
 		(lib_id "Device:D_TVS")
-		(at 232.41 85.09 0)
+		(at 186.69 85.09 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11274,7 +11230,7 @@
 		(dnp no)
 		(uuid "1721408a-fb17-5e15-8160-e0e5ed262ca9")
 		(property "Reference" "D6"
-			(at 232.41 80.01 0)
+			(at 186.69 80.01 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11284,7 +11240,7 @@
 			)
 		)
 		(property "Value" "ESDA25P35-1U1M"
-			(at 232.41 90.17 0)
+			(at 186.69 90.17 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11294,7 +11250,7 @@
 			)
 		)
 		(property "Footprint" "Diode_SMD:D_0603_1608Metric"
-			(at 232.41 85.09 0)
+			(at 186.69 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11305,7 +11261,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 232.41 85.09 0)
+			(at 186.69 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11316,7 +11272,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 232.41 85.09 0)
+			(at 186.69 85.09 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11576,83 +11532,6 @@
 			(project "operfly_pilotpro"
 				(path "/b7c47103-47da-5702-9736-49131f4f5275/c7fabf0e-66c3-5b3d-8c00-c341f0c8944b"
 					(reference "C32")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 655.32 490.22 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "30e98be4-d269-5e21-9e54-e0d2bbba6b0d")
-		(property "Reference" "TP10"
-			(at 657.86 488.95 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 657.86 491.49 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 655.32 490.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 655.32 490.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 655.32 490.22 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "26cb7411-637b-5d39-9685-bcedf291375d")
-		)
-		(instances
-			(project "operfly_pilotpro"
-				(path "/b7c47103-47da-5702-9736-49131f4f5275/c7fabf0e-66c3-5b3d-8c00-c341f0c8944b"
-					(reference "TP10")
 					(unit 1)
 				)
 			)
@@ -12457,7 +12336,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 346.71 85.09 0)
+		(at 300.99 85.09 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -12467,7 +12346,7 @@
 		(dnp no)
 		(uuid "47e120d8-d1eb-500c-ac62-1d652162cdb3")
 		(property "Reference" "C17"
-			(at 349.25 83.82 0)
+			(at 303.53 83.82 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12478,7 +12357,7 @@
 			)
 		)
 		(property "Value" "1u 50V"
-			(at 349.25 86.36 0)
+			(at 303.53 86.36 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12489,7 +12368,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 346.71 85.09 0)
+			(at 300.99 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12500,7 +12379,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 346.71 85.09 0)
+			(at 300.99 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12511,7 +12390,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 346.71 85.09 0)
+			(at 300.99 85.09 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12857,7 +12736,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 186.69 85.09 0)
+		(at 322.58 360.68 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -12867,7 +12746,7 @@
 		(dnp no)
 		(uuid "4ed21dd2-e86e-5cda-9562-58f303a9851a")
 		(property "Reference" "TP5"
-			(at 189.23 83.82 0)
+			(at 325.12 359.41 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12877,8 +12756,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "USBC_DM"
-			(at 189.23 86.36 0)
+		(property "Value" "+VSYS"
+			(at 325.12 361.95 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12889,7 +12768,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 186.69 85.09 0)
+			(at 322.58 360.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12900,7 +12779,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 186.69 85.09 0)
+			(at 322.58 360.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12911,7 +12790,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 186.69 85.09 0)
+			(at 322.58 360.68 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -13561,7 +13440,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 300.99 85.09 0)
+		(at 255.27 85.09 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -13571,7 +13450,7 @@
 		(dnp no)
 		(uuid "61bc1a5d-74e8-5b51-93d0-1db12c1dac7b")
 		(property "Reference" "R12"
-			(at 303.53 83.82 0)
+			(at 257.81 83.82 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -13582,7 +13461,7 @@
 			)
 		)
 		(property "Value" "470R"
-			(at 303.53 86.36 0)
+			(at 257.81 86.36 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -13593,7 +13472,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 300.99 85.09 0)
+			(at 255.27 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13604,7 +13483,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 300.99 85.09 0)
+			(at 255.27 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13615,7 +13494,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 300.99 85.09 0)
+			(at 255.27 85.09 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14201,7 +14080,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 278.13 85.09 0)
+		(at 232.41 85.09 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -14211,7 +14090,7 @@
 		(dnp no)
 		(uuid "73d83d75-9b02-54b8-9005-29b232a7dc7f")
 		(property "Reference" "C16"
-			(at 280.67 83.82 0)
+			(at 234.95 83.82 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14222,7 +14101,7 @@
 			)
 		)
 		(property "Value" "4u7 50V"
-			(at 280.67 86.36 0)
+			(at 234.95 86.36 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14233,7 +14112,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric"
-			(at 278.13 85.09 0)
+			(at 232.41 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14244,7 +14123,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 278.13 85.09 0)
+			(at 232.41 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14255,7 +14134,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 278.13 85.09 0)
+			(at 232.41 85.09 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14361,7 +14240,7 @@
 	)
 	(symbol
 		(lib_id "Device:D_TVS")
-		(at 255.27 85.09 0)
+		(at 209.55 85.09 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -14371,7 +14250,7 @@
 		(dnp no)
 		(uuid "768c83ef-b1bf-5a09-aec7-41e28ac78885")
 		(property "Reference" "D7"
-			(at 255.27 80.01 0)
+			(at 209.55 80.01 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14381,7 +14260,7 @@
 			)
 		)
 		(property "Value" "ESDA25P35-1U1M"
-			(at 255.27 90.17 0)
+			(at 209.55 90.17 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14391,7 +14270,7 @@
 			)
 		)
 		(property "Footprint" "Diode_SMD:D_0603_1608Metric"
-			(at 255.27 85.09 0)
+			(at 209.55 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14402,7 +14281,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 255.27 85.09 0)
+			(at 209.55 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14413,7 +14292,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 255.27 85.09 0)
+			(at 209.55 85.09 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14599,7 +14478,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 163.83 85.09 0)
+		(at 232.41 199.39 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -14609,7 +14488,7 @@
 		(dnp no)
 		(uuid "7c83975b-525e-5ce2-880e-183d42bcb6c0")
 		(property "Reference" "TP4"
-			(at 166.37 83.82 0)
+			(at 234.95 198.12 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14619,8 +14498,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "USBC_DP"
-			(at 166.37 86.36 0)
+		(property "Value" "VCHG"
+			(at 234.95 200.66 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14631,7 +14510,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 163.83 85.09 0)
+			(at 232.41 199.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14642,7 +14521,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 163.83 85.09 0)
+			(at 232.41 199.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14653,7 +14532,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 163.83 85.09 0)
+			(at 232.41 199.39 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -15880,7 +15759,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 609.6 284.48 0)
+		(at 655.32 518.16 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -15890,7 +15769,7 @@
 		(dnp no)
 		(uuid "aff298bd-8817-541e-b0e3-7234984b6b3e")
 		(property "Reference" "TP9"
-			(at 612.14 283.21 0)
+			(at 657.86 516.89 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -15900,8 +15779,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "+BATT"
-			(at 612.14 285.75 0)
+		(property "Value" "+5V"
+			(at 657.86 519.43 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -15912,7 +15791,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 609.6 284.48 0)
+			(at 655.32 518.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15923,7 +15802,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 609.6 284.48 0)
+			(at 655.32 518.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15934,7 +15813,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 609.6 284.48 0)
+			(at 655.32 518.16 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16407,7 +16286,7 @@
 	)
 	(symbol
 		(lib_id "Device:D_Schottky")
-		(at 323.85 85.09 0)
+		(at 278.13 85.09 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -16417,7 +16296,7 @@
 		(dnp no)
 		(uuid "bd35745a-545b-5060-8e4a-fe8d5813e21b")
 		(property "Reference" "D8"
-			(at 323.85 80.01 0)
+			(at 278.13 80.01 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16427,7 +16306,7 @@
 			)
 		)
 		(property "Value" "BAT54J"
-			(at 323.85 90.17 0)
+			(at 278.13 90.17 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16437,7 +16316,7 @@
 			)
 		)
 		(property "Footprint" "Diode_SMD:D_SOD-323"
-			(at 323.85 85.09 0)
+			(at 278.13 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16448,7 +16327,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 323.85 85.09 0)
+			(at 278.13 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16459,7 +16338,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 323.85 85.09 0)
+			(at 278.13 85.09 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16646,7 +16525,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 322.58 360.68 0)
+		(at 609.6 284.48 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -16656,7 +16535,7 @@
 		(dnp no)
 		(uuid "c715c2d8-5447-5a49-a7a1-5bfd389d8782")
 		(property "Reference" "TP7"
-			(at 325.12 359.41 0)
+			(at 612.14 283.21 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16666,8 +16545,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "+VSYS"
-			(at 325.12 361.95 0)
+		(property "Value" "+BATT"
+			(at 612.14 285.75 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16678,7 +16557,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 322.58 360.68 0)
+			(at 609.6 284.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16689,7 +16568,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 322.58 360.68 0)
+			(at 609.6 284.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16700,7 +16579,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 322.58 360.68 0)
+			(at 609.6 284.48 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -17212,83 +17091,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 655.32 518.16 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "d1e31968-838e-5aa0-9e4a-82351114b680")
-		(property "Reference" "TP11"
-			(at 657.86 516.89 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "+5V"
-			(at 657.86 519.43 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 655.32 518.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 655.32 518.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 655.32 518.16 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "b34dd0ae-67e4-556c-9e25-743b159fd93d")
-		)
-		(instances
-			(project "operfly_pilotpro"
-				(path "/b7c47103-47da-5702-9736-49131f4f5275/c7fabf0e-66c3-5b3d-8c00-c341f0c8944b"
-					(reference "TP11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C")
 		(at 140.97 149.86 0)
 		(unit 1)
@@ -17370,7 +17172,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 232.41 199.39 0)
+		(at 345.44 360.68 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -17380,7 +17182,7 @@
 		(dnp no)
 		(uuid "d5e431a4-a7e4-5171-892f-ed39404cb8fa")
 		(property "Reference" "TP6"
-			(at 234.95 198.12 0)
+			(at 347.98 359.41 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -17390,8 +17192,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "VCHG"
-			(at 234.95 200.66 0)
+		(property "Value" "CHG_REGN"
+			(at 347.98 361.95 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -17402,7 +17204,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 232.41 199.39 0)
+			(at 345.44 360.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17413,7 +17215,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 232.41 199.39 0)
+			(at 345.44 360.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17424,7 +17226,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 232.41 199.39 0)
+			(at 345.44 360.68 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -17607,7 +17409,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 345.44 360.68 0)
+		(at 655.32 490.22 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -17617,7 +17419,7 @@
 		(dnp no)
 		(uuid "dbb349d8-b5ae-50cb-88f2-a2e49c15228e")
 		(property "Reference" "TP8"
-			(at 347.98 359.41 0)
+			(at 657.86 488.95 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -17627,8 +17429,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "CHG_REGN"
-			(at 347.98 361.95 0)
+		(property "Value" "+3V3"
+			(at 657.86 491.49 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -17639,7 +17441,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 345.44 360.68 0)
+			(at 655.32 490.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17650,7 +17452,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 345.44 360.68 0)
+			(at 655.32 490.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17661,7 +17463,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 345.44 360.68 0)
+			(at 655.32 490.22 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -18317,7 +18119,7 @@
 	)
 	(symbol
 		(lib_id "Device:D_TVS")
-		(at 209.55 85.09 0)
+		(at 163.83 85.09 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -18327,7 +18129,7 @@
 		(dnp no)
 		(uuid "f5acc2f2-7f57-5194-8794-1f5d56193c99")
 		(property "Reference" "D5"
-			(at 209.55 80.01 0)
+			(at 163.83 80.01 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -18337,7 +18139,7 @@
 			)
 		)
 		(property "Value" "ESDA25P35-1U1M"
-			(at 209.55 90.17 0)
+			(at 163.83 90.17 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -18347,7 +18149,7 @@
 			)
 		)
 		(property "Footprint" "Diode_SMD:D_0603_1608Metric"
-			(at 209.55 85.09 0)
+			(at 163.83 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18358,7 +18160,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 209.55 85.09 0)
+			(at 163.83 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18369,7 +18171,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 209.55 85.09 0)
+			(at 163.83 85.09 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects

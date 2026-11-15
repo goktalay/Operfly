@@ -38,6 +38,7 @@ KARTLAR = [
     ("pilotpro", "KUMANDA_PRO", "operfly_pilotpro", "Operfly Pilot Pro"),
     ("base", "BASE", "operfly_base", "Operfly Base"),
     ("gr", "YER_RADYO", "operfly_groundradio", "Operfly Ground Radio"),
+    ("tracker", "TRACKER", "operfly_tracker", "Operfly Tracker"),
 ]
 
 

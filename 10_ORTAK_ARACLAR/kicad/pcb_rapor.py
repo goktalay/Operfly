@@ -54,7 +54,9 @@ def rapor(kart, kok, notlar):
     else:
         dizilim = "%d katman (%s; diğer katmanlar sinyal, elemanlar üstte)" % (ayar["katman"], ", ".join("%s: %s" % (k.replace("In", "iç ").replace(".Cu", ""), v.replace("GND", "toprak")) for k, v in sorted(ayar["duzlemler"].items())))
     b += "- **Kart:** %.0f x %.0f mm, %s, %d eleman, tamamı üst yüzde; köşelerde M3 montaj deliği.\n" % (s["en"], s["boy"], dizilim, s["eleman"])
-    b += "- **Kurallar:** yol 0,20 mm, açıklık 0,125 mm, geçiş 0,6/0,3 mm; besleme ağları, ağın en dar ucunu aşmayacak biçimde 0,2-1,0 mm (0,4 mm ve üstünde geçiş 0,8/0,4 mm); bakır-kenar 0,25 mm.\n"
+    ac, yl, gc, dl = ayar.get("sinif") or pcb_yerlesim.SINIFLAR["Default"]
+    b += ("- **Kurallar:** yol %.2f mm, açıklık %.3f mm, geçiş %.2f/%.2f mm; besleme" % (yl, ac, gc, dl)).replace(".", ",")
+    b += " ağları, ağın en dar ucunu aşmayacak biçimde 0,2-1,0 mm (0,4 mm ve üstünde geçiş 0,8/0,4 mm); bakır-kenar 0,25 mm.\n"
     if temiz:
         b += "- **Denetim:** DRC 0 ihlal, 0 bağlanmamış uç%s. %d yol parçası, %d geçiş.\n" % ("; şematik-kart uyumu temiz" if s["uyum"] == 0 else "; şematik-kart uyum uyarısı %d" % s["uyum"], s["yol"], s["gecis"])
     else:

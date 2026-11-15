@@ -38,7 +38,8 @@ RF_GENISLIK = 0.35
 def kurallar(b, ayar):
     bds = b.GetDesignSettings()
     ns = bds.m_NetSettings
-    aciklik, yol, gecis, delik = pcb_yerlesim.SINIFLAR["Default"]
+    # Ayardaki "sinif" (açıklık, yol, geçiş çapı, geçiş deliği) varsayılan sınıfı ezer (ince adımlı BGA'lı kartlar).
+    aciklik, yol, gecis, delik = ayar.get("sinif") or pcb_yerlesim.SINIFLAR["Default"]
     nc = ns.GetDefaultNetclass()
     nc.SetClearance(MM(aciklik))
     nc.SetTrackWidth(MM(yol))
@@ -65,8 +66,8 @@ def kurallar(b, ayar):
             nc = pcbnew.NETCLASS(ad)
             nc.SetClearance(MM(aciklik))
             nc.SetTrackWidth(MM(w))
-            nc.SetViaDiameter(MM(0.8 if w >= 0.4 else 0.6))
-            nc.SetViaDrill(MM(0.4 if w >= 0.4 else 0.3))
+            nc.SetViaDiameter(MM(0.8 if w >= 0.4 else gecis))
+            nc.SetViaDrill(MM(0.4 if w >= 0.4 else delik))
             ns.SetNetclass(ad, nc)
             kullanilan.add(ad)
         ns.SetNetclassPatternAssignment(ag, ad)
@@ -83,11 +84,11 @@ def kurallar(b, ayar):
         ns.SetNetclass("RF", nc)
         for ag in sorted(rf):
             ns.SetNetclassPatternAssignment(ag, "RF")
-    bds.m_TrackMinWidth = MM(0.127)
-    bds.m_ViasMinSize = MM(0.45)
+    bds.m_TrackMinWidth = MM(min(0.127, yol))
+    bds.m_ViasMinSize = MM(min(0.45, gecis))
     bds.m_MinThroughDrill = MM(0.2)
     bds.m_CopperEdgeClearance = MM(0.25)
-    bds.m_MinClearance = MM(0.125)
+    bds.m_MinClearance = MM(min(0.125, aciklik))
     bds.m_HoleClearance = MM(0.19)   # KiCad kütüphanesindeki USB Type-C ayak izinin kendi uç-delik aralığı 0,194 mm
     bds.m_HoleToHoleMin = MM(0.25)
     bds.m_ViasMinAnnularWidth = MM(0.1)

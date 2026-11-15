@@ -11,6 +11,17 @@
 		(company "Operfly")
 	)
 	(lib_symbols)
+	(text "Sematik betikle uretilir: 01_DONANIM/POWER/kicad/uret.py. 12 V cevirici ve servo rayi henuz cizilmedi (README)."
+		(exclude_from_sim no)
+		(at 25.4 33.02 0)
+		(effects
+			(font
+				(size 1.6 1.6)
+			)
+			(justify left bottom)
+		)
+		(uuid "35a2200a-5ac7-50e4-9d7a-9fe6336c3f10")
+	)
 	(text "Operfly Power - guc karti (OPFPWR)"
 		(exclude_from_sim no)
 		(at 25.4 25.4 0)
@@ -22,16 +33,51 @@
 		)
 		(uuid "39a468d1-c812-5efa-9398-dbd223b889bf")
 	)
-	(text "Sematik betikle uretilir: 01_DONANIM/POWER/kicad/uret.py. Guc kati sayfalari henuz cizilmedi (README)."
+	(sheet
+		(at 101.6 50.8)
+		(size 50.8 20.32)
 		(exclude_from_sim no)
-		(at 25.4 33.02 0)
-		(effects
-			(font
-				(size 1.6 1.6)
-			)
-			(justify left bottom)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
 		)
-		(uuid "fb9df0fa-e860-545a-b354-885a3dd7a08e")
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "2dc5f100-b258-5a54-9fb5-dd140e8556a1")
+		(property "Sheetname" "Giris"
+			(at 101.6 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "giris.kicad_sch"
+			(at 101.6 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_power"
+				(path "/c2cae590-43f8-5b4c-ac33-c6a8545ce09b"
+					(page "3")
+				)
+			)
+		)
 	)
 	(sheet
 		(at 25.4 50.8)

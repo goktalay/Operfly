@@ -1139,7 +1139,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Harwin:Harwin_Gecko_G125-MS12005M2P_2x10_P1.25mm_Vertical"
 			(at 80.01 90.17 0)
 			(hide yes)
 			(show_name no)
@@ -1271,7 +1271,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Harwin:Harwin_Gecko_G125-MS12005M2P_2x10_P1.25mm_Vertical"
 			(at 190.5 90.17 0)
 			(hide yes)
 			(show_name no)

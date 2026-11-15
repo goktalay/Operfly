@@ -6338,7 +6338,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-223-3_TabPin2"
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-223"
 			(at 389.89 90.17 0)
 			(hide yes)
 			(show_name no)

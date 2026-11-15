@@ -12,6 +12,7 @@ Konumu ve zamanı omurgaya verir; saniye darbesini (PPS) omurgaya süren karttı
 - Alıcının sembolü ve ayak izi KiCad kütüphanesinde yok; ikisi de üreticinin donanım kılavuzundan
   (mosaic Hardware Manual 1.11.0) betikle üretildi: `10_ORTAK_ARACLAR/kicad/mosaic_padleri.py` (239 padlik tablo,
   sayılarak denetlenir), `kutuphane_uret.py` (sembol), `ayak_izi_uret.py` (ayak izi).
+- Şematiğin kaynağı Base kartıyla ortaktır: `10_ORTAK_ARACLAR/kicad/nav_ana.py` (Base = Nav + dış besleme − pusula).
 
 ## Kararlar (sahibi kararı tasarımcıya bıraktı)
 

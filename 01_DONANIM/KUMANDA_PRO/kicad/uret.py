@@ -125,7 +125,7 @@ g = Izgara(450, 285, sutun=12)
 k.parca(gc, g, "Connector_Generic:Conn_01x05", "J", "Batarya (4S akilli paket)", {"Pin_1": "+BATT", "Pin_2": "BAT_SCL", "Pin_3": "BAT_SDA", "Pin_4": "BAT_T", "Pin_5": "GND"},
         "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical", dx=8)
 x, y = g.yer()
-k.koy(gc, "Device:Q_NMOS", "Q", "BSC014N04LS", x, y, {"D": "+BATT", "G": "CHG_SDRV", "S": "CHG_BAT"}, "Package_TO_SOT_SMD:TDSON-8-1")
+k.koy(gc, "Transistor_FET:BSC028N06LS3", "Q", "BSC014N04LS", x, y, {"D": "+BATT", "G": "CHG_SDRV", "S": "CHG_BAT"}, "Package_TO_SOT_SMD:TDSON-8-1")
 k.R(gc, g, "100R", "BAT_SCL", "PWR_SCL"); k.R(gc, g, "100R", "BAT_SDA", "PWR_SDA")
 k.C(gc, g, "10u 35V", "+BATT", fp=C1206); k.iki(gc, g, "Device:D_TVS", "D", "SMBJ18A", "+BATT", "GND", "Diode_SMD:D_SMB")
 k.olcum_noktasi(gc, g, "+BATT")

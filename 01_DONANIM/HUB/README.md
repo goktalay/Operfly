@@ -58,3 +58,6 @@ Omurganın merkezi: 12 port, her portta elektronik sigorta ve akım ölçümü, 
   RGMII saat gecikmesi ayarı (yazılımla), trafo orta uçlarının bağlanma biçimi, kristal yük kondansatörleri.
 - KSZ9567R ayak izi geçici (alt pedli 128 uçlu kılıf çizilecek).
 - TPS62130: sabit frekans ve çıkış ayar uçlarının bağlantısı, yumuşak başlatma kondansatörü.
+- **Kart çizimi ön koşulu (15 Kasım 2026 taraması):** KSZ9567R'nin alt pedi (uç 129) seçili ayak izinde yok; KiCad
+  kütüphanesinde alt pedli 128 uçlu TQFP ayak izi bulunmuyor. Kart çiziminden önce üretici kılıf çizimine göre ortak
+  kütüphaneye alt pedli ayak izi eklenecek.

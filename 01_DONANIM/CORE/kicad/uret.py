@@ -94,8 +94,8 @@ port1 = {"+12V": "+12V_BUS1", "GND": "GND", "CAN_A_H": "CAN_A_H", "CAN_A_L": "CA
 # Port 2: yedek guc ve CAN; Ethernet ve PPS bagli degil (karar: 15 Kasim 2026).
 port2 = {"+12V": "+12V_BUS2", "GND": "GND", "CAN_A_H": "CAN_A_H", "CAN_A_L": "CAN_A_L", "CAN_B_H": "CAN_B_H", "CAN_B_L": "CAN_B_L"}
 ref("J"), ref("J")
-om.koy(bus, "J1", "Operfly Bus 1", 80, 90, port1)
-om.koy(bus, "J2", "Operfly Bus 2 (yedek)", 190, 90, port2)
+om.koy(bus, "J1", "Operfly Bus 1", 80, 90, port1, footprint="Connector_Harwin:Harwin_Gecko_G125-MS12005M2P_2x10_P1.25mm_Vertical")
+om.koy(bus, "J2", "Operfly Bus 2 (yedek)", 190, 90, port2, footprint="Connector_Harwin:Harwin_Gecko_G125-MS12005M2P_2x10_P1.25mm_Vertical")
 om.metin("Port 1: tam omurga. Port 2: yedek guc ve CAN.", 40, 40)
 om.yaz(os.path.join(BURASI, "omurga.kicad_sch"))
 

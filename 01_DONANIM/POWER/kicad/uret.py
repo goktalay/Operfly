@@ -39,7 +39,7 @@ for i, h in enumerate("AB"):
     k.iki(gr, g, "Device:D_Zener", "D", "SMAT70A", "BAT_%s" % h, "TVS_%s" % h, "Diode_SMD:D_SMA")
     k.iki(gr, g, "Device:D_Zener", "D", "SMAJ24A", "GND", "TVS_%s" % h, "Diode_SMD:D_SMA")
     x, y = g.yer()
-    k.koy(gr, "Device:Q_NMOS", "Q", "100V lojik seviye, <=4 mR (secilecek)", x, y, {"S": "BAT_%s" % h, "G": "GATE_%s" % h, "D": "VIN_OR"}, "Package_TO_SOT_SMD:TDSON-8-1")
+    k.koy(gr, "Transistor_FET:BSC028N06LS3", "Q", "100V lojik seviye, <=4 mR (secilecek)", x, y, {"S": "BAT_%s" % h, "G": "GATE_%s" % h, "D": "VIN_OR"}, "Package_TO_SOT_SMD:TDSON-8-1")
     g.yer()
     k.parca(gr, g, "Power_Management:LTC4359-DCB", "U", "LTC4359IDCB", {"IN": "BAT_%s" % h, "SRC": "BAT_%s" % h, "GATE": "GATE_%s" % h, "OUT": "VIN_OR",
             "Vss": "VSS_%s" % h, "Pad": "VSS_%s" % h}, "Package_DFN_QFN:DFN-6-1EP_3x2mm_P0.5mm_EP1.65x1.35mm", dx=10)
@@ -110,7 +110,7 @@ for _ in range(4):
 
 def mosfet(deger, d, gate, src):
     x, y = g.yer()
-    k.koy(cv, "Device:Q_NMOS", "Q", deger, x, y, {"D": d, "G": gate, "S": src}, FET)
+    k.koy(cv, "Transistor_FET:BSC028N06LS3", "Q", deger, x, y, {"D": d, "G": gate, "S": src}, FET)
 
 
 M100 = "FDMS86101"
@@ -165,7 +165,7 @@ for i, h in enumerate("AB"):
     k.bayrak(sv, g, n)
     g.satir()
     x, y = g.yer()
-    k.koy(sv, "Device:Q_NMOS", "Q", "BSC014N04LS", x, y, {"S": n, "G": n + "_GATE", "D": "SERVO_V"}, FET)
+    k.koy(sv, "Transistor_FET:BSC028N06LS3", "Q", "BSC014N04LS", x, y, {"S": n, "G": n + "_GATE", "D": "SERVO_V"}, FET)
     g.yer()
     k.parca(sv, g, "Power_Management:LTC4359-DCB", "U", "LTC4359IDCB", {"IN": n, "SRC": n, "GATE": n + "_GATE", "OUT": "SERVO_V",
             "Vss": n + "_VSS", "Pad": n + "_VSS"}, "Package_DFN_QFN:DFN-6-1EP_3x2mm_P0.5mm_EP1.65x1.35mm", dx=10)

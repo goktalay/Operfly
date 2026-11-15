@@ -48,7 +48,7 @@ prices=[
 ("Hall etkili gimbal",60,T,"Model seçilmedi. Aday sınıf: 3,3 V analog çıkışlı Hall gimbal (ör. RadioMaster AG01). Ürün sayfalarında uç sırası yok; kablo numune üzerinde uyarlanır","","",K,A),
 ("Anahtar, tekerlek ve düğme seti",40,T,"6 anahtar, 2 tekerlek, 2 düğme, 5 yönlü tuş; kasa tasarımıyla seçilecek. Giriş kartına JST-GH kabloyla bağlanır","","",K,A),
 ("Küçük ekran (Pilot T)",30,T,"","","",K,A),
-("Kumanda bataryası ve şarj devresi",70,T,"","","",K,A),
+("Kumanda bataryası ve şarj devresi",70,T,"Pilot 12 şematiği: tek hücreli (1S) korumalı, NTC'li Li-ion paket (seçilmedi; öneri 5000 mAh ve üzeri) + şarj/güç yolu, batarya ölçer, 3,3 V ve radyo beslemesi",TI,"BQ24075RGT, BQ27441DRZR-G1A, TPS63001, TPS61230, LMV393",K,TS),
 ("Pilot Pro bataryası ve şarj devresi",150,T,"","","",K,A),
 ("USB–Gigabit Ethernet köprüsü",10,T,"Köprü + USB göbeği + trafo; fiyat teyit edilecek","Microchip / HALO","LAN7500i, USB2514B, TG111-MSC13LF",K,S),
 ("USB Type-C konnektör",6,T,"","","",K,TS),

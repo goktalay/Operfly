@@ -92,10 +92,53 @@ def rfd900ux_smt():
     return ad, s + ")\n"
 
 
+def pmddl():
+    """Microhard pMDDL OEM (pMDDL2350/2450/2550; 26,5 x 33 mm, 80 kenar pedi + alt toprak duzlemi). Olculer uretici
+    isletme kilavuzundan (v1.4.2, Cizim 3-1, 3-2, 3-3): ped 1,83 x 0,81 mm, adim 1,27 mm; yan sutunlar distan disa 27,99 mm
+    (24'er ped), ust ve alt siralar distan disa 34,34 mm (16'sar ped); toprak duzlemi 22,35 x 28,70 mm;
+    lehim pastasi toprak duzleminde 1,03 x 2,55 mm pencereler, sasirtmali 5-4 dizilim, sutun adimi 4,12 mm, satir araligi 1,00 mm.
+    Yon (ustten bakis, Cizim 3-5): 1-24 sol sutun yukaridan asagi, 25-40 alt sira soldan saga, 41-64 sag sutun asagidan yukari,
+    65-80 ust sira sagdan sola; antenler ust kenarda. Toprak duzlemi kilavuzda numarasiz, burada 81.
+    Kart cizimine gecmeden ureticinin guncel cizimiyle karsilastirilacak.
+    """
+    ad = "Microhard_pMDDL_OEM"
+    gx, gy = 13.25, 16.5
+    s = '(footprint "%s" (version 20240108) (generator "operfly") (generator_version "1") (layer "F.Cu")\n' % ad
+    s += '\t(descr "Microhard pMDDL OEM radyo modulu, 26.5x33 mm, 80 kenar pedi + toprak duzlemi (uretici cizimiyle dogrulanacak)")\n'
+    s += '\t(tags "Microhard pMDDL2450 OEM radio module")\n'
+    s += '\t(property "Reference" "REF**" (at 0 %.2f 0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))\n' % (-19.2)
+    s += '\t(property "Value" "%s" (at 0 %.2f 0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))\n' % (ad, 19.2)
+    s += '\t(property "Footprint" "" (at 0 0 0) (layer "F.Fab") (hide yes) (effects (font (size 1.27 1.27))))\n'
+    s += '\t(property "Datasheet" "" (at 0 0 0) (layer "F.Fab") (hide yes) (effects (font (size 1.27 1.27))))\n'
+    s += '\t(property "Description" "" (at 0 0 0) (layer "F.Fab") (hide yes) (effects (font (size 1.27 1.27))))\n'
+    s += "\t(attr smd)\n"
+    s += '\t(fp_rect (start %.2f %.2f) (end %.2f %.2f) (stroke (width 0.1) (type solid)) (fill none) (layer "F.Fab"))\n' % (-gx, -gy, gx, gy)
+    s += '\t(fp_circle (center %.2f %.2f) (end %.2f %.2f) (stroke (width 0.25) (type solid)) (fill none) (layer "F.SilkS"))\n' % (-15.0, -14.605, -14.87, -14.605)
+    s += '\t(fp_rect (start -14.25 -17.42) (end 14.25 17.42) (stroke (width 0.05) (type solid)) (fill none) (layer "F.CrtYd"))\n'
+    xs, ys = 27.99 / 2 - 1.83 / 2, 34.34 / 2 - 1.83 / 2      # sutun ve sira merkezleri
+    konum = {}
+    for i in range(24):
+        konum[1 + i] = (-xs, (i - 11.5) * 1.27, 1.83, 0.81)       # sol: yukaridan asagi
+        konum[41 + i] = (xs, (11.5 - i) * 1.27, 1.83, 0.81)       # sag: asagidan yukari
+    for i in range(16):
+        konum[25 + i] = ((i - 7.5) * 1.27, ys, 0.81, 1.83)        # alt: soldan saga
+        konum[65 + i] = ((7.5 - i) * 1.27, -ys, 0.81, 1.83)       # ust: sagdan sola
+    assert len(konum) == 80
+    for no in range(1, 81):
+        x, y, w, h = konum[no]
+        s += '\t(pad "%d" smd rect (at %.3f %.3f) (size %.2f %.2f) (layers "F.Cu" "F.Paste" "F.Mask"))\n' % (no, x, y, w, h)
+    s += '\t(pad "81" smd rect (at 0 0) (size 22.35 28.7) (layers "F.Cu" "F.Mask"))\n'
+    for r in range(7):
+        n = 5 if r % 2 == 0 else 4
+        for c in range(n):
+            s += '\t(pad "" smd rect (at %.2f %.2f) (size 1.03 2.55) (layers "F.Paste"))\n' % ((c - (n - 1) / 2) * 4.12, (r - 3) * 3.55)
+    return ad, s + ")\n"
+
+
 def main():
     klasor = sys.argv[1]
     os.makedirs(klasor, exist_ok=True)
-    for ad, metin in (mosaic(), rfd900ux_smt()):
+    for ad, metin in (mosaic(), rfd900ux_smt(), pmddl()):
         if len(sys.argv) > 2 and ad != sys.argv[2]:
             continue
         yol = os.path.join(klasor, ad + ".kicad_mod")

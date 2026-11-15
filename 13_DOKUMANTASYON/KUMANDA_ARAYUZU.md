@@ -49,6 +49,17 @@ Ana kart kuralları:
 - Güç açma: düğmeye basılınca ana kart beslemeyi açar; işlemci PWR_HOLD'u 1 yapınca besleme düğme bırakılsa da
   sürer. Kapatma: işlemci PWR_HOLD'u 0 yapar.
 
+## Pilot Pro'da farklar
+
+Pilot Pro ana kartında ayrı bir güç işlemcisi vardır (batarya, şarj, Jetson denetimi). Yassı kablonun uç sırası aynıdır;
+kullanım şöyle değişir:
+
+- 15-16 (I2C): güç işlemcisine gider (güç işlemcisi köle). Batarya durumu ve kapanma bilgisi buradan okunur.
+- 17 (ALERT_N): güç işlemcisi sürer (batarya düşük, kapanma başlıyor).
+- 18 (PWR_BTN_N): güç düğmesinin durumu (diyot üzerinden); gücü güç işlemcisi yönetir.
+- 19 (PWR_HOLD): ana kartta bağlı değildir.
+- 12-13 (USB): Jetson'ın USB göbeğine gider (2. adımda çizilecek).
+
 ## Giriş konnektörleri (giriş kartında, JST-GH 1,25 mm)
 
 Uç sıraları Operfly tanımıdır; satın alınan çubuk ve anahtarların kabloları bu sıraya göre hazırlanır.

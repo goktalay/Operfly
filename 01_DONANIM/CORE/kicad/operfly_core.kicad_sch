@@ -80,6 +80,52 @@
 		)
 	)
 	(sheet
+		(at 254 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "7a2f443c-5aff-50a7-8a87-cab626ff9894")
+		(property "Sheetname" "Islemci_Destek"
+			(at 254 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "islemci_destek.kicad_sch"
+			(at 254 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_core"
+				(path "/021aeb0d-29af-5cb6-83ea-514d49692429"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
 		(at 25.4 50.8)
 		(size 50.8 20.32)
 		(exclude_from_sim no)
@@ -121,6 +167,52 @@
 			(project "operfly_core"
 				(path "/021aeb0d-29af-5cb6-83ea-514d49692429"
 					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 177.8 50.8)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "ef558713-5c4a-5c33-a505-91be744457bd")
+		(property "Sheetname" "Guc"
+			(at 177.8 50.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "guc.kicad_sch"
+			(at 177.8 71.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "operfly_core"
+				(path "/021aeb0d-29af-5cb6-83ea-514d49692429"
+					(page "4")
 				)
 			)
 		)

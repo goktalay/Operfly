@@ -44,8 +44,24 @@ class Sema:
         if not m:
             raise SystemExit("sembol yok: " + sembol)
         b = blok(metin, m.start())
-        if re.search(r'\(extends "', b[:400]):
-            raise SystemExit("türetilmiş sembol desteklenmiyor: " + sembol)
+        e = re.search(r'\(extends "([^"]+)"\)', b[:400])
+        if e:  # türetilmiş sembol: temel sembolün çizimi ve pinleri bu adla kopyalanır
+            temel = e.group(1)
+            tm = re.search(r'\(symbol "%s"' % re.escape(temel), metin)
+            tureyen = b
+            b = blok(metin, tm.start())
+            b = b.replace('(symbol "%s"' % temel, '(symbol "%s"' % sembol, 1)
+            # türetilmiş sembolün kendi özellikleri (değer, ayak izi, veri sayfası...) temelinkilerin yerini alır
+            for pm in re.finditer(r'\(property "([^"]+)"', tureyen):
+                yeni = blok(tureyen, pm.start())
+                em = re.search(r'\(property "%s"' % re.escape(pm.group(1)), b)
+                if em:
+                    eski = blok(b, em.start())
+                    b = b.replace(eski, yeni, 1)
+                else:
+                    i = b.index("(symbol ", 1)
+                    b = b[:i] + yeni + "\n\t\t" + b[i:]
+            b = re.sub(r'\(symbol "%s_(\d+_\d+)"' % re.escape(temel), '(symbol "%s_\\1"' % sembol, b)
         lid = "%s:%s" % (lib_adi, sembol)
         self.lib[lid] = b.replace('(symbol "%s"' % sembol, '(symbol "%s"' % lid, 1)
         ps = []
@@ -59,13 +75,21 @@ class Sema:
 
     def koy(self, lid, ref, deger, x, y, aglar, footprint=""):
         """aglar: {pin numarası veya pin adı: ağ adı}. Verilmeyen pinler bağlı değil sayılır."""
+        if footprint:
+            if not hasattr(self, "ayak_izleri"):
+                self.ayak_izleri = set()
+            self.ayak_izleri.add(footprint)
         x, y = round(x / 1.27) * 1.27, round(y / 1.27) * 1.27  # bağlantı ızgarasına oturt
         u = uid(self.proje, ref)
         s = '\t(symbol (lib_id "%s") (at %.2f %.2f 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "%s")\n' % (lid, x, y, u)
         ys = [p[3] for p in self.pinler[lid]]
         ust, alt = max(ys) + 5.08, min(ys) - 5.08
+        dikey = len(self.pinler[lid]) <= 2 and all(p[2] == 0 for p in self.pinler[lid])  # uçları üstte ve altta olan eleman
         for ad, dg, py, gizli in (("Reference", ref, ust, False), ("Value", deger, alt, False), ("Footprint", footprint, 0, True), ("Datasheet", "", 0, True)):
-            s += '\t\t(property "%s" "%s" (at %.2f %.2f 0) (effects (font (size 1.27 1.27))%s))\n' % (ad, dg, x, y - py, " (hide yes)" if gizli else "")
+            px, hiza = x, ""
+            if dikey and not gizli:  # yazılar yana: üstte ve altta ağ etiketleri duruyor
+                px, py, hiza = x + 2.54, (1.27 if ad == "Reference" else -1.27), " (justify left)"
+            s += '\t\t(property "%s" "%s" (at %.2f %.2f 0) (effects (font (size 1.27 1.27))%s%s))\n' % (ad, dg, px, y - py, hiza, " (hide yes)" if gizli else "")
         for no, ad, px, py, aci in self.pinler[lid]:
             s += '\t\t(pin "%s" (uuid "%s"))\n' % (no, uid(self.proje, ref, "pin", no))
         s += '\t\t(instances (project "%s" (path "%s" (reference "%s") (unit 1))))\n\t)\n' % (self.proje, self.yol, ref)
@@ -87,6 +111,15 @@ class Sema:
         if eksik:
             raise SystemExit("%s: sembolde olmayan pin(ler): %s" % (ref, sorted(eksik)))
 
+    def bayrak(self, ag, x, y, sembol_dizini):
+        """Bir ağı "beslenen ağ" olarak işaretler (PWR_FLAG). Besleme pasif eleman üzerinden geldiğinde gerekir."""
+        import os
+        lid = "power:PWR_FLAG"
+        if lid not in self.lib:
+            self.kutuphane("power", os.path.join(sembol_dizini, "power.kicad_sym"), "PWR_FLAG")
+        self._bayrak_no = getattr(self, "_bayrak_no", 0) + 1
+        self.koy(lid, "#FLG_%s_%02d" % (self.ad, self._bayrak_no), "PWR_FLAG", x, y, {"1": ag})
+
     def metin(self, yazi, x, y, boyut=2.0):
         self.govde.append('\t(text "%s" (exclude_from_sim no) (at %.2f %.2f 0) (effects (font (size %.2f %.2f)) (justify left bottom)) (uuid "%s"))\n' % (yazi, x, y, boyut, boyut, uid(self.proje, "txt", yazi, x, y)))
 
@@ -98,6 +131,27 @@ class Sema:
         s += ('\t(sheet_instances (path "/" (page "1")))\n' if self.ust is None else "") + ")\n"
         open(yol, "w", encoding="utf-8", newline="\n").write(s)
         print("yazıldı:", yol)
+
+
+def kutuphane_tablolari(dizin, semalar, ozel=None):
+    """Proje kütüphane tablolarını (sym-lib-table, fp-lib-table) şematikte kullanılanlardan üretir.
+
+    ozel: {kütüphane adı: uri} - KiCad standart kütüphanesi olmayanlar (ör. ortak Operfly kütüphanesi).
+    """
+    import os
+    ozel = ozel or {}
+    sym, fp = set(), set()
+    for s in semalar:
+        sym.update(l.split(":")[0] for l in s.lib)
+        fp.update(f.split(":")[0] for f in getattr(s, "ayak_izleri", ()) if ":" in f)
+    def tablo(ad, adlar, degisken, uzanti):
+        t = "(%s\n  (version 7)\n" % ad
+        for n in sorted(adlar):
+            uri = ozel.get(n, "${%s}/%s%s" % (degisken, n, uzanti))
+            t += '  (lib (name "%s")(type "KiCad")(uri "%s")(options "")(descr ""))\n' % (n, uri)
+        return t + ")\n"
+    open(os.path.join(dizin, "sym-lib-table"), "w", encoding="utf-8", newline="\n").write(tablo("sym_lib_table", sym, "KICAD10_SYMBOL_DIR", ".kicad_sym"))
+    open(os.path.join(dizin, "fp-lib-table"), "w", encoding="utf-8", newline="\n").write(tablo("fp_lib_table", fp, "KICAD10_FOOTPRINT_DIR", ".pretty"))
 
 
 def kicad_sembol_dizini():

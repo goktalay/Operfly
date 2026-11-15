@@ -21,13 +21,14 @@ DUGUM_PINLERI = {
 }
 
 
-def dugum_sayfasi(k, kok, dizin, x=25.4, y=50.8, ek=None, pps=False, ethernet=False, port=True, sonlandirma=False, besleme="omurga"):
+def dugum_sayfasi(k, kok, dizin, x=25.4, y=50.8, ek=None, pps=False, ethernet=False, port=True, sonlandirma=False, besleme="omurga", ldo33=True):
     """k: Kart, kok: kök Sema. ek: {işlemci pini: ağ adı} karta özel bağlantılar. Sayfayı yazar ve döndürür.
 
     port=False: omurga portu bu sayfaya konmaz (Hub gibi portlarını kendi çizen kartlar); kart +12V_BUS ve CAN ağlarını
     kendi sağlar. sonlandirma=True: CAN sonlandırma dirençleri dizilir, toplam 60 ohm (yalnızca Hub);
     sonlandirma=120: 120 ohm dizilir (iki uçlu kısa bağlantının bir ucu olan kartlar, ör. PC adaptörü).
     besleme="harici": kart omurgadan beslenmez; +5V ve +3V3 ağlarını kart sağlar, port +12V uçları bağlanmaz.
+    ldo33=False: 3,3 V regülatörü bu sayfaya konmaz; +3V3 ağını kart kendi (daha güçlü) regülatörüyle +5V'tan üretir.
     """
     harici = besleme == "harici"
     s = Sema(k.P, "Dugum devresi (omurga, besleme, islemci, CAN, guvenli eleman)", kagit="A1", tarih=k.T, ust=kok, ad="Dugum", genel_etiket=True)
@@ -54,15 +55,19 @@ def dugum_sayfasi(k, kok, dizin, x=25.4, y=50.8, ek=None, pps=False, ethernet=Fa
         for ag in ("+12V_BUS", "+12V", "GND"):
             k.bayrak(s, g, ag)
 
-        s.metin("BESLEME: 12 V -> 5 V (AP63205, 2 A) -> 3,3 V (LP5907, 250 mA). 3,3 V'ta daha fazla akim isteyen kart kendi regulatorunu ekler.", 30, 125)
+        if ldo33:
+            s.metin("BESLEME: 12 V -> 5 V (AP63205, 2 A) -> 3,3 V (LP5907, 250 mA). 3,3 V'ta daha fazla akim isteyen kart kendi regulatorunu ekler.", 30, 125)
+        else:
+            s.metin("BESLEME: 12 V -> 5 V (AP63205, 2 A). 3,3 V bu kartta kendi sayfasindaki daha guclu regulatorle +5V'tan uretilir.", 30, 125)
         g = Izgara(50, 160, sutun=14)
         k.parca(s, g, "Regulator_Switching:AP63205WU", "U", "AP63205QWU",
                 {"IN": "+12V", "EN": "EN_5V", "GND": "GND", "SW": "SW_5V", "BST": "BST_5V", "FB": "+5V"}, "Package_TO_SOT_SMD:TSOT-23-6")
         k.R(s, g, "100k", "+12V", "EN_5V"); k.C(s, g, "10u 50V", "+12V", fp=C1206); k.C(s, g, "100n", "BST_5V", "SW_5V")
         k.iki(s, g, "Device:L", "L", "4u7 XAL4020-472", "SW_5V", "+5V", XAL)
         k.C(s, g, "22u 16V", "+5V", fp=C1206); k.C(s, g, "22u 16V", "+5V", fp=C1206); k.bayrak(s, g, "+5V")
-        k.parca(s, g, "Regulator_Linear:LP5907MFX-3.3", "U", "LP5907MFX-3.3", {"IN": "+5V", "EN": "+5V", "GND": "GND", "OUT": "+3V3"}, "Package_TO_SOT_SMD:SOT-23-5")
-        k.C(s, g, "1u", "+5V"); k.C(s, g, "1u", "+3V3")
+        if ldo33:
+            k.parca(s, g, "Regulator_Linear:LP5907MFX-3.3", "U", "LP5907MFX-3.3", {"IN": "+5V", "EN": "+5V", "GND": "GND", "OUT": "+3V3"}, "Package_TO_SOT_SMD:SOT-23-5")
+            k.C(s, g, "1u", "+5V"); k.C(s, g, "1u", "+3V3")
 
     else:
         g = Izgara(130, 70, sutun=12)

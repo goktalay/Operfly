@@ -2659,28 +2659,6 @@
 			)
 		)
 	)
-	(global_label "+12V_HUB"
-		(shape passive)
-		(at 137.16 351.79 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "0f18e33b-ab98-52a2-9d1b-91b3563f0e74")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 137.16 351.79 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "P6_12V"
 		(shape passive)
 		(at 337.82 353.06 180)
@@ -2749,28 +2727,6 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 149.86 384.81 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "1181e27e-15a7-5199-89fd-f8136d29547c")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 149.86 384.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
 		(at 668.02 189.23 270)
 		(effects
 			(font
@@ -2825,28 +2781,6 @@
 		(uuid "132f18d8-20e6-58f3-9801-150afe6d84d4")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 77.47 363.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "P3_12V"
-		(shape passive)
-		(at 732.79 97.79 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "13435546-682d-5c60-b15a-c9f72eaac117")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 732.79 97.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3275,28 +3209,6 @@
 			)
 		)
 	)
-	(global_label "P11_12V"
-		(shape passive)
-		(at 732.79 607.06 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "1c8f98ef-7bb1-5918-8dae-0eab8beccd29")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 732.79 607.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "P12_ETH_D-"
 		(shape passive)
 		(at 932.18 631.19 0)
@@ -3387,28 +3299,6 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 149.86 640.08 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "2145f76d-8284-59fc-8d6b-655270356f24")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 149.86 640.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
 		(at 720.09 640.08 270)
 		(effects
 			(font
@@ -3463,28 +3353,6 @@
 		(uuid "227288f0-04be-5d5e-8ac1-37fb734f3740")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 337.82 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+12V_HUB"
-		(shape passive)
-		(at 422.91 351.79 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "22d03634-075e-5962-8f2f-9199a9634bd9")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 422.91 351.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4419,28 +4287,6 @@
 			)
 		)
 	)
-	(global_label "P4_12V"
-		(shape passive)
-		(at 1017.27 97.79 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "3036a9a1-c32c-51ec-98cc-e0747bf76eda")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 1017.27 97.79 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "+3V3"
 		(shape passive)
 		(at 764.54 690.88 90)
@@ -4771,28 +4617,6 @@
 			)
 		)
 	)
-	(global_label "+12V_HUB"
-		(shape passive)
-		(at 991.87 351.79 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "364c52e2-4c8a-5e06-b6ea-2e1a6770e64c")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 991.87 351.79 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "GND"
 		(shape passive)
 		(at 77.47 104.14 0)
@@ -4827,28 +4651,6 @@
 		(uuid "36e99853-8476-566d-97f0-899ac11e4807")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 194.31 435.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 720.09 640.08 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "37dafb94-ea9b-53ae-8353-d991e7b91cad")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 720.09 640.08 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5685,50 +5487,6 @@
 		(uuid "41b24d7c-128e-5960-83a0-e637f2ddc4bd")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 1017.27 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+12V_HUB"
-		(shape passive)
-		(at 707.39 607.06 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "41fd6496-1fb9-5650-8f13-fa63e5aa840f")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 707.39 607.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 720.09 130.81 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "420937c2-0bfd-5dd7-a2b4-a7c6e2676f1d")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 720.09 130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6663,28 +6421,6 @@
 			)
 		)
 	)
-	(global_label "P1_12V"
-		(shape passive)
-		(at 162.56 97.79 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "55ff4373-268e-5587-ba02-0ce25660c8c9")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 162.56 97.79 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "P7_12V"
 		(shape passive)
 		(at 647.7 353.06 0)
@@ -7367,28 +7103,6 @@
 			)
 		)
 	)
-	(global_label "+12V_HUB"
-		(shape passive)
-		(at 137.16 607.06 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "62786af5-9851-5d1a-9ffd-7f4a8898c38d")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 137.16 607.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "CAN_B_H"
 		(shape passive)
 		(at 622.3 109.22 180)
@@ -7875,28 +7589,6 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 1004.57 130.81 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "6bb93134-a0df-5ac3-bcfb-d1cbb7859fa4")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 1004.57 130.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
 		(at 906.78 613.41 180)
 		(effects
 			(font
@@ -8149,50 +7841,6 @@
 		(uuid "702c70de-e355-5c89-b361-ce8fe255f4d3")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 137.16 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "P12_12V"
-		(shape passive)
-		(at 1017.27 607.06 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "702d8156-f277-5b85-8bb3-24335a37d024")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 1017.27 607.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "P7_12V"
-		(shape passive)
-		(at 732.79 351.79 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "7077ed11-1d0b-51ad-8b9c-0668052f97fa")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 732.79 351.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8765,28 +8413,6 @@
 		(uuid "793e0ff8-cf4d-5689-b2d4-2fb60085ea09")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 337.82 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 1004.57 640.08 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "79816b3a-d0b5-5189-9840-1c6d8062d5db")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 1004.57 640.08 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9677,28 +9303,6 @@
 			)
 		)
 	)
-	(global_label "+12V_HUB"
-		(shape passive)
-		(at 991.87 97.79 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "868e8b4e-a55f-5930-a666-b3c45b99b222")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 991.87 97.79 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "P10_12V"
 		(shape passive)
 		(at 337.82 608.33 180)
@@ -9787,28 +9391,6 @@
 			)
 		)
 	)
-	(global_label "P2_12V"
-		(shape passive)
-		(at 448.31 97.79 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "87f22476-67f3-5baf-8170-275258e0d5a7")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 448.31 97.79 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "GND"
 		(shape passive)
 		(at 97.79 698.5 270)
@@ -9887,28 +9469,6 @@
 		(uuid "89bb9602-950c-5332-803b-97b556520934")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 1121.41 698.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+12V_HUB"
-		(shape passive)
-		(at 707.39 97.79 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "89d8cfae-92a6-5ef6-ab4a-e8207c6edd15")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 707.39 97.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10667,28 +10227,6 @@
 			)
 		)
 	)
-	(global_label "P8_12V"
-		(shape passive)
-		(at 1017.27 351.79 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "992b559b-dd18-5c21-96c2-688816a49145")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 1017.27 351.79 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "P11_ETH_B-"
 		(shape passive)
 		(at 647.7 626.11 0)
@@ -10767,28 +10305,6 @@
 		(uuid "9adfc258-34cf-5659-94d1-93811b34df11")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 551.18 435.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "P9_12V"
-		(shape passive)
-		(at 162.56 607.06 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "9b0906c7-b476-5092-8cd3-ce60b362dec2")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 162.56 607.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11009,28 +10525,6 @@
 		(uuid "9ef7d93e-def4-5c26-84ad-58ffbcd114b3")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 97.79 181.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 435.61 130.81 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "9f492e78-59af-523c-bbb2-bb9f84fe0495")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 435.61 130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11383,28 +10877,6 @@
 		(uuid "a4919b73-3498-5083-9bc7-9ef2cbab9b97")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 77.47 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+12V_HUB"
-		(shape passive)
-		(at 137.16 97.79 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "a496ab61-82ba-5853-93e6-e01d5755f2ac")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 137.16 97.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11789,50 +11261,6 @@
 			)
 		)
 	)
-	(global_label "GND"
-		(shape passive)
-		(at 720.09 384.81 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "a9f1c6c2-c583-54df-a823-7aa77e1dbe77")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 720.09 384.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 1004.57 384.81 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "aa500edf-1692-539a-9409-ca8e7b64214b")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 1004.57 384.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "P12_EN"
 		(shape passive)
 		(at 991.87 632.46 180)
@@ -11999,28 +11427,6 @@
 		(uuid "ad874318-8852-59cf-9a47-6c6dac1159f8")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 49.53 181.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 149.86 130.81 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "aecf775a-0367-52f8-abcf-6ae8c9a0299f")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 149.86 130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12493,28 +11899,6 @@
 			)
 		)
 	)
-	(global_label "P5_12V"
-		(shape passive)
-		(at 162.56 351.79 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "b5e1ef6c-8c4d-5904-9143-fda870891b4a")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 162.56 351.79 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "GND"
 		(shape passive)
 		(at 991.87 635 180)
@@ -12967,28 +12351,6 @@
 		(uuid "be17de3e-09d7-5b21-914a-59e06fbd65d1")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 363.22 368.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+12V_HUB"
-		(shape passive)
-		(at 422.91 607.06 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "be18a694-0c2b-5754-9560-55a1b4e1f8ad")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 422.91 607.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13747,28 +13109,6 @@
 			)
 		)
 	)
-	(global_label "GND"
-		(shape passive)
-		(at 435.61 384.81 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "c8b41096-f647-55f5-9f06-2c93bc4f0ddc")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 435.61 384.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "P7_DVDT"
 		(shape passive)
 		(at 732.79 379.73 0)
@@ -13989,28 +13329,6 @@
 			)
 		)
 	)
-	(global_label "GND"
-		(shape passive)
-		(at 435.61 640.08 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "cc105266-86bd-5ed5-8662-984380da5848")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 435.61 640.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "PPS_BUS"
 		(shape passive)
 		(at 52.07 365.76 180)
@@ -14177,28 +13495,6 @@
 		(uuid "cf3bba0a-2c78-5ee7-a91c-bc73808a2725")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 1017.27 379.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "P10_12V"
-		(shape passive)
-		(at 448.31 607.06 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "cfb893e2-859c-53f2-8503-6c708e818644")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 448.31 607.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15023,28 +14319,6 @@
 			)
 		)
 	)
-	(global_label "+12V_HUB"
-		(shape passive)
-		(at 422.91 97.79 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "df0c71db-dca2-58df-8060-bd301f62c2f8")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 422.91 97.79 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "P12_12V"
 		(shape passive)
 		(at 906.78 608.33 180)
@@ -15529,28 +14803,6 @@
 			)
 		)
 	)
-	(global_label "P6_12V"
-		(shape passive)
-		(at 448.31 351.79 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "e7a090fa-0440-5bee-9ea0-c4bb71363c82")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 448.31 351.79 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "P11_ETH_C+"
 		(shape passive)
 		(at 622.3 628.65 180)
@@ -15717,28 +14969,6 @@
 		(uuid "ea9b53ad-0c2f-5b73-abce-1e7e893ddba1")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 952.5 698.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+12V_HUB"
-		(shape passive)
-		(at 707.39 351.79 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "ebdf2a6d-a342-5615-8b33-45af5cfb0b59")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 707.39 351.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16553,28 +15783,6 @@
 		(uuid "fc27da4f-c61b-5791-a802-4db404c887b9")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 991.87 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+12V_HUB"
-		(shape passive)
-		(at 991.87 607.06 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "fc9fff22-5c3d-519f-bea6-a2aa961cf4f6")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 991.87 607.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

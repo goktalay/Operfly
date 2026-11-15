@@ -109,13 +109,18 @@ class Sema:
                 s += '\t\t(pin "%s" (uuid "%s"))\n' % (no, uid(self.proje, ref, "pin", no))
             s += '\t\t(instances (project "%s" (path "%s" (reference "%s") (unit %d))))\n\t)\n' % (self.proje, self.yol, ref, bn)
             self.govde.append(s)
+            konulan = set()   # ayni noktada ust uste duran uclar (cok sayida GND gibi) tek etiket alir
             for no, ad, px, py, aci in pinler:
                 ag = aglar.get(no, aglar.get(ad))
                 sx, sy = bx + px, y - py
+                if ag is not None:
+                    kullanilan.add(no if no in aglar else ad)
+                if (round(sx, 2), round(sy, 2), ag) in konulan:
+                    continue
+                konulan.add((round(sx, 2), round(sy, 2), ag))
                 if ag is None:
                     self.govde.append('\t(no_connect (at %.2f %.2f) (uuid "%s"))\n' % (sx, sy, uid(self.proje, ref, "nc", no)))
                     continue
-                kullanilan.add(no if no in aglar else ad)
                 eaci, hiza = {0: (180, "right"), 180: (0, "left"), 90: (270, "right"), 270: (90, "left")}[aci]
                 if self.genel:
                     self.govde.append('\t(global_label "%s" (shape passive) (at %.2f %.2f %d) (effects (font (size 1.27 1.27)) (justify %s)) (uuid "%s"))\n' % (ag, sx, sy, eaci, hiza, uid(self.proje, ref, "lbl", no)))

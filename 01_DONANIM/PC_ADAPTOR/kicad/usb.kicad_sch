@@ -4046,28 +4046,6 @@
 			)
 		)
 	)
-	(global_label "VBUS_USB"
-		(shape passive)
-		(at 74.93 69.85 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "0450711e-b16c-57c3-868c-352123d88d36")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 74.93 69.85 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "GND"
 		(shape passive)
 		(at 430.53 224.79 270)
@@ -4266,28 +4244,6 @@
 			)
 		)
 	)
-	(global_label "+5V"
-		(shape passive)
-		(at 69.85 232.41 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "13e2f269-6e52-58dd-b097-8203b6da73b0")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 232.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "GND"
 		(shape passive)
 		(at 59.69 247.65 180)
@@ -4432,28 +4388,6 @@
 		(uuid "1b38fc0c-4907-5729-a248-e9b1e00ff984")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 255.27 181.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 59.69 107.95 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "1b9422ae-8b27-56b4-8d1f-55cd33cac89d")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 59.69 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4618,28 +4552,6 @@
 			)
 		)
 	)
-	(global_label "GND"
-		(shape passive)
-		(at 69.85 198.12 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "293f3635-58e7-509c-8f11-902d81378333")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "+3V3"
 		(shape passive)
 		(at 476.25 243.84 90)
@@ -4706,28 +4618,6 @@
 			)
 		)
 	)
-	(global_label "VBUS_USB"
-		(shape passive)
-		(at 74.93 69.85 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "2fec2780-7b90-5f62-8e7c-bae9aba905ff")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 74.93 69.85 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "GND"
 		(shape passive)
 		(at 278.13 248.92 270)
@@ -4762,28 +4652,6 @@
 		(uuid "32372a67-f2a9-55f5-b1fd-daf193721b23")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 163.83 331.47 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+5V"
-		(shape passive)
-		(at 69.85 172.72 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "325d108f-badb-54f4-a303-d909af338ec7")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 172.72 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5190,28 +5058,6 @@
 			)
 		)
 	)
-	(global_label "+5V"
-		(shape passive)
-		(at 69.85 232.41 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "557f87bd-ac34-520c-a556-e6a4c10863db")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 232.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "REG_3V3_SS"
 		(shape passive)
 		(at 59.69 182.88 180)
@@ -5224,28 +5070,6 @@
 		(uuid "560f6fb6-6f7f-5eae-9c57-3040c3b606fa")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 59.69 182.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "REG_3V3_SW"
-		(shape passive)
-		(at 80.01 180.34 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "57372e25-ff83-548e-b3c5-a8befc8a5da5")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 80.01 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5652,28 +5476,6 @@
 			)
 		)
 	)
-	(global_label "REG_1V2_SW"
-		(shape passive)
-		(at 80.01 240.03 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "72b6d1f5-859e-5754-abd8-42d8ce04aa21")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 80.01 240.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "GND"
 		(shape passive)
 		(at 186.69 248.92 270)
@@ -5740,28 +5542,6 @@
 			)
 		)
 	)
-	(global_label "GND"
-		(shape passive)
-		(at 59.69 107.95 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "7647c663-c7cf-58dc-835b-2f170e819655")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 59.69 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "+1V2"
 		(shape passive)
 		(at 209.55 241.3 90)
@@ -5774,28 +5554,6 @@
 		(uuid "7a31df0b-847c-5b1a-bbe8-ae4f86148fe2")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 209.55 241.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 430.53 224.79 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "7ca504fb-4773-5125-ac39-45f5f93fa9c0")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 430.53 224.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6060,50 +5818,6 @@
 		(uuid "9192ec69-e2c7-5a24-827f-fabe8a454478")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 491.49 104.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "VBUS_USB"
-		(shape passive)
-		(at 74.93 69.85 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "920f9bf0-e4ac-58a9-961c-b40a9c23eecf")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 74.93 69.85 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 69.85 257.81 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "92643d78-86c8-56c1-94b5-b82e71a5f8d9")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 257.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6534,28 +6248,6 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 69.85 198.12 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "a96c0df3-173e-5bb5-907e-b1bd2a0e98c3")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
 		(at 163.83 339.09 270)
 		(effects
 			(font
@@ -6642,28 +6334,6 @@
 			)
 		)
 	)
-	(global_label "GND"
-		(shape passive)
-		(at 69.85 257.81 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "b77f8a5d-57a8-56cf-b01d-daee0f4a43d7")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 257.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "+3V3"
 		(shape passive)
 		(at 186.69 181.61 90)
@@ -6676,28 +6346,6 @@
 		(uuid "b9a64dbf-bf4c-5da5-96d0-433666989d88")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 186.69 181.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "REG_3V3_SW"
-		(shape passive)
-		(at 80.01 180.34 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "bb428ef3-07e4-5cef-9889-51fa7e37ed75")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 80.01 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7172,28 +6820,6 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 69.85 257.81 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "d3f7badb-5e3d-5ef9-b2af-fcf3cd2f97ad")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 257.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
 		(at 659.13 251.46 270)
 		(effects
 			(font
@@ -7456,28 +7082,6 @@
 			)
 		)
 	)
-	(global_label "REG_1V2_SW"
-		(shape passive)
-		(at 80.01 240.03 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "e9ecbcc5-d0e1-5bc0-93ec-7f455ee6f1e8")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 80.01 240.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "HUB_DIS4P"
 		(shape passive)
 		(at 476.25 251.46 270)
@@ -7600,28 +7204,6 @@
 		(uuid "ef4e0fa8-5299-51ae-a991-bcc03d027c20")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 255.27 241.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 69.85 198.12 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "f08f6f9e-dcbd-507d-ac87-8b2293afaca0")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 198.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7940,28 +7522,6 @@
 			)
 		)
 	)
-	(global_label "GND"
-		(shape passive)
-		(at 59.69 107.95 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "fecea3e5-60de-5244-8197-37e46a236a44")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 59.69 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "+3V3"
 		(shape passive)
 		(at 430.53 243.84 90)
@@ -7974,28 +7534,6 @@
 		(uuid "ff442c2a-b670-5600-8dd1-bb1971bce210")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 430.53 243.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+5V"
-		(shape passive)
-		(at 69.85 172.72 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "ff65a95d-04d7-5609-b39f-5ecde517b43a")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 172.72 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

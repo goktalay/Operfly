@@ -5,7 +5,8 @@ Kaynak bu dosyadır; `*.kicad_sch` çıktıları elle düzenlenmez.
 1. ADIM: güç işlemcisi (düğüm devresi), USB Type-C güç anlaşması, 4 hücreli batarya şarjı ve güç yolu, 3,3 V ve 5 V,
 güç düğmesi, kumanda radyosu ve giriş kartı bağlantısı. Bu kadarıyla kart kumanda olarak çalışır.
 2. ADIM, ilk bölüm: Jetson çekirdeği ve beslemesi, NVMe, USB göbeği, omurga Ethernet'i, fan (Vision kartındaki devreler).
-HENÜZ ÇİZİLMEDİ: geniş bant radyo ve ikinci Ethernet portu, 10 inç ekran ve dokunmatik arayüzü (README'de liste).
+3. ADIM: geniş bant radyo (Radio kartındaki devre) ve ikinci Ethernet portu (Vision'daki I210 devresi).
+HENÜZ ÇİZİLMEDİ: 10 inç ekranın görüntü ve arka ışık arayüzü (panel seçilmedi; README'de).
 
 Devre değerleri üretici belgelerindendir: BQ25798 (SLUSDV2C: uç açıklamaları, Tablo 7-1, bölüm 7.3.9.5, 7.3.12, 8.2),
 STUSB4500 (DS12499 Rev 3, Şekil 10 "Typical schematic with MCU"), AP6320x (düğüm ve RX kartındaki devreler),
@@ -32,7 +33,7 @@ TVS25_FP = "Diode_SMD:D_0603_1608Metric"
 k = Kart("operfly_pilotpro", "2026-11-15")
 kok = Sema(k.P, "Operfly Pilot Pro", kagit="A3", tarih=k.T)
 kok.metin("Operfly Pilot Pro - kumanda ana karti (OPFKPR)", 25.4, 25.4, 3.0)
-kok.metin("Sematik betikle uretilir: 01_DONANIM/KUMANDA_PRO/kicad/uret.py. Cizilmeyenler: genis bant radyo, ikinci Ethernet portu, 10 inc ekran arayuzu.", 25.4, 33.02, 1.6)
+kok.metin("Sematik betikle uretilir: 01_DONANIM/KUMANDA_PRO/kicad/uret.py. Cizilmeyen: 10 inc ekranin goruntu ve arka isik arayuzu (panel secilmedi).", 25.4, 33.02, 1.6)
 
 EK = {"PB10": "PWR_SCL", "PB11": "PWR_SDA",      # I2C2: sarj entegresi, guc anlasmasi entegresi, bataryanin kendi olceri
       "PB3": "I2C_SCL", "PB4": "I2C_SDA",        # I2C3 (kole): giris kartindaki kumanda islemcisiyle dogrudan baglanti
@@ -209,7 +210,7 @@ jt = Sema(k.P, "Pilot Pro - Jetson Orin NX soketi, beslemesi ve denetim devreler
 kok.alt_sayfa(jt, "jetson.kicad_sch", 254.0, 50.8)
 jt.birim_araligi = 200
 jt.metin("JETSON SOKETI (260 uclu SO-DIMM). Birimler: guc ve denetim | PCIe, Ethernet, USB | dusuk hizli giris-cikislar | goruntu uclari (henuz baglanmadi).", 30, 25)
-jt.metin("Uc tablosu uretici veri sayfasindan (10_ORTAK_ARACLAR/kicad/jetson_uclari.py). Devreler Vision kartindakilerin aynisidir; PCIE1/PCIE2 ve goruntu uclari bostur.", 30, 31)
+jt.metin("Uc tablosu uretici veri sayfasindan (10_ORTAK_ARACLAR/kicad/jetson_uclari.py). Devreler Vision kartindakilerin aynisidir; PCIE1 ikinci Ethernet portuna gider, PCIE2 ve goruntu uclari bostur.", 30, 31)
 J = {"VDD_IN": "+VJET", "GND": "GND", "POWER_EN": "JET_POWER_EN_R", "SYS_RESET*": "JET_SYS_RESET_N", "SHUTDOWN_REQ*": "JET_SHDN_REQ_HV",
      "FORCE_RECOVERY*": "JET_FRC_N", "MODULE_ID": "JET_MODULE_ID", "MOD_SLEEP*": "JET_MOD_SLEEP_N", "SLEEP/WAKE*": "JET_SLEEP_WAKE_N",
      "PCIE0_CLK_P": "M2_CLK_P", "PCIE0_CLK_N": "M2_CLK_N", "PCIE0_RST*": "M2_RST_N", "PCIE0_CLKREQ*": "M2_CLKREQ_N", "PCIE_WAKE*": "PCIE_WAKE_N",
@@ -220,6 +221,8 @@ for l in range(4):
         J["PCIE0_RX%d_%s" % (l, s_)] = "M2_PER%d_%s" % (l, s_)
         J["PCIE0_TX%d_%s" % (l, s_)] = "J_PCIE0_TX%d_%s" % (l, s_)
         J["GBE_MDI%d_%s" % (l, s_)] = "JGBE_MDI%d_%s" % (l, s_)
+J.update({"PCIE1_RX0_P": "E1_PET_C_P", "PCIE1_RX0_N": "E1_PET_C_N", "PCIE1_TX0_P": "J_PCIE1_TX_P", "PCIE1_TX0_N": "J_PCIE1_TX_N",
+          "PCIE1_CLK_P": "E1_CLK_P", "PCIE1_CLK_N": "E1_CLK_N", "PCIE1_RST*": "E1_RST_N", "PCIE1_CLKREQ*": "E1_CLKREQ_N"})   # ikinci Ethernet portu
 k.koy(jt, "operfly:Jetson_Orin_NX", "J", "Jetson Orin NX", 110, 150, J, "Connector_PCBEdge:SODIMM-260_DDR4_H4.0-5.2_OrientationStd_Socket")
 
 jt.metin("DENETIM (Vision ile ayni): POWER_EN guc islemcisinden (1k seri). SHUTDOWN_REQ* modulde besleme gerilimine cekilidir -> 100k/22k ile islemciye.", 30, 290)
@@ -361,6 +364,120 @@ k.R(cv, g, "10k", "+3V3", "FAN_TACH"); k.R(cv, g, "10k", "FAN_TACH_K", "FAN_TACH
 k.C(cv, g, "10u 10V", "+5V", fp=C0805)
 cv.yaz(os.path.join(BURASI, "cevre.kicad_sch"))
 
+# --- Geniş bant radyo, ikinci Ethernet portu ---------------------------------------------
+wb = Sema(k.P, "Pilot Pro - genis bant radyo modulu ve ikinci Ethernet portu (I210)", kagit="A0", tarih=k.T, ust=kok, ad="Genisbant", genel_etiket=True)
+kok.alt_sayfa(wb, "genisbant.kicad_sch", 25.4, 101.6)
+wb.metin("GENIS BANT RADYO MODULU (Microhard pMDDL2450 OEM, 2,4 GHz, 2x2 MIMO, 1 W): baglanti Radio kartindakinin aynisi (uretici kilavuzu, Tablo 3-3).", 30, 28)
+wb.metin("Antenler modulun ustundeki iki U.FL'den kabloyla kasadaki SMA'lara gider. Modul yaklasik 7,5 W isi uretir: sogutucu sart.", 30, 34)
+wb.metin("Modul Jetson'a Ethernet'ten baglidir (ayar ve video). Seri port yalnizca kurtarma icindir (0R + olcum noktalari). Sifirlama, ayar ve", 30, 40)
+wb.metin("verici beslemesini kesme uclari guc islemcisinin I2C hattindaki kucuk genisleticidedir (PCA9536, adres 0x41); acilista hepsi bostadir.", 30, 46)
+k.koy(wb, "operfly:pMDDL2450", "U", "pMDDL2450 OEM", 110, 150, {
+    "Vcc": "+3V3", "VRF": "+5V_RF", "GND": "GND",
+    "Serial_RxD": "WB_RXD_M", "Serial_TxD": "WB_TXD_M",
+    "RESET": "WB_NRST", "CONFIG": "WB_CONFIG_N", "CPU_STATUS_LED": "WB_CPU_STATUS",
+    "LED_RX": "WB_LED_RX", "LED_TX": "WB_LED_TX", "ETH0_LINK_LED": "WB_ETH_LINK",
+    "TX_P0": "RETH_TXP", "TX_N0": "RETH_TXN", "RX_P0": "RETH_RXP", "RX_N0": "RETH_RXN", "ETH_BIAS": "RETH_BIAS"},
+    "operfly_ayak:Microhard_pMDDL_OEM")
+g = Izgara(50, 250, sutun=10)
+for ag, n in (("+3V3", 2), ("+5V_RF", 2)):
+    k.C(wb, g, "22u 16V", ag, fp=C1206)
+    for _ in range(n):
+        k.C(wb, g, "100n", ag)
+k.C(wb, g, "100p", "+5V_RF")
+g.satir()
+k.R(wb, g, "0R", "WB_RXD", "WB_RXD_M"); k.R(wb, g, "0R", "WB_TXD", "WB_TXD_M")
+k.olcum_noktasi(wb, g, "WB_RXD"); k.olcum_noktasi(wb, g, "WB_TXD")
+k.R(wb, g, "10k", "+3V3", "WB_NRST"); k.R(wb, g, "10k", "+3V3", "WB_CONFIG_N")
+k.olcum_noktasi(wb, g, "WB_CONFIG_N"); k.olcum_noktasi(wb, g, "WB_NRST")
+g.satir()
+for ag, ad in (("WB_CPU_STATUS", "mavi (modul)"), ("WB_LED_RX", "yesil (alis)"), ("WB_LED_TX", "kirmizi (veris)"), ("WB_ETH_LINK", "sari (Ethernet)")):
+    k.R(wb, g, "1k", ag, ag + "_A"); k.iki(wb, g, "Device:LED", "D", "LED " + ad, "GND", ag + "_A", "LED_SMD:LED_0603_1608Metric"); k.R(wb, g, "10k", ag, "GND")
+g = Izgara(50, 370, sutun=10)
+k.parca(wb, g, "Interface_Expansion:PCA9536D", "U", "PCA9536D", {"VDD": "+3V3", "VSS": "GND", "SCL": "PWR_SCL", "SDA": "PWR_SDA",
+        "IO0": "WB_NRST", "IO1": "WB_CONFIG_N", "IO2": "WB_RF_OFF", "IO3": "WB_CPU_STATUS"}, "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", bosluk=2, dx=18)
+k.C(wb, g, "100n", "+3V3")
+
+wb.metin("5 V VERICI BESLEMESI (AP63201, +VSYS'ten; Radio kartindaki devre): verici kati ortalama 1,2 A, anlik 1,5 A ceker. Sifirlamada ACIK;", 30, 420)
+wb.metin("WB_RF_OFF = 1 vericiyi susturur. Cikis = 0,8 V x (1 + 158k / 30k1) = 5,0 V. Modulun 3,3 V'u kartin 3,3 V rayindandir (0,5 A).", 30, 426)
+g = Izgara(50, 465, sutun=12)
+k.parca(wb, g, "Regulator_Switching:AP63201WU", "U", "AP63201WU",
+        {"IN": "+VSYS", "EN": "EN_RF", "GND": "GND", "SW": "SW_RF", "BST": "BST_RF", "FB": "FB_RF"}, TSOT6)
+k.R(wb, g, "100k", "+VSYS", "EN_RF"); k.C(wb, g, "10u 50V", "+VSYS", fp=C1206); k.C(wb, g, "100n", "BST_RF", "SW_RF")
+k.iki(wb, g, "Device:L", "L", "10u (Isat >= 3 A)", "SW_RF", "+5V_RF", "Inductor_SMD:L_Coilcraft_XAL5030-XXX")
+k.C(wb, g, "22u 16V", "+5V_RF", fp=C1206); k.C(wb, g, "22u 16V", "+5V_RF", fp=C1206); k.bayrak(wb, g, "+5V_RF")
+g.satir()
+k.R(wb, g, "158k 1%", "+5V_RF", "FB_RF"); k.R(wb, g, "30k1 1%", "FB_RF", "GND"); k.C(wb, g, "100p", "+5V_RF", "FB_RF")
+x, y = g.yer()
+k.koy(wb, N7002[0], N7002[1], N7002[2], x, y, {"D": "EN_RF", "S": "GND", "G": "WB_RF_OFF"}, SOT23)
+k.R(wb, g, "100k", "WB_RF_OFF", "GND"); k.olcum_noktasi(wb, g, "+5V_RF")
+
+wb.metin("RADYO <-> JETSON ETHERNET BAGLANTISI: modulun 10/100 portu kendi trafosundan (uretici ornegi), ikinci Ethernet denetleyicisi de kendi", 420, 28)
+wb.metin("trafosundan gecer; iki trafonun kablo taraflari kart uzerinde birlesir (kisa bir kablo baglantisinin esdegeri). Ciftler caprazdir:", 420, 34)
+wb.metin("modulun gonderme cifti denetleyicinin alma ciftine (MDI1), alma cifti gonderme ciftine (MDI0). C ve D ciftleri kullanilmaz (100 Mbit).", 420, 40)
+g = Izgara(440, 90, sutun=12)
+k.parca(wb, g, "Transformer:PT61017PEL", "T", "PT61017PEL (10/100, 1:1)", {
+    "TD+": "RETH_TXP", "TD-": "RETH_TXN", "C_TD": "RETH_CT", "RD+": "RETH_RXP", "RD-": "RETH_RXN", "C_RD": "RETH_CT",
+    "TX+": "WB_MTX+", "TX-": "WB_MTX-", "C_TX": "RETH_CT_A", "RX+": "WB_MRX+", "RX-": "WB_MRX-", "C_RX": "RETH_CT_B"},
+    "Transformer_SMD:Transformer_Ethernet_Bourns_PT61017PEL", bosluk=2, dx=25)
+k.R(wb, g, "49R9 1%", "RETH_TXP", "RETH_TERM_TX"); k.R(wb, g, "49R9 1%", "RETH_TXN", "RETH_TERM_TX"); k.C(wb, g, "100n", "RETH_TERM_TX")
+k.R(wb, g, "49R9 1%", "RETH_RXP", "RETH_TERM_RX"); k.R(wb, g, "49R9 1%", "RETH_RXN", "RETH_TERM_RX"); k.C(wb, g, "100n", "RETH_TERM_RX")
+g.satir()
+k.iki(wb, g, "Device:FerriteBead", "FB", "BLM18HD102SN1D", "RETH_BIAS", "RETH_CT", "Inductor_SMD:L_0603_1608Metric")
+k.C(wb, g, "100n", "RETH_BIAS"); k.C(wb, g, "100n", "RETH_CT")
+k.R(wb, g, "75R", "RETH_CT_A", "WB_BS"); k.R(wb, g, "75R", "RETH_CT_B", "WB_BS")
+
+wb.metin("IKINCI ETHERNET PORTU (Intel I210-IT, Jetson PCIE1; Vision'daki kamera portu devresinin aynisi): besleme tam tumlesik (CTOP-CBOT 39 nF),", 420, 170)
+wb.metin("RSET 4k99, 25 MHz kristal + 27 pF, ayar icin SPI flash. Kullanilmayan NC-SI, SMBus ve JTAG uclari uretici tablosundaki gibi cekilir.", 420, 176)
+e, y0, V, GD = "E1", 290, "+3V3_JET", "GND"
+ust = {4: "TDO", 5: "NRX1", 6: "NRX0", 8: "NTX1", 9: "NTX0", 16: "WAKE", 18: "TMS", 28: "DEVOFF", 29: "TDI", 34: "SMBC", 35: "SMBA", 36: "SMBD", 1: "PG"}
+alt = {2: "NCLK", 3: "NCRS", 7: "NTXEN", 19: "TCK", 12: "NVM_SI"}
+a = {10: V, 27: V, 41: V, 51: V, 64: V, 65: GD, 11: e + "_0V9", 32: e + "_0V9", 42: e + "_0V9", 59: e + "_0V9", 38: e + "_0V9",
+     47: e + "_1V5", 56: e + "_1V5", 39: e + "_1V5", 37: e + "_CBOT", 40: e + "_CTOP", 48: e + "_RSET", 45: e + "_XO", 46: e + "_XI",
+     13: e + "_NVM_SK", 14: e + "_NVM_SO", 15: e + "_NVM_CS", 17: e + "_RST_N", 20: e + "_PET_N", 21: e + "_PET_P", 23: e + "_PER_N", 24: e + "_PER_P",
+     25: e + "_CLK_N", 26: e + "_CLK_P", 31: e + "_LED",
+     58: e + "_MDI0_P", 57: e + "_MDI0_N", 55: e + "_MDI1_P", 54: e + "_MDI1_N", 53: e + "_MDI2_P", 52: e + "_MDI2_N", 50: e + "_MDI3_P", 49: e + "_MDI3_N"}
+a.update({no: "%s_%s" % (e, ad) for no, ad in list(ust.items()) + list(alt.items())})
+k.koy(wb, "Interface_Ethernet:WGI210AT", "U", "WGI210IT", 500, y0, {str(no): ag for no, ag in a.items()}, "Package_DFN_QFN:QFN-64-1EP_9x9mm_P0.5mm_EP4.7x4.7mm")
+g = Izgara(430, y0 + 75, sutun=22, dx=20)
+for ad in ust.values():
+    k.R(wb, g, "10k", V, "%s_%s" % (e, ad))
+for ad in alt.values():
+    k.R(wb, g, "10k", "%s_%s" % (e, ad), GD)
+g.satir()
+for _ in range(5):
+    k.C(wb, g, "100n", V)
+k.C(wb, g, "22u 10V", V, fp=C1206)
+for _ in range(4):
+    k.C(wb, g, "100n", e + "_0V9")
+k.C(wb, g, "22u 6V3", e + "_0V9", fp=C0805)
+for _ in range(2):
+    k.C(wb, g, "100n", e + "_1V5")
+k.C(wb, g, "22u 6V3", e + "_1V5", fp=C0805)
+k.C(wb, g, "39n", e + "_CTOP", e + "_CBOT"); k.R(wb, g, "4k99 1%", e + "_RSET", GD)
+g.satir()
+k.koy(wb, "Device:Crystal_GND24", "Y", "25 MHz 30 ppm", *g.yer(), {"1": e + "_XI", "3": e + "_XO", "2": GD, "4": GD}, "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm")
+k.C(wb, g, "27p", e + "_XI"); k.C(wb, g, "27p", e + "_XO")
+k.C(wb, g, "220n", e + "_PET_P", e + "_PET_C_P"); k.C(wb, g, "220n", e + "_PET_N", e + "_PET_C_N")
+k.C(wb, g, "220n", "J_PCIE1_TX_P", e + "_PER_P"); k.C(wb, g, "220n", "J_PCIE1_TX_N", e + "_PER_N"); k.R(wb, g, "0R", e + "_CLKREQ_N", GD)
+k.parca(wb, g, "Memory_Flash:W25Q32JVSS", "U", "W25Q16JVSSIQ", {"~{CS}": e + "_NVM_CS", "CLK": e + "_NVM_SK", "DI/IO_{0}": e + "_NVM_SI", "DO/IO_{1}": e + "_NVM_SO",
+        "~{WP}/IO_{2}": e + "_NVM_WP", "~{HOLD}/~{RESET}/IO_{3}": e + "_NVM_HOLD", "VCC": V, "GND": GD}, "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm", bosluk=2, dx=18)
+k.R(wb, g, "10k", V, e + "_NVM_WP"); k.R(wb, g, "10k", V, e + "_NVM_HOLD"); k.C(wb, g, "100n", V)
+k.iki(wb, g, "Device:LED", "D", "LED yesil (baglanti)", e + "_LED", e + "_LED_A", "LED_SMD:LED_0603_1608Metric"); k.R(wb, g, "1k", V, e + "_LED_A")
+tr = {}
+kablo = {"A": ("WB_MRX+", "WB_MRX-"), "B": ("WB_MTX+", "WB_MTX-")}
+for c, i, (cp, cm, cc), (kp_, km_, kc_) in zip("ABCD", range(4), ((2, 3, 1), (5, 6, 4), (8, 9, 7), (11, 12, 10)), ((23, 22, 24), (20, 19, 21), (17, 16, 18), (14, 13, 15))):
+    tr.update({str(cp): "E1_MDI%d_P" % i, str(cm): "E1_MDI%d_N" % i, str(cc): "E1_CT_%s" % c, str(kc_): "E1_KCT_%s" % c})
+    if c in kablo:
+        tr.update({str(kp_): kablo[c][0], str(km_): kablo[c][1]})
+k.koy(wb, "Transformer:TG111-MSC13LF", "T", "TG111-MSC13LF", 690, y0, tr, "Transformer_SMD:Transformer_Ethernet_HALO_TG111-MSC13")
+g = Izgara(760, y0 - 30, sutun=9, dx=24)
+for c in "ABCD":
+    k.C(wb, g, "100n", "E1_CT_%s" % c)
+for c in "ABCD":
+    k.R(wb, g, "75R", "E1_KCT_%s" % c, "WB_BS")
+k.C(wb, g, "1n 2kV", "WB_BS", fp=C1206)
+wb.yaz(os.path.join(BURASI, "genisbant.kicad_sch"))
+
 kok.yaz(os.path.join(BURASI, "operfly_pilotpro.kicad_sch"))
-kutuphane_tablolari(BURASI, [kok, dg, gc, rd, jt, cv], {"operfly": ORTAK_URI, "operfly_ayak": AYAK_URI})
-print("yazildi: operfly_pilotpro (kok + 5 sayfa)")
+kutuphane_tablolari(BURASI, [kok, dg, gc, rd, jt, cv, wb], {"operfly": ORTAK_URI, "operfly_ayak": AYAK_URI})
+print("yazildi: operfly_pilotpro (kok + 6 sayfa)")

@@ -20,10 +20,10 @@ prices=[
 ("CAN FD alıcı-verici",2,T,"Core şematiğinde TJA1051TK/3; TCAN1044 pin uyumlu seçenek","NXP / "+TI,"TJA1051TK/3",K,S),
 ("Gigabit Ethernet PHY",4,T,"",TI,"DP83867 serisi",K,O),
 ("10/100 Ethernet PHY (RMII)",2,T,"Core için; işlemcinin Ethernet arayüzü en çok 100 Mbit","Microchip","LAN8742A-CZ",K,S),
-("microSD yuvası",2,T,"Core; uçuş kaydı. Endüstriyel microSD kart ayrıca alınır","Hirose","DM3AT-SF-PEJM5",K,S),
+("microSD yuvası",2,T,"Core: uçuş kaydı. Nav: ham ölçüm kaydı. Endüstriyel microSD kart ayrıca alınır","Hirose","DM3AT-SF-PEJM5",K,S),
 ("Peltier modülü ve sürücüsü",25,T,"","","",K,A),
 ("Watchdog, gözetleyiciler, enerji deposu",20,T,"","","",K,TS),
-("Kart içi regülatörler",15,T,"Düğüm: AP63205 + LP5907; Hub ve PC adaptöründe ayrıca TPS62130","Diodes / "+TI,"AP63205QWU, LP5907MFX-3.3, TPS62130",K,S),
+("Kart içi regülatörler",15,T,"Düğüm: AP63205 + LP5907; Hub ve PC adaptöründe ayrıca TPS62130; Nav'da 3,3 V için AP7361C (1 A)","Diodes / "+TI,"AP63205QWU, LP5907MFX-3.3, TPS62130, AP7361C-33E",K,S),
 ("Pasifler, kristal, ESD, küçük malzeme",25,T,"0402 kılıf","","",K,TS),
 ("Operfly Bus prizi, 20 kontak",17,D,"RS tek adet 13,69 £, 5+ adet 12,29 £. Kaynak: uk.rs-online.com/web/p/pcb-sockets/2871000",HW,"Gecko-SL (G125), 20 kontak",K,S),
 ("Operfly Bus fişi + kısa kablo",45,T,"Hazır kablo takımı için kaba tahmin",HW,"Gecko-SL (G125), 20 kontak",K,S),
@@ -39,7 +39,7 @@ prices=[
 ("Servo güç rayı (yedekli)",45,T,"İki bağımsız 5 A regülatör + 2 ideal diyot; fiyat teyit edilecek",TI+" / Analog Devices","2 x TPS54560B, 2 x LTC4359",K,S),
 ("Temassız akım algılayıcı, 400 A",35,T,"","","",K,A),
 ("Jetson taşıyıcı devresi (soket, güç, soğutma)",70,T,"","","",K,TS),
-("GNSS RF ön ucu (LNA, filtre, anten beslemesi)",30,T,"","","",K,TS),
+("GNSS RF ön ucu (LNA, filtre, anten beslemesi)",30,T,"Nav şematiği: alıcı anten beslemesini ve korumasını içinde taşır; kartta yalnızca anten regülatörü ve çift anten seçeneğinin elemanları var. Tahmin şematikten yüksek kaldı, fiyat teyidinde düşürülecek",TI+" / Würth","LP5907MFX-3.3, 744786139A, SESD0402X1BN",K,S),
 ("SIM yuvası, eSIM, anten bağlantıları",20,T,"","","",K,TS),
 ("Fark basınç sensörü",40,T,"","","",K,A),
 ("Yalıtımlı motor girişleri (devir, sıcaklık, yakıt)",35,T,"","","",K,TS),
@@ -79,7 +79,7 @@ P=[
 ("Operfly Hub","OPFHUB",1,[("Gigabit anahtar entegresi seti (12 port, PTP)",1)]+node+[("Port koruması: elektronik sigorta + akım ölçümü",12),(reg,1),(pas,2),(bus,12),(big,1),(asm,1)]),
 ("Operfly Power","OPFPWR",1,[("Geniş girişli güç katı, 150 W, çift giriş",1),("Servo güç rayı (yedekli)",1),("Temassız akım algılayıcı, 400 A",1)]+node+[("Batarya giriş konnektörü (yüksek akım)",2),(pas,1),(bus,1),(small,1),(asm,1)]),
 ("Operfly PC adaptörü","OPFPCA",1,[("USB–Gigabit Ethernet köprüsü",1)]+node+[("USB Type-C konnektör",1),(pas,1),("Operfly Bus fişi + kısa kablo",1),(small,1),(asm,1)]),
-("Operfly Nav","OPFNAV",2,[("GNSS modülü",1),("GNSS RF ön ucu (LNA, filtre, anten beslemesi)",1)]+node+[(reg,1),(pas,1),(sma,2),(bus,1),(small,1),(asm,1)]),
+("Operfly Nav","OPFNAV",2,[("GNSS modülü",1),("GNSS RF ön ucu (LNA, filtre, anten beslemesi)",1)]+node+[("Pusula",1),("microSD yuvası",1),("USB Type-C konnektör",1),(reg,1),(pas,1),(sma,2),(bus,1),(small,1),(asm,1)]),
 ("Operfly Radio","OPFRAD",2,[(WB,1)]+node+[(phy,1),(reg,1),(pas,1),(sma,2),(bus,1),(small,1),(asm,1)]),
 ("Operfly RX","OPFRCV",2,[(KR,1)]+node+[(pas,1),(sma,2),(bus,1),(small,1),(asm,1)]),
 ("Operfly Pilot 12","OPFK12",2,merge([(KR,1),("Güvenli eleman",1),("Kumanda bataryası ve şarj devresi",1),(sma,2),(pas,1),(small,1),(asm,1)]+GK)),
@@ -196,7 +196,7 @@ for i,l in enumerate(lines,1):
     c=sv.cell(row=i,column=1,value=l); c.font=bf if i==1 else nf; c.alignment=Alignment(wrap_text=True)
 wb.save("Operfly_BOM.xlsx")
 # denetim
-exp={"Core":(517,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(403,520),"Radio":(377,450),"RX":(358,100),"Pilot 12":(882,100),"Air":(388,0),"Engine":(383,0),"Vision":(573,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,400),"Cell":(407,250),"Pilot T":(912,100),"Pilot Pro":(1153,1810),"Base":(398,520),"Ground Radio":(494,550),"Tracker":(613,0),"Shield":(373,1342)}
+exp={"Core":(517,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(413,520),"Radio":(377,450),"RX":(358,100),"Pilot 12":(882,100),"Air":(388,0),"Engine":(383,0),"Vision":(573,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,400),"Cell":(407,250),"Pilot T":(912,100),"Pilot Pro":(1153,1810),"Base":(398,520),"Ground Radio":(494,550),"Tracker":(613,0),"Shield":(373,1342)}
 tk=tm=0
 for n,c,s,its in P:
     k=sum(q*PR[i][1] for i,q in its if PR[i][6]==K); m=sum(q*PR[i][1] for i,q in its if PR[i][6]==M)

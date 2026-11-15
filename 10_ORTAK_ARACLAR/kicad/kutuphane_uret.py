@@ -107,12 +107,75 @@ def ksz9567r():
                 "7 portlu gigabit Ethernet anahtari, 5 bakir port + 2 RGMII, PTP (ayak izi gecici: alt pedli kilif cizilecek)", yari=73.66)
 
 
+def mosaic():
+    """Septentrio mosaic-X5 / mosaic-H (239 uclu LGA). Uc numaralari mosaic_padleri.py tablosundan (uretici belgesi, Ek G).
+
+    Birim 1: islevsel uclar. Cok sayidaki GND, VDD_3V3 ve VANT ucu ayni noktada ust uste durur (ilki gorunur, digerleri gizli).
+    Birim 2: ayrilmis (Reserved_NC) uclar; her biri ayri durur ve bos birakilir.
+    """
+    from mosaic_padleri import PADLER
+    T = "tri_state"
+    sol = [("nRST_IN", I), ("ONOFF", I), ("MODULE_RDY", O), ("PMIC_ON_REQ", O), None,
+           ("TXD1", O), ("RXD1", I), ("RTS1", O), ("CTS1", I), ("TXD2", O), ("RXD2", I), ("RTS2", O), ("CTS2", I),
+           ("TXD3", O), ("RXD3", I), ("RTS3", O), ("CTS3", I), ("TXD4", O), ("RXD4", I), None,
+           ("PPSO", T), ("EVENTA", I), ("EVENTB", I), ("GP1", T), ("GP2", T), None,
+           ("GPLED", T), ("GPLED2", T), ("LOGLED", T), ("LOGBUTTON", I)]
+    sag = [("ANT_1", P), ("ANT_2", P), None, ("REF_O", O), ("REF_I", I), ("VTUNE", P), None,
+           ("USB_VBUS1", P), ("USB_DEV_P", B), ("USB_DEV_N", B), None,
+           ("SD1_CLK", O), ("SD1_CMD", B), ("SD1_DATA0", B), None,
+           ("RMII_CLK", O), ("MDC", O), ("MDIO", B), ("RMII_TXEN", O), ("RMII_TXD0", O), ("RMII_TXD1", O),
+           ("RMII_RXD0", I), ("RMII_RXD1", I), ("RMII_CRSDV", I), ("RMII_RXER", I), ("nRST_LAN", O), None,
+           ("RTC_XTALI", P), ("RTC_XTALO", P)]
+    ust = [("VDD_3V3", G), ("VDD_BAT", G), ("VANT", G), ("2V8_IN", G), ("2V8_OUT", V), ("1V8_OUT", V), ("SYNC", I)]
+    alt = [("GND", G), ("Reserved_GND", P)]
+    sol, sag = [None] * 5 + sol + [None] * 6, [None] * 5 + sag + [None] * 6   # ust ve alt uc adlarina yer
+    ad, yari = "mosaic-X5", 22.86
+    n = max(len(sol), len(sag))
+    y0 = (n - 1) * 1.27
+    tepe = y0 + 2.54
+    kullanilan = set()
+
+    def pin(isim, tur, x, y, aci):
+        r = ""
+        for i, no in enumerate(PADLER[isim]):
+            kullanilan.add(no)
+            r += '\t\t\t(pin %s line (at %.2f %.2f %d) (length 2.54)%s (name "%s" (effects (font (size 1.27 1.27)))) (number "%s" (effects (font (size 1.27 1.27)))))\n' % (
+                tur if i == 0 else "passive", x, y, aci, "" if i == 0 else " hide", isim, no)
+        return r
+    s = '\t(symbol "%s" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)\n' % ad
+    s += ozellik("Reference", "U", -yari, tepe + 6.35) + ozellik("Value", ad, yari, -tepe - 6.35)
+    s += ozellik("Footprint", "operfly_ayak:Septentrio_mosaic_LGA-239_31x31mm_P1.27mm", 0, 0, True) + ozellik("Datasheet", "", 0, 0, True)
+    s += ozellik("Description", "GNSS alici modulu, Septentrio mosaic-X5 (tek anten) / mosaic-H (cift anten), LGA-239 31x31 mm", 0, 0, True)
+    s += '\t\t(symbol "%s_1_1" (rectangle (start %.2f %.2f) (end %.2f %.2f) (stroke (width 0.254) (type default)) (fill (type background)))\n' % (ad, -yari, tepe, yari, -tepe)
+    for grup, x, aci in ((sol, -yari - 2.54, 0), (sag, yari + 2.54, 180)):
+        for i, u in enumerate(grup):
+            if u:
+                s += pin(u[0], u[1], x, y0 - i * 2.54, aci)
+    for grup, y, aci in ((ust, tepe + 2.54, 270), (alt, -tepe - 2.54, 90)):
+        for i, (isim, tur) in enumerate(grup):
+            s += pin(isim, tur, (i - (len(grup) - 1) / 2) * 5.08, y, aci)
+    s += "\t\t)\n"
+    # Birim 2: ayrilmis uclar, iki sutun
+    nc = PADLER["Reserved_NC"]
+    yarim = (len(nc) + 1) // 2
+    t2 = (yarim - 1) * 1.27 + 2.54
+    s += '\t\t(symbol "%s_2_1" (rectangle (start -17.78 %.2f) (end 17.78 %.2f) (stroke (width 0.254) (type default)) (fill (type background)))\n' % (ad, t2, -t2)
+    for i, no in enumerate(nc):
+        kullanilan.add(no)
+        solda = i < yarim
+        s += '\t\t\t(pin no_connect line (at %s %.2f %d) (length 2.54) (name "Reserved_NC" (effects (font (size 1.27 1.27)))) (number "%s" (effects (font (size 1.27 1.27)))))\n' % (
+            "-20.32" if solda else "20.32", (yarim - 1) * 1.27 - (i % yarim) * 2.54, 0 if solda else 180, no)
+    assert len(kullanilan) == 239, len(kullanilan)
+    return s + "\t\t)\n\t)\n"
+
+
 def main():
     s = '(kicad_symbol_lib (version 20231120) (generator "operfly") (generator_version "1")\n'
     s += konnektor("Operfly_Bus_20", BUS, FP_BUS, "Operfly Bus portu, Harwin Gecko-SL 20 kontak")
     for e in ENTEGRELER:
         s += kutu(*e[:7], yari=e[7])
     s += ksz9567r()
+    s += mosaic()
     s += ")\n"
     open(sys.argv[1], "w", encoding="utf-8", newline="\n").write(s)
     print("yazıldı:", sys.argv[1])

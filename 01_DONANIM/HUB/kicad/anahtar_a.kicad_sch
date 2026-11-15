@@ -10516,28 +10516,6 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 340.36 604.52 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "a234b10d-8515-5448-b345-b75a52d5f944")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 340.36 604.52 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
 		(at 388.62 631.19 270)
 		(effects
 			(font

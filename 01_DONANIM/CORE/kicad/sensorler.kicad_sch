@@ -5385,28 +5385,6 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 72.39 175.26 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "6721aa28-d54b-5225-9f29-60b7eead6795")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 72.39 175.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
 		(at 464.82 190.5 270)
 		(effects
 			(font
@@ -6857,28 +6835,6 @@
 			)
 		)
 	)
-	(global_label "GND"
-		(shape passive)
-		(at 184.15 358.14 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "d33675ea-9219-54f9-9d8e-b3f02a617972")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 184.15 358.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "+3V3_S1"
 		(shape passive)
 		(at 72.39 336.55 90)
@@ -7167,28 +7123,6 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 464.82 350.52 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "e5b30a6a-17de-57e1-aead-bbd8ab2e2a61")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 464.82 350.52 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
 		(at 90.17 77.47 0)
 		(effects
 			(font
@@ -7375,28 +7309,6 @@
 		(uuid "f46d35c3-6d5f-59ef-b9e7-7363647aa73f")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 464.82 172.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 59.69 415.29 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "f9826c06-c4a0-565c-9b04-fcfdcbcf0a07")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 59.69 415.29 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

@@ -4293,28 +4293,6 @@
 			)
 		)
 	)
-	(global_label "GND"
-		(shape passive)
-		(at 290.83 255.27 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "16795a90-daa8-55ba-a977-71c5a3f4a7da")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 290.83 255.27 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "+3V3"
 		(shape passive)
 		(at 434.34 175.26 90)
@@ -5679,28 +5657,6 @@
 			)
 		)
 	)
-	(global_label "GND"
-		(shape passive)
-		(at 435.61 107.95 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "803c0f3c-19fc-514d-b5ce-277888cf60c3")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 435.61 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "ETH_B+"
 		(shape passive)
 		(at 57.15 86.36 180)
@@ -6593,28 +6549,6 @@
 		(uuid "dfe8fb75-b17f-5703-873e-398141bd413d")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 138.43 325.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape passive)
-		(at 435.61 80.01 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "e020c7fd-325a-580a-8087-70149e78a60d")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 435.61 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

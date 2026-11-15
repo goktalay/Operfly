@@ -43,7 +43,7 @@ prices=[
 ("Jetson taşıyıcı devresi (soket, güç, soğutma)",70,T,"","","",K,TS),
 ("GNSS RF ön ucu (LNA, filtre, anten beslemesi)",30,T,"Nav şematiği: alıcı anten beslemesini ve korumasını içinde taşır; kartta yalnızca anten regülatörü ve çift anten seçeneğinin elemanları var. Tahmin şematikten yüksek kaldı, fiyat teyidinde düşürülecek",TI+" / Würth","LP5907MFX-3.3, 744786139A, SESD0402X1BN",K,S),
 ("SIM yuvası, eSIM, anten bağlantıları",20,T,"","","",K,TS),
-("Fark basınç sensörü",40,T,"","","",K,A),
+("Fark basınç sensörü",40,T,"Air şematiği: ±1 psi, 24 bit, çift hortum uçlu; fiyat teyit edilecek. Pitot ısıtıcı anahtarı (NCV8402) küçük malzemede","TE Connectivity","5525DSO-DB001DS",K,S),
 ("Yalıtımlı motor girişleri (devir, sıcaklık, yakıt)",35,T,"","","",K,TS),
 ("Hall etkili gimbal",60,T,"Model seçilmedi. Aday sınıf: 3,3 V analog çıkışlı Hall gimbal (ör. RadioMaster AG01). Ürün sayfalarında uç sırası yok; kablo numune üzerinde uyarlanır","","",K,A),
 ("Anahtar, tekerlek ve düğme seti",40,T,"6 anahtar, 2 tekerlek, 2 düğme, 5 yönlü tuş; kasa tasarımıyla seçilecek. Giriş kartına JST-GH kabloyla bağlanır","","",K,A),
@@ -85,7 +85,7 @@ P=[
 ("Operfly Radio","OPFRAD",2,[(WB,1)]+node+[("Ethernet trafosu (10/100)",1),("Radyo modülü soğutucusu ve ısı dolgusu",1),(reg,1),(pas,1),(sma,2),(bus,1),(small,1),(asm,1)]),
 ("Operfly RX","OPFRCV",2,[(KR,1)]+node+[(reg,1),(pas,1),(sma,2),(bus,1),(small,1),(asm,1)]),
 ("Operfly Pilot 12","OPFK12",2,merge([(KR,1),("Güvenli eleman",1),("Kumanda bataryası ve şarj devresi",1),(sma,2),(pas,1),(small,1),(asm,1)]+GK)),
-("Operfly Air","OPFAIR",2,[("Fark basınç sensörü",1)]+node+[(pas,1),(bus,1),(small,1),(asm,1)]),
+("Operfly Air","OPFAIR",2,[("Fark basınç sensörü",1),("Barometre",1)]+node+[(pas,1),(bus,1),(small,1),(asm,1)]),
 ("Operfly Engine","OPFENG",2,[("Yalıtımlı motor girişleri (devir, sıcaklık, yakıt)",1)]+node+[(pas,1),(bus,1),(small,1),(asm,1)]),
 ("Operfly Vision","OPFVIS",3,[("Jetson modülü",1),("M.2 NVMe 256 GB (endüstriyel)",1),("Jetson taşıyıcı devresi (soket, güç, soğutma)",1),("IMU 1",1)]+node+[(phy,2),(reg,1),(pas,1),(bus,3),(big,1),(asm,1)]),
 ("Operfly Range 10","OPFR10",3,[("Mesafe sensörü çekirdeği, 10 m",1)]+node+[(pas,1),(bus,1),(small,1),(asm,1)]),
@@ -198,7 +198,7 @@ for i,l in enumerate(lines,1):
     c=sv.cell(row=i,column=1,value=l); c.font=bf if i==1 else nf; c.alignment=Alignment(wrap_text=True)
 wb.save("Operfly_BOM.xlsx")
 # denetim
-exp={"Core":(520,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(413,520),"Radio":(384,450),"RX":(373,86),"Pilot 12":(882,86),"Air":(388,0),"Engine":(383,0),"Vision":(573,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,400),"Cell":(407,250),"Pilot T":(912,86),"Pilot Pro":(1153,1796),"Base":(398,520),"Ground Radio":(494,536),"Tracker":(613,0),"Shield":(373,1342)}
+exp={"Core":(520,0),"Hub":(857,0),"Power":(548,0),"PC adaptörü":(392,0),"Nav":(413,520),"Radio":(384,450),"RX":(373,86),"Pilot 12":(882,86),"Air":(393,0),"Engine":(383,0),"Vision":(573,860),"Range 10":(348,50),"Range 30":(348,150),"Range 100":(348,400),"Cell":(407,250),"Pilot T":(912,86),"Pilot Pro":(1153,1796),"Base":(398,520),"Ground Radio":(494,536),"Tracker":(613,0),"Shield":(373,1342)}
 tk=tm=0
 for n,c,s,its in P:
     k=sum(q*PR[i][1] for i,q in its if PR[i][6]==K); m=sum(q*PR[i][1] for i,q in its if PR[i][6]==M)

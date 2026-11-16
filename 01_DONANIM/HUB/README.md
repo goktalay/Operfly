@@ -70,12 +70,12 @@ Yeniden üretmek için: `python 10_ORTAK_ARACLAR/kicad/pcb_ciz.py HUB operfly_hu
 
 - **Kart:** 180 x 130 mm, 6 katman (iç 1: toprak, iç 4: +3V3; diğer katmanlar sinyal, elemanlar üstte), 489 eleman, tamamı üst yüzde; köşelerde M3 montaj deliği.
 - **Kurallar:** yol 0,20 mm, açıklık 0,125 mm, geçiş 0,60/0,30 mm; besleme ağları, ağın en dar ucunu aşmayacak biçimde 0,2-1,0 mm (0,4 mm ve üstünde geçiş 0,8/0,4 mm); bakır-kenar 0,25 mm.
-- **Denetim: KART TAMAMLANMADI.** DRC 2 ihlal (starved_thermal, zones_intersect), 21 bağlanmamış uç. Otomatik yol çizici bu kartı bitiremedi;
+- **Denetim: KART TAMAMLANMADI.** DRC 0 ihlal (-), 6 bağlanmamış uç. Otomatik yol çizici bu kartı bitiremedi;
   kalan bağlantılar elle çizilmeli ya da yerleşim elle düzeltilip yeniden denenmeli.
 
 **Bu bir mühendis çizimi değildir.** Üretimden önce bir kart tasarımcısının bakması gereken noktalar:
 
-- Yol çizici 10 turda bitiremedi; eksik bağlantıların çoğu Ethernet anahtarlarının analog beslemeleri (AVDDL/AVDDH) ve port Ethernet çiftleri. İki ihlal düzlem onarım yamalarından geliyor (üst üste binen iki yama ve bir uçta eksik ısıl köprü).
+- Eksik kalan altı bağlantı: CAN_B_L, P6_FLT_N, P6_MDI_D+, P3_MDI_A+, P3_MDI_B-, P3_MDI_C+. Yol çizici 40 turda (yaklaşık 6 saat; `OPERFLY_YOL_CIZICI` 1.9.0, `OPERFLY_YOL_TUR=40`) bunları bağlayamadı; ilk denemede (10 tur) 21 bağlantı eksikti. İç düzlemler uçlara tam bağlandı (ısıl köprüsüz).
 - **Gigabit Ethernet çiftleri (12 port × 4 çift ve anahtarlar arası RGMII) işlevsel sayılmaz:** 100 ohm fark empedansında, eşit uzunlukta ve çift olarak çizilmedi; RGMII saat/veri hatlarının uzunluk eşlemesi yapılmadı.
 - Üç 128 uçlu anahtar entegresinin alt pedlerindeki ısı geçişleri, 1,2 V/2,5 V/3,3 V beslemelerinin dağıtımı ve ayırma kondansatörleri üretici önerisine göre düzenlenmedi.
 - Port beslemeleri (port başına 6 A'e kadar, girişte XT60) dar yolla çizildi: **bu hatlar geniş bakırla yeniden çizilmeden kart yük altında kullanılmaz.**

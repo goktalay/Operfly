@@ -183,6 +183,10 @@ def ciz(kart, kok, tur=40, sure="00:20:00"):
              # Ağ erişimi kapalı: araç açılışta sürüm denetimi için dışarı çıkmak ister; ölü bir vekil adresi verilir.
              "-Dhttp.proxyHost=127.0.0.1", "-Dhttp.proxyPort=9", "-Dhttps.proxyHost=127.0.0.1", "-Dhttps.proxyPort=9", "-jar", JAR,
              "--gui.enabled=false", "-da", "-de", dsn, "-do", ses, "-mp", str(tur), "--router.max_passes=%d" % tur]
+    if "1.9" in os.path.basename(JAR):
+        # Eski sürüm: tur sınırına uyar ve eksik bağlantı kalsa da sonucu yazar, ama pencere açmak ister;
+        # sanal ekranda (xvfb-run) çalıştırılır.
+        komut = ["xvfb-run", "-a"] + [k for k in komut if k not in ("--gui.enabled=false", "-da", "-Djava.awt.headless=true") and not k.startswith("--router.")]
     try:
         s = subprocess.run(komut, cwd=is_dizini, env=ortam, capture_output=True, text=True, timeout=sinir * 60)
         open(os.path.join(is_dizini, kok + ".log"), "w", encoding="utf-8").write(s.stdout + "\n" + s.stderr)
@@ -251,7 +255,7 @@ def drc(kart, kok, sessiz=False):
     return r
 
 
-def otomatik(kart, kok, deneme=5, tur=40, sure="00:20:00"):
+def otomatik(kart, kok, deneme=5, tur=int(os.environ.get("OPERFLY_YOL_TUR", "40")), sure="00:20:00"):
     """Yerleşim + yol çizimi. Sonuç temiz değilse (bağlanmamış uç ya da ihlal) başka tohumla yeniden dener,
     en iyisini bırakır. Temiz çıkan tohum kartın pcb_ayar.py dosyasına "tohum" olarak yazılır ki sonuç yinelenebilsin."""
     import shutil

@@ -133,3 +133,28 @@ kullandığı, CAN hattında kabul edilen en yüksek hız için kablo boyu.
 6. **Peltier sürücüsü: DRV8837**, 5 V'tan, en çok 1 A. Çıkışta bobin ve kondansatör var (anahtarlama gürültüsü pusula
    ve IMU'yu bozmasın diye). Isıl hedef varsayılan 45 °C, yazılımla değişir; sıcaklık IMU'ların kendi sensöründen okunur.
    Peltier modülünün kendisi mekanik tasarımla birlikte seçilecek (en çok 5 V, 1 A).
+
+## Kart çizimi (otomatik)
+
+Sahibinin kararıyla kart **otomatik** çizildi: yerleşim `pcb_yerlesim.py`, yollar dış bir otomatik yol çiziciyle
+(`pcb_ciz.py`). Dosya: `kicad/operfly_core.kicad_pcb`; ayarlar `kicad/pcb_ayar.py`.
+Yeniden üretmek için: `python 10_ORTAK_ARACLAR/kicad/pcb_ciz.py CORE operfly_core`.
+
+- **Kart:** 115 x 80 mm, 6 katman (iç 1: toprak, iç 4: +3V3; diğer katmanlar sinyal, elemanlar üstte), 264 eleman, tamamı üst yüzde; köşelerde M3 montaj deliği.
+- **Kurallar:** yol 0,10 mm, açıklık 0,100 mm, geçiş 0,40/0,20 mm; besleme ağları, ağın en dar ucunu aşmayacak biçimde 0,2-1,0 mm (0,4 mm ve üstünde geçiş 0,8/0,4 mm); bakır-kenar 0,25 mm.
+- **Denetim: KART TAMAMLANMADI.** DRC 0 ihlal (-), 10 bağlanmamış uç. Otomatik yol çizici bu kartı bitiremedi;
+  kalan bağlantılar elle çizilmeli ya da yerleşim elle düzeltilip yeniden denenmeli.
+
+**Bu bir mühendis çizimi değildir.** Üretimden önce bir kart tasarımcısının bakması gereken noktalar:
+
+- İşlemci 0,65 mm adımlı BGA olduğu için ince kural kullanıldı (yol ve açıklık 0,10 mm, geçiş 0,4/0,2 mm): bu, standart değil ileri sınıf üretim ister; üreticinin yetenekleriyle karşılaştırılmalı.
+- Üç IMU'nun mekanik yalıtımı, ısıtıcı/Peltier bölgesi ve IMU'ların ısı kaynaklarından uzaklığı gözetilmedi; uçuş denetçisinde ölçüm kalitesi doğrudan buna bağlıdır.
+- İşlemci çekirdek beslemesi ve BGA altı ayırma kondansatörleri üretici önerisine göre yerleştirilmedi; Ethernet (RMII), USB ve microSD hatları eşit uzunlukta çizilmedi.
+- Servo/motor çıkışları (12 kanal) ve yedek işlemci yolu için gürültü ve arıza yalıtımı gözetilmedi.
+- Anahtarlamalı regülatörlerin (bobin, diyot, giriş/çıkış kondansatörleri) akım döngüleri küçük tutulmadı; gürültü ve verim ölçülmeli.
+- Kristal ve osilatör hatları en kısa yoldan çizilmedi; altlarından başka sinyal geçip geçmediğine bakılmalı.
+- Fark çiftleri (CAN, USB, Ethernet) çift olarak, eşit uzunlukta ve empedans denetimli çizilmedi.
+- Güç elemanlarının soğutma bakırı ve ısıl geçişleri ayrıca hesaplanmadı.
+- Eleman adları üretim katmanında bırakıldı; kart üstünde yazı (serigrafi) yok.
+- Kasa, konnektör yerleri ve montaj delikleri mekanik tasarımla eşleştirilmedi.
+- Üretim dosyaları (Gerber, delik, dizgi) henüz çıkarılmadı.

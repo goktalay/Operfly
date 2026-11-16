@@ -176,6 +176,11 @@ main {
 .sheets button small { display: block; color: var(--muted); font-size: 11px; max-width: 30ch; }
 .sheets button:hover, .sheets button:focus-visible { border-color: var(--accent); outline: none; }
 .nosheet { color: var(--muted); margin: 0; font-size: 13px; }
+.kdurum { margin: 6px 0 0; font-size: 12.5px; color: var(--muted); }
+.kdurum b { font-weight: 600; color: var(--ink); }
+.kdurum.uyari b { color: var(--accent); }
+.kdot { fill: none; stroke: var(--accent); stroke-width: 1.3; }
+.node.on .kdot { stroke: #fff; }
 
 /* Şematik görüntüleyici: tam ekran, sayfa sekmeleri, sürükleme ve yakınlaştırma. Kâğıt rengi temadan bağımsızdır. */
 .viewer {
@@ -201,6 +206,7 @@ main {
   border: 1px solid var(--line); border-radius: 99px; padding: 6px 12px; cursor: pointer;
 }
 .vtabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.vtabs button.k3tab { border-style: dashed; border-color: var(--accent); font-weight: 600; }
 .vstage {
   flex: 1; min-height: 0; position: relative; overflow: hidden;
   background: #f5f4ef; border-top: 1px solid var(--line);
@@ -210,8 +216,24 @@ main {
 .vstage svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; user-select: none; -webkit-user-select: none; }
 .vmsg { position: absolute; inset: 0; margin: auto; height: 3em; text-align: center; color: #5d6b66; font-size: 14px; padding: 0 16px; }
 .vmsg:empty { display: none; }
-.vzoom { position: absolute; right: 12px; bottom: 14px; display: flex; gap: 6px; }
+.vzoom { position: absolute; right: 12px; bottom: 14px; display: flex; gap: 6px; z-index: 2; }
 .vzoom .vbtn { box-shadow: 0 2px 8px rgba(0,0,0,.18); }
+.vzoom .vbtn[hidden] { display: none; }
+/* Kart (3B): aynı sahnede koyu zemin üstünde tuval; altında ölçü ve denetim durumu satırı. */
+.vstage.k3 { background: #1b2220; }
+.vstage.k3 .vmsg { color: #cfd8d3; }
+.vstage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; outline: none; }
+.vstage canvas[hidden] { display: none; }
+.vhint {
+  position: absolute; left: 12px; top: 10px; margin: 0; z-index: 1; pointer-events: none;
+  font-size: 12px; color: #cfd8d3; background: rgba(20,26,24,.6); padding: 3px 8px; border-radius: 6px;
+}
+.vhint[hidden] { display: none; }
+.vnote { margin: 0; padding: 8px 12px 10px; font-size: 12.5px; line-height: 1.4; color: var(--muted); border-top: 1px solid var(--line); }
+.vnote[hidden] { display: none; }
+.vnote b { font-weight: 600; color: var(--ink); }
+.vnote.uyari b { color: var(--accent); }
+@media (max-width: 520px) { .vzoom { right: 8px; bottom: 10px; gap: 4px; } .vzoom .vbtn { padding: 6px 9px; } }
 body.vopen { overflow: hidden; }
 footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 12px; color: var(--muted); }
 @media (min-width: 900px) {
@@ -226,13 +248,14 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
 <body>
 <header class="top">
   <h1>Operfly Donanım Şeması</h1>
-  <p class="lead">22 ürün, tek omurga. İlk hedefler: 2 kg faydalı yüklü dört motorlu araç ve 10 kg faydalı yüklü benzinli sabit kanat. Bir donanıma dokunun: bağlı olduğu donanımlar vurgulanır, özellikleri panelde açılır. Şematiği çizilmiş kartlarda panelden şematik sayfaları da açılır.</p>
+  <p class="lead">22 ürün, tek omurga. İlk hedefler: 2 kg faydalı yüklü dört motorlu araç ve 10 kg faydalı yüklü benzinli sabit kanat. Bir donanıma dokunun: bağlı olduğu donanımlar vurgulanır, özellikleri panelde açılır. Panelden kartın şematik sayfaları ve çizilmiş kartın döndürülebilir 3 boyutlu önizlemesi de açılır.</p>
   <ul class="legend" aria-label="Çizgi türleri">
     <li><svg viewBox="0 0 30 10" aria-hidden="true"><line x1="0" y1="5" x2="30" y2="5" class="edge" style="opacity:1"/></svg>Operfly Bus / sinyal kablosu</li>
     <li><svg viewBox="0 0 30 10" aria-hidden="true"><line x1="0" y1="5" x2="30" y2="5" class="edge guc"/></svg>Güç</li>
     <li><svg viewBox="0 0 30 10" aria-hidden="true"><line x1="0" y1="5" x2="30" y2="5" class="edge rf"/></svg>Kablosuz bağlantı</li>
     <li><svg viewBox="0 0 30 10" aria-hidden="true"><rect x="1" y="1" width="28" height="8" fill="none" stroke="currentColor" stroke-dasharray="4 3"/></svg>Operfly ürünü değil</li>
     <li><svg viewBox="0 0 30 10" aria-hidden="true"><circle cx="15" cy="5" r="3.2" class="sdot"/></svg>Şematiği hazır</li>
+    <li><svg viewBox="0 0 30 10" aria-hidden="true"><circle cx="15" cy="5" r="3.2" class="kdot"/></svg>Kartı çizildi (3B)</li>
   </ul>
 </header>
 <main>
@@ -242,27 +265,35 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
   </figure>
   <section class="panel" id="panel" aria-live="polite"></section>
 </main>
-<footer>Kaynak: Operfly Donanım Ekosistemi Mimari Şartname, Rev A (14 Kasım 2026) ve depodaki KiCad şematikleri. Şematikler ilk taslaktır; kart çizimleri (PCB) henüz yapılmadı. Yeni şematikler çıktıkça sayfaya eklenir.</footer>
+<footer>Kaynak: Operfly Donanım Ekosistemi Mimari Şartname, Rev A (14 Kasım 2026) ve depodaki KiCad şematikleri. Şematikler ilk taslaktır. Kart çizimleri (PCB) otomatik çizimdir; üretimden önce gözden geçirilecek. Yeni şematikler ve kartlar çıktıkça sayfaya eklenir.</footer>
 
 <div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-labelledby="vtitle">
   <div class="vbar">
     <div class="vhead"><strong id="vtitle"></strong><span id="vsub"></span></div>
-    <button type="button" class="vbtn" id="vclose" aria-label="Şematiği kapat">Kapat</button>
+    <button type="button" class="vbtn" id="vclose" aria-label="Görüntüleyiciyi kapat">Kapat</button>
   </div>
-  <div class="vtabs" id="vtabs" role="tablist" aria-label="Şematik sayfaları"></div>
-  <div class="vstage" id="vstage"><p class="vmsg" id="vmsg"></p></div>
-  <div class="vzoom">
-    <button type="button" class="vbtn" id="vout" aria-label="Uzaklaştır">−</button>
-    <button type="button" class="vbtn" id="vfit">Sığdır</button>
-    <button type="button" class="vbtn" id="vin" aria-label="Yakınlaştır">+</button>
+  <div class="vtabs" id="vtabs" role="tablist" aria-label="Şematik sayfaları ve kart görünümü"></div>
+  <div class="vstage" id="vstage">
+    <p class="vmsg" id="vmsg"></p>
+    <p class="vhint" id="vhint" hidden>Sürükle: döndür · İki parmak: yakınlaştır, kaydır</p>
+    <div class="vzoom">
+      <button type="button" class="vbtn" id="vtop" hidden>Üst</button>
+      <button type="button" class="vbtn" id="vbot" hidden>Alt</button>
+      <button type="button" class="vbtn" id="vout" aria-label="Uzaklaştır">−</button>
+      <button type="button" class="vbtn" id="vfit">Sığdır</button>
+      <button type="button" class="vbtn" id="vin" aria-label="Yakınlaştır">+</button>
+    </div>
   </div>
+  <p class="vnote" id="vnote" hidden></p>
 </div>
 
 <script src="sema/liste.js"></script>
+<script src="kart/liste.js"></script>
 <script>
 (function () {
   "use strict";
   var SEMA = window.OPERFLY_SEMA || {};
+  var KART = window.OPERFLY_KART || {};
   var W = 130, S = 80, H = 38;
   var N = [
     // ARAÇ
@@ -451,6 +482,7 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
       g.appendChild(el("text", { x: cx, y: n.y + 23, "class": "nm", "text-anchor": "middle" }, n.name));
     }
     if (SEMA[n.id]) g.appendChild(el("circle", { cx: n.x + n.w - 6, cy: n.y + 6, r: 2.6, "class": "sdot" }));
+    if (KART[n.id]) g.appendChild(el("circle", { cx: n.x + n.w - 6, cy: n.y + (SEMA[n.id] ? 13.5 : 6), r: 2.3, "class": "kdot" }));
     g.addEventListener("click", function () { select(n.id); });
     g.addEventListener("keydown", function (ev) {
       if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(n.id); }
@@ -494,6 +526,13 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
     h += "<span class=\"pill\">" + (n.kind.indexOf("ortak") > -1 ? "Ortak modül" : KIND[kindKey]) + "</span>";
     if (n.stage) h += "<span class=\"pill stage\">Tasarım aşaması " + n.stage + "</span>";
     h += "</div><p class=\"role\">" + n.role + "</p>";
+    var kt = KART[id];
+    if (kt) {
+      h += "<h3>Kart (3B)</h3><div class=\"sheets\"><button type=\"button\" data-kart=\"" + id + "\">3B önizlemeyi aç<small>" + kartOlcu(kt) + "</small></button></div>" +
+        "<p class=\"kdurum" + (kt.uyari ? " uyari" : "") + "\">" + kartDurum(kt) + "</p>";
+    } else if (kindKey === "kart") {
+      h += "<h3>Kart (3B)</h3><p class=\"nosheet\">Kart çizimi sürüyor; bitince burada 3B olarak açılır.</p>";
+    }
     var sm = SEMA[id];
     if (sm) {
       h += "<h3>Şematik</h3><div class=\"sheets\">" + sm.sayfalar.map(function (p, i) {
@@ -519,7 +558,9 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
     var b = ev.target.closest("button[data-go]");
     if (b) { select(b.getAttribute("data-go")); return; }
     var s = ev.target.closest("button[data-sema]");
-    if (s) openViewer(s.getAttribute("data-sema"), +s.getAttribute("data-page"), s);
+    if (s) { openViewer(s.getAttribute("data-sema"), +s.getAttribute("data-page"), s); return; }
+    var k = ev.target.closest("button[data-kart]");
+    if (k) openViewer(k.getAttribute("data-kart"), -1, k);
   });
 
   // --- Şematik görüntüleyici. Sayfalar ilk açılışta yüklenir (sema/<donanım>/<n>.js) ve bellekte tutulur.
@@ -532,6 +573,397 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
     cache[key] = text;
     if (waiting[key]) { waiting[key](); delete waiting[key]; }
   };
+
+  // --- Kart (3B) görüntüleyici. Model ilk açılışta yüklenir (kart/<donanım>.js): zlib ile sıkıştırılmış, 16 bitlik
+  // koordinatlı üçgen ağları; 10_ORTAK_ARACLAR/kicad/kart_web.py üretir. Dış kitaplık yoktur, çizim WebGL ile yapılır.
+  var GENEL_NOT = "Otomatik çizimdir; üretimden önce gözden geçirilecek.";
+  var vnote = document.getElementById("vnote"), vhint = document.getElementById("vhint");
+  var vtop = document.getElementById("vtop"), vbot = document.getElementById("vbot");
+  var kartBekleyen = {}, kartBetik = {}, kartModel = null;
+
+  function kartOlcu(k) {
+    var a = [];
+    if (k.en) a.push(k.en + " × " + k.boy + " mm");
+    if (k.katman) a.push(k.katman + " katman");
+    if (k.eleman) a.push(k.eleman + " eleman");
+    return a.join(" · ");
+  }
+  function kartDurum(k) { return (k.durum ? "<b>" + k.durum + ".</b> " : "") + GENEL_NOT; }
+
+  // zlib (RFC 1950/1951) açıcı: tarayıcının kendi açıcısı yoksa kullanılır.
+  function zlibYedek(src) {
+    var pos = 2, bb = 0, bc = 0, out = new Uint8Array(src.length * 4), op = 0;
+    function bits(n) {
+      while (bc < n) { bb |= src[pos++] << bc; bc += 8; }
+      var v = bb & ((1 << n) - 1); bb >>>= n; bc -= n; return v;
+    }
+    function tablo(lens, n) {
+      var count = new Uint16Array(16), offs = new Uint16Array(16), symbol = new Uint16Array(n), i;
+      for (i = 0; i < n; i++) count[lens[i]]++;
+      count[0] = 0;
+      for (i = 1; i < 16; i++) offs[i] = offs[i - 1] + count[i - 1];
+      for (i = 0; i < n; i++) if (lens[i]) symbol[offs[lens[i]]++] = i;
+      return { count: count, symbol: symbol };
+    }
+    function sym(h) {
+      var code = 0, first = 0, index = 0;
+      for (var len = 1; len < 16; len++) {
+        code |= bits(1);
+        var c = h.count[len];
+        if (code - c < first) return h.symbol[index + (code - first)];
+        index += c; first += c; first <<= 1; code <<= 1;
+      }
+      throw new Error("kod");
+    }
+    function buyut(n) {
+      if (op + n > out.length) { var t = new Uint8Array(Math.max(out.length * 2, op + n)); t.set(out); out = t; }
+    }
+    var LB = [3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258];
+    var LE = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0];
+    var DB = [1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577];
+    var DE = [0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13];
+    var ORD = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
+    var son, i;
+    do {
+      son = bits(1);
+      var tip = bits(2), ll, dl;
+      if (tip === 0) {
+        bb = 0; bc = 0;
+        var n = src[pos] | (src[pos + 1] << 8); pos += 4;
+        buyut(n); out.set(src.subarray(pos, pos + n), op); op += n; pos += n;
+        continue;
+      }
+      if (tip === 1) {
+        var l = new Uint8Array(288), d = new Uint8Array(30);
+        for (i = 0; i < 288; i++) l[i] = i < 144 ? 8 : i < 256 ? 9 : i < 280 ? 7 : 8;
+        for (i = 0; i < 30; i++) d[i] = 5;
+        ll = tablo(l, 288); dl = tablo(d, 30);
+      } else if (tip === 2) {
+        var nl = bits(5) + 257, nd = bits(5) + 1, nc = bits(4) + 4, cl = new Uint8Array(19), lens = new Uint8Array(nl + nd);
+        for (i = 0; i < nc; i++) cl[ORD[i]] = bits(3);
+        var ch = tablo(cl, 19);
+        for (i = 0; i < nl + nd;) {
+          var s = sym(ch), tekrar, deger = 0;
+          if (s < 16) { lens[i++] = s; continue; }
+          if (s === 16) { deger = lens[i - 1]; tekrar = 3 + bits(2); } else if (s === 17) tekrar = 3 + bits(3); else tekrar = 11 + bits(7);
+          while (tekrar--) lens[i++] = deger;
+        }
+        ll = tablo(lens.subarray(0, nl), nl); dl = tablo(lens.subarray(nl), nd);
+      } else throw new Error("blok");
+      for (;;) {
+        var c = sym(ll);
+        if (c < 256) { buyut(1); out[op++] = c; continue; }
+        if (c === 256) break;
+        c -= 257;
+        var uz = LB[c] + bits(LE[c]), ds = sym(dl), geri = DB[ds] + bits(DE[ds]);
+        if (geri > op) throw new Error("uzaklık");
+        buyut(uz);
+        for (var k = 0; k < uz; k++, op++) out[op] = out[op - geri];
+      }
+    } while (!son);
+    return out.subarray(0, op);
+  }
+
+  function zlibAc(b64, tamam, hata) {
+    // üretici altı harfi işaretle değiştirir (kart_web.py, HARF_DEGISIMI); önce geri çevrilir
+    b64 = b64.replace(/[-_.~!*]/g, function (c) { return "xXaAqQ".charAt("-_.~!*".indexOf(c)); });
+    var bin = atob(b64), n = bin.length, u8 = new Uint8Array(n);
+    for (var i = 0; i < n; i++) u8[i] = bin.charCodeAt(i);
+    function yedek() { var r; try { r = zlibYedek(u8); } catch (e) { hata(); return; } tamam(r); }
+    if (window.DecompressionStream && window.Response && window.Blob && Blob.prototype.stream) {
+      try {
+        new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream("deflate"))).arrayBuffer()
+          .then(function (ab) { tamam(new Uint8Array(ab)); }, yedek);
+        return;
+      } catch (e) { /* yedeğe düş */ }
+    }
+    yedek();
+  }
+
+  // Model biçimi: "OPK1", başlık uzunluğu, JSON başlık, sonra grup grup: x/y/z farkları (zikzak; önce alt baytlar,
+  // sonra üst baytlar), ardından üçgen dizinleri (o ana kadar görülen nokta sayısına uzaklık; 0 = yeni nokta).
+  function kartCoz(u8) {
+    if (u8[0] !== 79 || u8[1] !== 80 || u8[2] !== 75 || u8[3] !== 49) throw new Error("biçim");
+    var n = u8[4] | (u8[5] << 8) | (u8[6] << 16) | (u8[7] << 24), metin = "", i;
+    if (window.TextDecoder) metin = new TextDecoder().decode(u8.subarray(8, 8 + n));
+    else for (i = 0; i < n; i++) metin += String.fromCharCode(u8[8 + i]);
+    var m = JSON.parse(metin), o = 8 + n;
+    m.gruplar.forEach(function (g) {
+      var nv = g.nokta, pos = new Uint16Array(nv * 3), bas = o;
+      for (var a = 0; a < 3; a++) {
+        var hi = o + nv, acc = 0;
+        for (var j = 0; j < nv; j++) {
+          var z = u8[o + j] | (u8[hi + j] << 8);
+          acc = (acc + ((z >>> 1) ^ -(z & 1))) & 0xFFFF;
+          pos[j * 3 + a] = acc;
+        }
+        o += 2 * nv;
+      }
+      var ni = g.ucgen * 3, idx = new Uint32Array(ni), gorulen = 0;
+      for (var k = 0; k < ni; k++) {
+        var c = 0, s = 0, b;
+        do { b = u8[o++]; c |= (b & 127) << s; s += 7; } while (b & 128);
+        if (c > gorulen) throw new Error("dizin");
+        idx[k] = gorulen - c;
+        if (c === 0) gorulen++;
+      }
+      if (o - bas !== g.bayt || gorulen !== nv) throw new Error("uzunluk");
+      g.pos = pos; g.idx = idx;
+    });
+    return m;
+  }
+
+  window.OPERFLY_KART_YUKLE = function (id, b64) {
+    var f = kartBekleyen[id];
+    delete kartBekleyen[id];
+    if (f) f(b64);
+  };
+
+  function kartYukle(id, tamam, hata) {
+    if (kartModel && kartModel.id === id) { tamam(kartModel.m); return; }
+    kartBekleyen[id] = function (b64) {
+      zlibAc(b64, function (u8) {
+        var m;
+        try { m = kartCoz(u8); } catch (e) { hata("Kart modeli açılamadı."); return; }
+        kartModel = { id: id, m: m };
+        tamam(m);
+      }, function () { hata("Kart modeli açılamadı."); });
+    };
+    if (kartBetik[id]) kartBetik[id].remove();
+    var sc = document.createElement("script");
+    sc.src = KART[id].dosya;
+    sc.onerror = function () { delete kartBekleyen[id]; hata("Kart modeli yüklenemedi. Bağlantıyı kontrol edip yeniden deneyin."); };
+    kartBetik[id] = sc;
+    document.head.appendChild(sc);
+  }
+
+  var K3 = (function () {
+    var cv = null, gl = null, prog = null, U = {}, ext32 = false, gruplar = [], model = null, cizim = 0;
+    var az = 0, yuk = 0, uzak = 100, hedef = [0, 0, 0], R = 50, tabanAz = 0;
+    var ACI = 32 * Math.PI / 180, YARIM = Math.PI / 2;
+    var VS = "attribute vec3 aP;uniform vec3 uS,uO;uniform mat4 uMV,uPr;varying vec3 vV;" +
+      "void main(){vec4 v=uMV*vec4(aP*uS+uO,1.0);vV=v.xyz;gl_Position=uPr*v;}";
+    // Düz gölgelendirme: yüzey normali ekran türevlerinden bulunur (modelde normal saklanmaz). Işıklar kameraya bağlıdır;
+    // metal yüzeyler (bakır, pedler) basit bir stüdyo yansıması alır.
+    var FS = "#extension GL_OES_standard_derivatives : enable\n" +
+      "#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\n" +
+      "varying vec3 vV;uniform vec4 uC;uniform vec2 uM;" +
+      "vec3 ortam(vec3 d){float t=clamp(d.y*0.5+0.5,0.0,1.0);" +
+      "vec3 c=mix(vec3(0.16,0.17,0.18),vec3(0.80,0.84,0.90),t);" +
+      "c+=vec3(1.6)*smoothstep(0.86,0.98,dot(d,normalize(vec3(0.30,0.72,0.62))));" +
+      "c+=vec3(0.7,0.66,0.6)*smoothstep(0.70,0.97,dot(d,normalize(vec3(-0.72,0.30,0.62))));return c;}" +
+      "void main(){vec3 n=normalize(cross(dFdx(vV),dFdy(vV)));vec3 v=normalize(-vV);if(dot(n,v)<0.0)n=-n;" +
+      "vec3 L=normalize(vec3(0.30,0.72,0.62));float nl=max(dot(n,L),0.0);float yari=n.y*0.5+0.5;" +
+      "vec3 r=reflect(-v,n);vec3 c;" +
+      "if(uM.x>0.5){c=uC.rgb*(0.45+0.35*nl+0.80*ortam(r));}" +
+      "else{float par=pow(max(dot(n,normalize(L+v)),0.0),mix(80.0,10.0,uM.y))*mix(0.45,0.05,uM.y);" +
+      "float fr=pow(1.0-max(dot(n,v),0.0),5.0);" +
+      "c=uC.rgb*(0.34+0.22*yari+0.72*nl)+vec3(par)+ortam(r)*(0.03+0.25*fr)*(1.0-uM.y);}" +
+      "c=c/(1.0+0.22*c);gl_FragColor=vec4(pow(c,vec3(0.4545)),uC.a);}";
+
+    function golgelendirici(tur, kaynak) {
+      var s = gl.createShader(tur);
+      gl.shaderSource(s, kaynak);
+      gl.compileShader(s);
+      return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
+    }
+    function kur() {
+      if (gl) return true;
+      if (!cv) {
+        cv = document.createElement("canvas");
+        cv.setAttribute("role", "img");
+        cv.hidden = true;
+        stage.insertBefore(cv, stage.firstChild);
+        cv.addEventListener("webglcontextlost", function (ev) { ev.preventDefault(); gl = null; prog = null; gruplar = []; });
+        cv.addEventListener("webglcontextrestored", function () { if (model && kur()) { yukle(); ciz(); } });
+        cv.addEventListener("contextmenu", function (ev) { ev.preventDefault(); });
+      }
+      var secenek = { alpha: false, antialias: true, depth: true, stencil: false }, g = null;
+      try { g = cv.getContext("webgl", secenek) || cv.getContext("experimental-webgl", secenek); } catch (e) { g = null; }
+      if (!g || !g.getExtension("OES_standard_derivatives")) return false;
+      gl = g;
+      ext32 = !!gl.getExtension("OES_element_index_uint");
+      var vs = golgelendirici(gl.VERTEX_SHADER, VS), fs = golgelendirici(gl.FRAGMENT_SHADER, FS);
+      prog = gl.createProgram();
+      if (!vs || !fs) { gl = null; return false; }
+      gl.attachShader(prog, vs); gl.attachShader(prog, fs);
+      gl.bindAttribLocation(prog, 0, "aP");
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { gl = null; return false; }
+      ["uS", "uO", "uMV", "uPr", "uC", "uM"].forEach(function (ad) { U[ad] = gl.getUniformLocation(prog, ad); });
+      return true;
+    }
+    function yukle() {
+      gruplar = model.gruplar.map(function (g) {
+        var o = { g: g, n: g.idx.length, vb: gl.createBuffer(), ib: null, tip: 0 };
+        gl.bindBuffer(gl.ARRAY_BUFFER, o.vb);
+        if (g.nokta <= 65536 || ext32) {
+          gl.bufferData(gl.ARRAY_BUFFER, g.pos, gl.STATIC_DRAW);
+          o.ib = gl.createBuffer();
+          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, o.ib);
+          if (g.nokta <= 65536) { gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(g.idx), gl.STATIC_DRAW); o.tip = gl.UNSIGNED_SHORT; }
+          else { gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, g.idx, gl.STATIC_DRAW); o.tip = gl.UNSIGNED_INT; }
+        } else {
+          // 32 bit dizin desteği yoksa noktalar açılarak dizinsiz çizilir
+          var p = new Uint16Array(o.n * 3);
+          for (var i = 0; i < o.n; i++) { var k = g.idx[i] * 3; p[i * 3] = g.pos[k]; p[i * 3 + 1] = g.pos[k + 1]; p[i * 3 + 2] = g.pos[k + 2]; }
+          gl.bufferData(gl.ARRAY_BUFFER, p, gl.STATIC_DRAW);
+        }
+        return o;
+      });
+    }
+    function bosalt() {
+      if (gl) gruplar.forEach(function (o) { gl.deleteBuffer(o.vb); if (o.ib) gl.deleteBuffer(o.ib); });
+      gruplar = [];
+    }
+    function donus() {
+      var ca = Math.cos(az), sa = Math.sin(az), ce = Math.cos(yuk), se = Math.sin(yuk);
+      return [ca, 0, sa, se * sa, ce, -se * ca, -ce * sa, se, ce * ca];
+    }
+    function boyutla() {
+      var o = Math.min(window.devicePixelRatio || 1, 2);
+      var w = Math.max(1, Math.round(stage.clientWidth * o)), h = Math.max(1, Math.round(stage.clientHeight * o));
+      if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+    }
+    function ciz() { if (!cizim) cizim = requestAnimationFrame(cizSimdi); }
+    function cizSimdi() {
+      cizim = 0;
+      if (!gl || !model || cv.hidden) return;
+      boyutla();
+      var w = cv.width, h = cv.height, r = donus(), b = model.boyut, a = model.adim;
+      var mv = new Float32Array([r[0], r[3], r[6], 0, r[1], r[4], r[7], 0, r[2], r[5], r[8], 0,
+        -(r[0] * hedef[0] + r[1] * hedef[1] + r[2] * hedef[2]),
+        -(r[3] * hedef[0] + r[4] * hedef[1] + r[5] * hedef[2]),
+        -(r[6] * hedef[0] + r[7] * hedef[1] + r[8] * hedef[2]) - uzak, 1]);
+      var Rs = R + Math.sqrt(hedef[0] * hedef[0] + hedef[1] * hedef[1] + hedef[2] * hedef[2]);
+      var yakin = Math.max(uzak - Rs, uzak * 0.05), irak = uzak + Rs, f = 1 / Math.tan(ACI / 2);
+      var pr = new Float32Array([f * h / w, 0, 0, 0, 0, f, 0, 0, 0, 0, (irak + yakin) / (yakin - irak), -1, 0, 0, 2 * irak * yakin / (yakin - irak), 0]);
+      gl.viewport(0, 0, w, h);
+      gl.depthMask(true);
+      gl.clearColor(0.106, 0.133, 0.125, 1);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL); gl.disable(gl.CULL_FACE);
+      gl.useProgram(prog);
+      gl.uniformMatrix4fv(U.uMV, false, mv);
+      gl.uniformMatrix4fv(U.uPr, false, pr);
+      gl.uniform3f(U.uS, a, a, a);
+      gl.uniform3f(U.uO, -b[0] / 2, -b[1] / 2, -b[2] / 2);
+      gl.enableVertexAttribArray(0);
+      for (var gecis = 0; gecis < 2; gecis++) {
+        // önce opak parçalar, sonra saydam lehim maskesi (altındaki bakır yollar görünsün)
+        if (gecis) { gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(false); }
+        for (var i = 0; i < gruplar.length; i++) {
+          var o = gruplar[i], c = o.g.renk;
+          if ((c[3] < 1 ? 1 : 0) !== gecis) continue;
+          // Kart gövdesi koyulaştırılır, lehim maskesi dosyadakinden biraz daha saydam çizilir: böylece maskenin
+          // altındaki bakır (yollar ve dolgu) açık, bakırsız aralıklar koyu görünür ve yollar seçilir.
+          var k = o.g.tur === "govde" ? 0.35 : 1;
+          gl.uniform4f(U.uC, c[0] * k, c[1] * k, c[2] * k, o.g.tur === "maske" ? c[3] * 0.9 : c[3]);
+          gl.uniform2f(U.uM, o.g.metal, o.g.puruz);
+          gl.bindBuffer(gl.ARRAY_BUFFER, o.vb);
+          gl.vertexAttribPointer(0, 3, gl.UNSIGNED_SHORT, false, 0, 0);
+          if (o.ib) { gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, o.ib); gl.drawElements(gl.TRIANGLES, o.n, o.tip, 0); }
+          else gl.drawArrays(gl.TRIANGLES, 0, o.n);
+        }
+      }
+      gl.disable(gl.BLEND);
+      gl.depthMask(true);
+    }
+    function sigdir() {
+      if (!model) return;
+      var r = donus(), b = model.boyut, t = Math.tan(ACI / 2), oran = (stage.clientWidth || 1) / (stage.clientHeight || 1), d = 0;
+      for (var i = 0; i < 8; i++) {
+        var x = (i & 1 ? 0.5 : -0.5) * b[0], y = (i & 2 ? 0.5 : -0.5) * b[1], z = (i & 4 ? 0.5 : -0.5) * b[2];
+        var vx = r[0] * x + r[1] * y + r[2] * z, vy = r[3] * x + r[4] * y + r[5] * z, vz = r[6] * x + r[7] * y + r[8] * z;
+        d = Math.max(d, vz + Math.abs(vx) / (t * oran), vz + Math.abs(vy) / t);
+      }
+      hedef = [0, 0, 0];
+      uzak = d * 1.1;
+      ciz();
+    }
+    function gorunum(ad) {
+      if (!model) return;
+      if (ad === "ust") { az = tabanAz; yuk = YARIM; }
+      else if (ad === "alt") { az = tabanAz + Math.PI; yuk = -YARIM; }
+      else { az = tabanAz - 0.4; yuk = 0.9; }
+      sigdir();
+    }
+    return {
+      // Modeli sahneye koyar; WebGL açılamazsa false döner.
+      goster: function (m, etiket) {
+        if (!kur()) return false;
+        if (model !== m || !gruplar.length) { bosalt(); model = m; yukle(); }
+        var b = m.boyut;
+        R = Math.sqrt(b[0] * b[0] + b[1] * b[1] + b[2] * b[2]) / 2;
+        // dik tutulan telefonda yatay kart çeyrek tur döndürülür ki ekranı doldursun
+        tabanAz = stage.clientWidth < stage.clientHeight * 0.85 && b[0] > b[2] * 1.15 ? YARIM : 0;
+        cv.setAttribute("aria-label", etiket);
+        cv.hidden = false;
+        gorunum("ilk");
+        return true;
+      },
+      gizle: function () { if (cv) cv.hidden = true; },
+      acik: function () { return !!cv && !cv.hidden; },
+      ciz: ciz,
+      sigdir: sigdir,
+      gorunum: gorunum,
+      dondur: function (dx, dy) {
+        az += dx * 0.008;
+        yuk = Math.max(-YARIM, Math.min(YARIM, yuk + dy * 0.008));
+        ciz();
+      },
+      kaydir: function (dx, dy) {
+        var r = donus(), u = 2 * uzak * Math.tan(ACI / 2) / (stage.clientHeight || 1);
+        for (var i = 0; i < 3; i++) hedef[i] += (-r[i] * dx + r[3 + i] * dy) * u;
+        var boy = Math.sqrt(hedef[0] * hedef[0] + hedef[1] * hedef[1] + hedef[2] * hedef[2]);
+        if (boy > R) for (i = 0; i < 3; i++) hedef[i] *= R / boy;
+        ciz();
+      },
+      yakinlas: function (f) {
+        uzak = Math.max(R * 0.12, Math.min(R * 12, uzak / f));
+        ciz();
+      }
+    };
+  })();
+
+  function k3Kapat() {
+    K3.gizle();
+    stage.classList.remove("k3");
+    vnote.hidden = vhint.hidden = vtop.hidden = vbot.hidden = true;
+  }
+
+  function show3(id) {
+    var k = KART[id], key = "kart/" + id;
+    cur = { id: id, i: -1, key: key, k3: true };
+    var kartAd = /kartı$/.test(k.ad) ? k.ad : k.ad + " kartı";
+    document.getElementById("vtitle").textContent = kartAd + " (3B)";
+    document.getElementById("vsub").textContent = kartOlcu(k);
+    Array.prototype.forEach.call(vtabs.children, function (b) { b.setAttribute("aria-selected", b.getAttribute("data-i") === "-1" ? "true" : "false"); });
+    if (svgEl) { svgEl.remove(); svgEl = null; }
+    full = vb = null;
+    K3.gizle();
+    stage.classList.add("k3");
+    var govde = "";
+    if (k.eleman && !k.govdeli) govde = " Eleman gövdeleri gösterilmiyor; yalnız kart, bakır yollar ve pedler görünür.";
+    else if (k.eleman && k.govdeli < k.eleman) govde = " Eleman gövdesi: " + k.govdeli + " / " + k.eleman + " (kalanların 3B modeli yok).";
+    vnote.innerHTML = kartDurum(k) + govde;
+    vnote.className = "vnote" + (k.uyari ? " uyari" : "");
+    vnote.hidden = false;
+    vhint.hidden = true;
+    vtop.hidden = vbot.hidden = true;
+    vmsg.textContent = "Kart modeli yükleniyor…";
+    kartYukle(id, function (m) {
+      if (!cur || cur.key !== key) return;
+      if (!K3.goster(m, kartAd + ", 3 boyutlu görünüm. Sürükleyerek döndürülür.")) {
+        vmsg.textContent = "Bu cihazda 3B görünüm açılamadı (tarayıcı WebGL desteklemiyor).";
+        return;
+      }
+      vmsg.textContent = "";
+      vhint.hidden = vtop.hidden = vbot.hidden = false;
+    }, function (ileti) {
+      if (cur && cur.key === key) vmsg.textContent = ileti;
+    });
+  }
 
   function load(key, file, done) {
     if (cache[key]) { done(); return; }
@@ -568,11 +1000,13 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
   }
 
   function show(id, i) {
+    if (i < 0) { show3(id); return; }
+    k3Kapat();
     var sm = SEMA[id], p = sm.sayfalar[i], key = id + "/" + (i + 1);
     cur = { id: id, i: i, key: key };
     document.getElementById("vtitle").textContent = sm.ad + " şematiği";
     document.getElementById("vsub").textContent = (i + 1) + " / " + sm.sayfalar.length + " · " + p.baslik;
-    Array.prototype.forEach.call(vtabs.children, function (b, j) { b.setAttribute("aria-selected", j === i ? "true" : "false"); });
+    Array.prototype.forEach.call(vtabs.children, function (b) { b.setAttribute("aria-selected", +b.getAttribute("data-i") === i ? "true" : "false"); });
     if (svgEl) { svgEl.remove(); svgEl = null; }
     full = vb = null;
     vmsg.textContent = "Yükleniyor…";
@@ -596,11 +1030,14 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
 
   function openViewer(id, i, from) {
     var sm = SEMA[id];
-    if (!sm) return;
+    if (!sm && !KART[id]) return;
+    if (i < 0 && !KART[id]) i = 0;
+    if (i >= 0 && !sm) i = -1;
     opener = from || null;
-    vtabs.innerHTML = sm.sayfalar.map(function (p, j) {
-      return "<button type=\"button\" role=\"tab\" data-i=\"" + j + "\">" + (j + 1) + ". " + p.ad.replace(/_/g, " ") + "</button>";
-    }).join("");
+    vtabs.innerHTML = (KART[id] ? "<button type=\"button\" role=\"tab\" class=\"k3tab\" data-i=\"-1\">Kart (3B)</button>" : "") +
+      (sm ? sm.sayfalar : []).map(function (p, j) {
+        return "<button type=\"button\" role=\"tab\" data-i=\"" + j + "\">" + (j + 1) + ". " + p.ad.replace(/_/g, " ") + "</button>";
+      }).join("");
     viewer.hidden = false;
     document.body.classList.add("vopen");
     show(id, i);
@@ -610,6 +1047,7 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
     viewer.hidden = true;
     document.body.classList.remove("vopen");
     if (svgEl) { svgEl.remove(); svgEl = null; }
+    k3Kapat();
     cur = null;
     if (opener && document.contains(opener)) opener.focus();
   }
@@ -619,21 +1057,31 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
     if (b && cur) show(cur.id, +b.getAttribute("data-i"));
   });
   document.getElementById("vclose").addEventListener("click", closeViewer);
-  document.getElementById("vfit").addEventListener("click", fit);
-  document.getElementById("vin").addEventListener("click", function () { zoomAt(1.6, stage.clientWidth / 2, stage.clientHeight / 2); });
-  document.getElementById("vout").addEventListener("click", function () { zoomAt(1 / 1.6, stage.clientWidth / 2, stage.clientHeight / 2); });
+  function k3mu() { return !!(cur && cur.k3); }
+  function yakinlastir(f) { if (k3mu()) K3.yakinlas(f); else zoomAt(f, stage.clientWidth / 2, stage.clientHeight / 2); }
+  document.getElementById("vfit").addEventListener("click", function () { if (k3mu()) K3.sigdir(); else fit(); });
+  document.getElementById("vin").addEventListener("click", function () { yakinlastir(1.6); });
+  document.getElementById("vout").addEventListener("click", function () { yakinlastir(1 / 1.6); });
+  vtop.addEventListener("click", function () { K3.gorunum("ust"); });
+  vbot.addEventListener("click", function () { K3.gorunum("alt"); });
   document.addEventListener("keydown", function (ev) {
     if (viewer.hidden) return;
     if (ev.key === "Escape") closeViewer();
-    else if (ev.key === "+" || ev.key === "=") zoomAt(1.4, stage.clientWidth / 2, stage.clientHeight / 2);
-    else if (ev.key === "-") zoomAt(1 / 1.4, stage.clientWidth / 2, stage.clientHeight / 2);
+    else if (ev.key === "+" || ev.key === "=") yakinlastir(1.4);
+    else if (ev.key === "-") yakinlastir(1 / 1.4);
+    else if (k3mu()) {
+      if (ev.key === "ArrowRight") K3.dondur(30, 0);
+      else if (ev.key === "ArrowLeft") K3.dondur(-30, 0);
+      else if (ev.key === "ArrowUp") { ev.preventDefault(); K3.dondur(0, -30); }
+      else if (ev.key === "ArrowDown") { ev.preventDefault(); K3.dondur(0, 30); }
+    }
     else if (ev.key === "ArrowRight" && cur && cur.i < SEMA[cur.id].sayfalar.length - 1) show(cur.id, cur.i + 1);
     else if (ev.key === "ArrowLeft" && cur && cur.i > 0) show(cur.id, cur.i - 1);
   });
-  window.addEventListener("resize", function () { if (!viewer.hidden) fit(); });
+  window.addEventListener("resize", function () { if (viewer.hidden) return; if (k3mu()) K3.ciz(); else fit(); });
 
   // Sürükleme (tek parmak / fare), iki parmakla yakınlaştırma, tekerlek, çift dokunma.
-  var pts = {}, lastTap = 0;
+  var pts = {}, lastTap = 0, kaydirKipi = false;
   function local(ev) { var r = stage.getBoundingClientRect(); return { x: ev.clientX - r.left, y: ev.clientY - r.top }; }
   function ids() { return Object.keys(pts); }
   stage.addEventListener("pointerdown", function (ev) {
@@ -641,13 +1089,28 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
     stage.setPointerCapture(ev.pointerId);
     pts[ev.pointerId] = local(ev);
     stage.classList.add("drag");
+    kaydirKipi = ev.button === 1 || ev.button === 2 || ev.shiftKey;   // fareyle kaydırma: sağ tuş ya da Shift
+    if (k3mu()) { vhint.hidden = true; lastTap = 0; return; }   // 3B'de çift dokunma yok: art arda döndürmeyi bozar
     var now = Date.now();
     if (ids().length === 1 && now - lastTap < 300) { zoomAt(2, pts[ev.pointerId].x, pts[ev.pointerId].y); lastTap = 0; }
     else lastTap = now;
   });
   stage.addEventListener("pointermove", function (ev) {
-    if (!pts[ev.pointerId] || !vb) return;
+    if (!pts[ev.pointerId]) return;
     var p = local(ev), o = pts[ev.pointerId], k = ids();
+    if (k3mu()) {
+      // 3B: tek parmak döndürür; iki parmak yakınlaştırır ve kaydırır
+      if (k.length === 1) { if (kaydirKipi) K3.kaydir(p.x - o.x, p.y - o.y); else K3.dondur(p.x - o.x, p.y - o.y); }
+      else if (k.length === 2) {
+        var q3 = pts[k[0] == ev.pointerId ? k[1] : k[0]];
+        var e0 = Math.hypot(o.x - q3.x, o.y - q3.y), e1 = Math.hypot(p.x - q3.x, p.y - q3.y);
+        if (e0 > 0 && e1 > 0) K3.yakinlas(e1 / e0);
+        K3.kaydir((p.x - o.x) / 2, (p.y - o.y) / 2);
+      }
+      pts[ev.pointerId] = p;
+      return;
+    }
+    if (!vb) return;
     if (k.length === 1) {
       var u = vb.w / (stage.clientWidth || 1);
       vb.x -= (p.x - o.x) * u; vb.y -= (p.y - o.y) * u;
@@ -665,6 +1128,7 @@ footer { max-width: 1080px; margin: 0 auto; padding: 12px 16px 20px; font-size: 
   stage.addEventListener("wheel", function (ev) {
     ev.preventDefault();
     var p = local(ev);
+    if (k3mu()) { K3.yakinlas(ev.deltaY < 0 ? 1.15 : 1 / 1.15); return; }
     zoomAt(ev.deltaY < 0 ? 1.2 : 1 / 1.2, p.x, p.y);
   }, { passive: false });
 

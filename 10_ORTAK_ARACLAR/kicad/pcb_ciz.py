@@ -214,10 +214,11 @@ def ciz(kart, kok, tur=40, sure="00:20:00"):
         kalan = [u for u in r.get("unconnected_items", []) if _ag(u) in yama_aglari]
         if not kalan:
             break
-        for u in kalan:
+        for sira, u in enumerate(kalan):
             xs = [i["pos"]["x"] for i in u["items"]]
             ys = [i["pos"]["y"] for i in u["items"]]
-            alan_ekle(b, b.GetLayerID(katman_adi), _ag(u), oncelik=1 + deneme,
+            # Her yamaya ayrı öncelik: üst üste binen yamalar aynı öncelikte olursa DRC hata verir.
+            alan_ekle(b, b.GetLayerID(katman_adi), _ag(u), oncelik=1 + 100 * deneme + sira,
                       kutu_mm=(min(xs) - genis, min(ys) - genis, max(xs) + genis, max(ys) + genis))
         pcbnew.ZONE_FILLER(b).Fill(b.Zones())
         b.BuildConnectivity()

@@ -140,14 +140,14 @@ Sahibinin kararıyla kart **otomatik** çizildi: yerleşim `pcb_yerlesim.py`, yo
 (`pcb_ciz.py`). Dosya: `kicad/operfly_core.kicad_pcb`; ayarlar `kicad/pcb_ayar.py`.
 Yeniden üretmek için: `python 10_ORTAK_ARACLAR/kicad/pcb_ciz.py CORE operfly_core`.
 
-- **Kart:** 115 x 80 mm, 6 katman (iç 1: toprak, iç 4: +3V3; diğer katmanlar sinyal, elemanlar üstte), 264 eleman, tamamı üst yüzde; köşelerde M3 montaj deliği.
+- **Kart:** 125 x 85 mm, 6 katman (iç 1: toprak, iç 4: +3V3; diğer katmanlar sinyal, elemanlar üstte), 264 eleman, tamamı üst yüzde; köşelerde M3 montaj deliği.
 - **Kurallar:** yol 0,10 mm, açıklık 0,100 mm, geçiş 0,40/0,20 mm; besleme ağları, ağın en dar ucunu aşmayacak biçimde 0,2-1,0 mm (0,4 mm ve üstünde geçiş 0,8/0,4 mm); bakır-kenar 0,25 mm.
-- **Denetim: KART TAMAMLANMADI.** DRC 0 ihlal (-), 4 bağlanmamış uç. Otomatik yol çizici bu kartı bitiremedi;
+- **Denetim: KART TAMAMLANMADI.** DRC 0 ihlal (-), 3 bağlanmamış uç. Otomatik yol çizici bu kartı bitiremedi;
   kalan bağlantılar elle çizilmeli ya da yerleşim elle düzeltilip yeniden denenmeli.
 
 **Bu bir mühendis çizimi değildir.** Üretimden önce bir kart tasarımcısının bakması gereken noktalar:
 
-- Eksik kalan dört bağlantı: IMU3_MOSI, OUT11, PGOOD_5V, ETH_RXD1. Yol çizici 120 turda (yaklaşık 3 saat; `OPERFLY_YOL_CIZICI` 1.9.0, `OPERFLY_YOL_TUR=120`) bunları bağlayamadı; ilk denemede (30 tur) 10 bağlantı eksikti.
+- Eksik kalan üç bağlantı: +3V3, +3V3_S2, IMU2_MOSI. Üç ayrı yerleşim denendi (ilki 120 turda 4 eksik, ikincisi 10 eksik, bu üçüncüsü 60 turda 3 eksik; `OPERFLY_YOL_CIZICI` 1.9.0, `OPERFLY_YOL_TUR=60`, deneme başına yaklaşık 3 saat). Otomatik yol çizici bu kartı bitiremiyor; kalanlar elle çizilmeli.
 - İşlemci 0,65 mm adımlı BGA olduğu için ince kural kullanıldı (yol ve açıklık 0,10 mm, geçiş 0,4/0,2 mm): bu, standart değil ileri sınıf üretim ister; üreticinin yetenekleriyle karşılaştırılmalı.
 - Üç IMU'nun mekanik yalıtımı, ısıtıcı/Peltier bölgesi ve IMU'ların ısı kaynaklarından uzaklığı gözetilmedi; uçuş denetçisinde ölçüm kalitesi doğrudan buna bağlıdır.
 - İşlemci çekirdek beslemesi ve BGA altı ayırma kondansatörleri üretici önerisine göre yerleştirilmedi; Ethernet (RMII), USB ve microSD hatları eşit uzunlukta çizilmedi.
